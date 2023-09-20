@@ -10,6 +10,10 @@ import NotificationsPortal from '@redhat-cloud-services/frontend-components-noti
 import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 
+/**
+ * Entry point for our appication. It provides the notification portal,
+ * and the routes for our application.
+ */
 const App = () => {
   const navigate = useNavigate();
   const { on } = useChrome();

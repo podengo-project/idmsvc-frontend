@@ -975,56 +975,6 @@ export const ActionsApiAxiosParamCreator = function (configuration?: Configurati
         options: localVarRequestOptions,
       };
     },
-    /**
-     * Update the rhel-idm domain information.
-     * @summary Update domain information by user.
-     * @param {string} uuid The uuid that identify the domain.
-     * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
-     * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateDomainUser: async (
-      uuid: string,
-      updateDomainUserRequest: UpdateDomainUserRequest,
-      xRhInsightsRequestId?: string,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'uuid' is not null or undefined
-      assertParamExists('updateDomainUser', 'uuid', uuid);
-      // verify required parameter 'updateDomainUserRequest' is not null or undefined
-      assertParamExists('updateDomainUser', 'updateDomainUserRequest', updateDomainUserRequest);
-      const localVarPath = `/domains/{uuid}`.replace(`{${'uuid'}}`, encodeURIComponent(String(uuid)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication x-rh-identity required
-      await setApiKeyToObject(localVarHeaderParameter, 'X-Rh-Identity', configuration);
-
-      if (xRhInsightsRequestId != null) {
-        localVarHeaderParameter['X-Rh-Insights-Request-Id'] = String(xRhInsightsRequestId);
-      }
-
-      localVarHeaderParameter['Content-Type'] = 'application/json';
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(updateDomainUserRequest, localVarRequestOptions, configuration);
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
   };
 };
 
@@ -1081,24 +1031,6 @@ export const ActionsApiFp = function (configuration?: Configuration) {
       );
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
-    /**
-     * Update the rhel-idm domain information.
-     * @summary Update domain information by user.
-     * @param {string} uuid The uuid that identify the domain.
-     * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
-     * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updateDomainUser(
-      uuid: string,
-      updateDomainUserRequest: UpdateDomainUserRequest,
-      xRhInsightsRequestId?: string,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DomainResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updateDomainUser(uuid, updateDomainUserRequest, xRhInsightsRequestId, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
   };
 };
 
@@ -1149,23 +1081,6 @@ export const ActionsApiFactory = function (configuration?: Configuration, basePa
         .updateDomainAgent(uuid, xRhIdmVersion, updateDomainAgentRequest, xRhInsightsRequestId, options)
         .then((request) => request(axios, basePath));
     },
-    /**
-     * Update the rhel-idm domain information.
-     * @summary Update domain information by user.
-     * @param {string} uuid The uuid that identify the domain.
-     * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
-     * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateDomainUser(
-      uuid: string,
-      updateDomainUserRequest: UpdateDomainUserRequest,
-      xRhInsightsRequestId?: string,
-      options?: any
-    ): AxiosPromise<DomainResponse> {
-      return localVarFp.updateDomainUser(uuid, updateDomainUserRequest, xRhInsightsRequestId, options).then((request) => request(axios, basePath));
-    },
   };
 };
 
@@ -1213,27 +1128,6 @@ export class ActionsApi extends BaseAPI {
   ) {
     return ActionsApiFp(this.configuration)
       .updateDomainAgent(uuid, xRhIdmVersion, updateDomainAgentRequest, xRhInsightsRequestId, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   * Update the rhel-idm domain information.
-   * @summary Update domain information by user.
-   * @param {string} uuid The uuid that identify the domain.
-   * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
-   * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ActionsApi
-   */
-  public updateDomainUser(
-    uuid: string,
-    updateDomainUserRequest: UpdateDomainUserRequest,
-    xRhInsightsRequestId?: string,
-    options?: AxiosRequestConfig
-  ) {
-    return ActionsApiFp(this.configuration)
-      .updateDomainUser(uuid, updateDomainUserRequest, xRhInsightsRequestId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -1515,6 +1409,56 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Update the rhel-idm domain information.
+     * @summary Update domain information by user.
+     * @param {string} uuid The uuid that identify the domain.
+     * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
+     * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateDomainUser: async (
+      uuid: string,
+      updateDomainUserRequest: UpdateDomainUserRequest,
+      xRhInsightsRequestId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'uuid' is not null or undefined
+      assertParamExists('updateDomainUser', 'uuid', uuid);
+      // verify required parameter 'updateDomainUserRequest' is not null or undefined
+      assertParamExists('updateDomainUser', 'updateDomainUserRequest', updateDomainUserRequest);
+      const localVarPath = `/domains/{uuid}`.replace(`{${'uuid'}}`, encodeURIComponent(String(uuid)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication x-rh-identity required
+      await setApiKeyToObject(localVarHeaderParameter, 'X-Rh-Identity', configuration);
+
+      if (xRhInsightsRequestId != null) {
+        localVarHeaderParameter['X-Rh-Insights-Request-Id'] = String(xRhInsightsRequestId);
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(updateDomainUserRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -1631,6 +1575,24 @@ export const ResourcesApiFp = function (configuration?: Configuration) {
       );
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
+    /**
+     * Update the rhel-idm domain information.
+     * @summary Update domain information by user.
+     * @param {string} uuid The uuid that identify the domain.
+     * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
+     * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateDomainUser(
+      uuid: string,
+      updateDomainUserRequest: UpdateDomainUserRequest,
+      xRhInsightsRequestId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DomainResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateDomainUser(uuid, updateDomainUserRequest, xRhInsightsRequestId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
   };
 };
 
@@ -1716,6 +1678,23 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
       return localVarFp
         .registerDomain(xRhIdmRegistrationToken, xRhIdmVersion, registerDomainRequest, xRhInsightsRequestId, options)
         .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update the rhel-idm domain information.
+     * @summary Update domain information by user.
+     * @param {string} uuid The uuid that identify the domain.
+     * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
+     * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateDomainUser(
+      uuid: string,
+      updateDomainUserRequest: UpdateDomainUserRequest,
+      xRhInsightsRequestId?: string,
+      options?: any
+    ): AxiosPromise<DomainResponse> {
+      return localVarFp.updateDomainUser(uuid, updateDomainUserRequest, xRhInsightsRequestId, options).then((request) => request(axios, basePath));
     },
   };
 };
@@ -1822,6 +1801,27 @@ export class ResourcesApi extends BaseAPI {
   ) {
     return ResourcesApiFp(this.configuration)
       .registerDomain(xRhIdmRegistrationToken, xRhIdmVersion, registerDomainRequest, xRhInsightsRequestId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update the rhel-idm domain information.
+   * @summary Update domain information by user.
+   * @param {string} uuid The uuid that identify the domain.
+   * @param {UpdateDomainUserRequest} updateDomainUserRequest Information for an IPA domain so it is updated from the ipa-hcc agent.
+   * @param {string} [xRhInsightsRequestId] Request id for distributed tracing.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ResourcesApi
+   */
+  public updateDomainUser(
+    uuid: string,
+    updateDomainUserRequest: UpdateDomainUserRequest,
+    xRhInsightsRequestId?: string,
+    options?: AxiosRequestConfig
+  ) {
+    return ResourcesApiFp(this.configuration)
+      .updateDomainUser(uuid, updateDomainUserRequest, xRhInsightsRequestId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
