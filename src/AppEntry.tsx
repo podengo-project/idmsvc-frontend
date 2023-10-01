@@ -7,12 +7,14 @@ import { getBaseName } from '@redhat-cloud-services/frontend-components-utilitie
 import logger from 'redux-logger';
 import { AppContext } from './AppContext';
 import { Domain } from './Api';
+import { VerifyState } from './Routes/WizardPage/Components/VerifyRegistry/VerifyRegistry';
 
 const AppEntry = () => {
   const appContext = useContext(AppContext);
   const [domains, setDomains] = useState<Domain[]>([]);
   const [wizardToken, setWizardToken] = useState<string>('');
   const [wizardDomain, setWizardDomain] = useState<Domain>({} as Domain);
+  const [wizardRegisterStatus, setWizardRegisterStatus] = useState<VerifyState>('initial');
   const cbSetDomains = (domains: Domain[]) => {
     appContext.domains = domains;
     setDomains(domains);
@@ -29,6 +31,12 @@ const AppEntry = () => {
   const cbSetWizardDomain = (value: Domain) => {
     setWizardDomain(value);
   };
+  const cbGetRegisterStatus = (): VerifyState => {
+    return wizardRegisterStatus;
+  };
+  const cbSetRegisterStatus = (value: VerifyState) => {
+    setWizardRegisterStatus(value);
+  };
   return (
     <Provider store={init(...(process.env.NODE_ENV !== 'production' ? [logger] : [])).getStore()}>
       <Router basename={getBaseName(window.location.pathname)}>
@@ -39,6 +47,8 @@ const AppEntry = () => {
             wizard: {
               getToken: cbGetWizardToken,
               setToken: cbSetWizardToken,
+              getRegisteredStatus: cbGetRegisterStatus,
+              setRegisteredStatus: cbSetRegisterStatus,
               getDomain: cbGetWizardDomain,
               setDomain: cbSetWizardDomain,
             },
