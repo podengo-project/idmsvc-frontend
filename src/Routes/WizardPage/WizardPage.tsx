@@ -23,22 +23,6 @@ const PageServiceRegistration = React.lazy(() => import('./Components/PageServic
 const PageServiceDetails = React.lazy(() => import('./Components/PageServiceDetails/PageServiceDetails'));
 const PageReview = React.lazy(() => import('./Components/PageReview/PageReview'));
 
-const initialDomain: Domain = {
-  domain_id: '14f3a7a4-32c5-11ee-b40f-482ae3863d30',
-  domain_name: 'mydomain.example',
-  auto_enrollment_enabled: true,
-  title: 'My Domain',
-  description: 'My Domain Description',
-  domain_type: 'rhel-idm',
-  'rhel-idm': {
-    realm_name: '',
-    realm_domains: [],
-    ca_certs: [],
-    servers: [],
-    locations: [],
-  },
-};
-
 /**
  * Wizard page to register a new domain into the service.
  * @see {@link PagePreparation} about the preparation page.
@@ -110,6 +94,23 @@ const WizardPage = () => {
       //   appContext.wizard.setUUID('');
       // }
     }
+    if (id === 4) {
+      try {
+        if (domain.domain_id) {
+          const response = await resources_api.updateDomainUser(domain.domain_id, {
+            title: domain.title,
+            description: domain.description,
+            auto_enrollment_enabled: domain.auto_enrollment_enabled,
+          });
+          if (response.status >= 400) {
+            // TODO show-up notification with error message
+          }
+        }
+      } catch (error) {
+        // TODO show-up notification with error message
+        console.log('error noNextPage: ' + error);
+      }
+    }
   };
 
   const initCanJumpPage1 = true;
@@ -168,12 +169,14 @@ const WizardPage = () => {
       name: 'Preparation',
       component: <PagePreparation onToken={onToken} />,
       canJumpTo: canJumpPage1,
+      enableNext: true,
     },
     {
       id: 2,
       name: 'Service registration',
       component: <PageServiceRegistration uuid={domain.domain_id ? domain.domain_id : ''} token={appContext.wizard.getToken()} onVerify={onVerify} />,
       canJumpTo: canJumpPage2,
+      enableNext: canJumpPage3,
     },
     {
       id: 3,
@@ -190,13 +193,15 @@ const WizardPage = () => {
         />
       ),
       canJumpTo: canJumpPage3,
+      enableNext: canJumpPage4,
     },
     {
       id: 4,
       name: 'Review',
-      // FIXME Pass here the 'registering.domain' field from the context
-      component: <PageReview data={domain} />,
+      component: <PageReview domain={domain} />,
+      nextButtonText: 'Finish',
       canJumpTo: canJumpPage4,
+      enableNext: true,
     },
   ];
 
