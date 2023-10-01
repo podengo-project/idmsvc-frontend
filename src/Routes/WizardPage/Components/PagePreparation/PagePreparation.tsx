@@ -1,26 +1,81 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 import InfoCircleIcon from '@patternfly/react-icons/dist/esm/icons/info-circle-icon';
-import { Button, ClipboardCopy, Form, FormGroup, Icon, Select, SelectOption, Stack, TextContent } from '@patternfly/react-core';
+import { Button, ClipboardCopy, Form, FormGroup, Icon, Select, SelectOption, TextContent, Title } from '@patternfly/react-core';
 
 import './PagePreparation.scss';
+import { DomainType, ResourcesApiFactory } from '../../../../Api';
+import { AppContext, IAppContext } from '../../../../AppContext';
 
-const PagePreparation: React.FC = () => {
-  // TODO Update links
-  const firewallConfigurationLink =
-    'https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/using-and-configuring-firewalld_configuring-and-managing-networking';
-  const cloudProviderConfigurationLink =
-    'https://access.redhat.com/documentation/es-es/red_hat_subscription_management/2023/html-single/red_hat_cloud_access_reference_guide/index';
-  const networkConfigurationLink = 'https://www.redhat.com/sysadmin/network-interface-linux';
-  const installServerPackagesLink = 'https://freeipa.org/page/Quick_Start_Guide';
+/** Represent the properties for PagePreparation component. */
+interface PagePreparationProps {
+  token?: string;
+  onToken?: (token: string, domain_id: string, expiration: number) => void;
+}
+
+/**
+ * This page provide information and links to prepare the rhel-idm
+ * servers before the user could proceed to the registration process.
+ * @param props provide the token value and the onToken event to
+ * notify when it is created.
+ * @returns Return the view to inform the user how to prepare for
+ * the domain registration.
+ * @public
+ * @see {@link PagePreparationProps} to know about the properties.
+ * @see {@link WizardPage} to know about the parent component.
+ */
+const PagePreparation = (props: PagePreparationProps) => {
+  // FIXME Update the target link when it is known
+  const installServerPackagesLink = 'https://duckduckgo.com/?q=freeipa+prerequisites';
+  // FIXME Update the target link when it is known
+  const prerequisitesLink = 'https://www.google.com?q=rhel-idm+pre-requisites';
 
   // States
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const appContext = useContext<IAppContext>(AppContext);
 
-  // hooks
+  const base_url = '/api/idmsvc/v1';
+  const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
+
+  const token = appContext.wizard.getToken();
+  const domain = appContext.wizard.getDomain();
+  const domain_id = domain.domain_id ? domain.domain_id : '';
+
+  /**
+   * side effect to retrieve a token in the background.
+   * TODO When more than one type of domain, this callback will
+   * invoke from 'onRegisterDomainTypeSelect' event.
+   */
+  useEffect(() => {
+    if (token != '' && domain_id != '') {
+      return;
+    }
+    // NOTE await and async cannot be used directly because EffectCallback cannot be a Promise
+    resources_api
+      .createDomainToken({ domain_type: 'rhel-idm' }, undefined, undefined)
+      .then((value) => {
+        appContext.wizard.setToken(value.data.domain_token);
+        const domain_id = value.data.domain_id;
+        const domain_name = 'My domain';
+        const domain_type = value.data.domain_type;
+        const token = value.data.domain_token;
+        const expiration = value.data.expiration;
+        appContext.wizard.setDomain({
+          domain_id: domain_id,
+          domain_name: domain_name,
+          domain_type: domain_type,
+        });
+        props.onToken?.(token, domain_id, expiration);
+      })
+      .catch((reason) => {
+        // FIXME handle the error here
+        console.log('error creating the token by createDomainToken: ' + reason);
+      });
+  }, [token, domain_id]);
+
   const onRegisterDomainTypeSelect = () => {
-    // TODO Not implemented
-    console.debug('onRegisterDomainTypeSelect in WizardPage');
+    // TODO Not implemented, currently only support rhel-idm
+    console.debug('PagePreparation.onRegisterDomainTypeSelect in WizardPage');
     return;
   };
 
@@ -30,29 +85,29 @@ const PagePreparation: React.FC = () => {
 
   const domainOptions = [
     {
-      value: 'rhel-idm',
-      title: 'Red Hat Enterprise Linux IdM/IPA',
+      value: 'rhel-idm' as DomainType,
+      title: 'RHEL IdM (IPA)',
     },
   ];
 
   return (
-    <React.Fragment>
+    <>
+      <Title headingLevel={'h2'}>Preparation for your directory and domain service</Title>
       <Form
         onSubmit={(value) => {
-          console.debug('onSubmit WizardPage' + String(value));
+          console.debug('TODO onSubmit WizardPage' + String(value));
         }}
       >
         <FormGroup
-          label="Identity and access management service"
-          isRequired
+          label="Service type"
           fieldId="register-domain-type"
+          className="pf-u-mt-xs pf-u-mt-sm pf-u-mt-md pf-u-mt-lg pf-u-mt-xl"
           helperText={
             <TextContent style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Icon status="info" isInline>
                 <InfoCircleIcon />
-              </Icon>
-              <span> </span>
-              Only Red Hat Linux IdM/IPA are currently supported.
+              </Icon>{' '}
+              Only RHEL IdM (IPA) are currently supported.
             </TextContent>
           }
         >
@@ -63,7 +118,7 @@ const PagePreparation: React.FC = () => {
             onSelect={onRegisterDomainTypeSelect}
             // onOpenChange={(isOpen) => setIsOpen(isOpen)}
             onToggle={onToggleClick}
-            className="domain-type-select"
+            className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
           >
             {domainOptions.map((option) => (
               <SelectOption key={option.value} value={option.value}>
@@ -72,57 +127,10 @@ const PagePreparation: React.FC = () => {
             ))}
           </Select>
         </FormGroup>
-        <FormGroup label="Prerequisites">
-          <TextContent>
-            There are prerequisites that must be completed to create and use security for Red Hat Linux IdM/IPA. If any prerequisites are already in
-            place, please skip to the next step:
-          </TextContent>
-          <Button
-            className="domain-item-margin-left"
-            component="a"
-            target="_blank"
-            variant="link"
-            icon={<ExternalLinkAltIcon />}
-            iconPosition="right"
-            isInline
-            href={firewallConfigurationLink}
-          >
-            1. Firewall configuration
-          </Button>
-          <br />
-          <Button
-            className="domain-item-margin-left"
-            component="a"
-            target="_blank"
-            variant="link"
-            icon={<ExternalLinkAltIcon />}
-            iconPosition="right"
-            isInline
-            href={cloudProviderConfigurationLink}
-          >
-            2. Cloud provider configuration
-          </Button>
-          <br />
-          <Button
-            className="domain-item-margin-left"
-            component="a"
-            target="_blank"
-            variant="link"
-            icon={<ExternalLinkAltIcon />}
-            iconPosition="right"
-            isInline
-            href={networkConfigurationLink}
-          >
-            3. Networking configuration
-          </Button>
-          <br />
-          <Stack className="domain-item-margin-left">
-            <TextContent>4. Verify wether or not the package is present on your server(st) with this command:</TextContent>
-            <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
-              dnf list installed ipa-hcc-server
-            </ClipboardCopy>
-            <TextContent>
-              If the package is not present on your server(s), follow these steps:{' '}
+        <FormGroup label="Service prerequisites">
+          <ol>
+            <li className="pf-u-pt-sd pf-u-ml-md">
+              Complete the{' '}
               <Button
                 component="a"
                 target="_blank"
@@ -130,20 +138,40 @@ const PagePreparation: React.FC = () => {
                 icon={<ExternalLinkAltIcon />}
                 iconPosition="right"
                 isInline
-                href={installServerPackagesLink}
+                href={prerequisitesLink}
               >
-                Install server packages
+                prerequisites
               </Button>
+            </li>
+            <li className="pf-u-pt-md pf-u-ml-md">
+              <TextContent>Verify whether or not the package is present on your server(s) with this command:</TextContent>
               <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
-                dnf copr enable copr.devel.redhat.com/cheimes/ipa-hcc && dnf install ipa-hcc-server
+                dnf list installed ipa-hcc-server
               </ClipboardCopy>
-              The package must be installed on at least one IPA server. For redundency, the package should be installed on two or more IPA servers,
-              possibly all IPA servers.
-            </TextContent>
-          </Stack>
+              <TextContent>
+                If the package is not present on your server(s), follow these{' '}
+                <Button
+                  component="a"
+                  target="_blank"
+                  variant="link"
+                  icon={<ExternalLinkAltIcon />}
+                  iconPosition="right"
+                  isInline
+                  href={installServerPackagesLink}
+                >
+                  steps to install the server packages
+                </Button>
+                <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
+                  dnf copr enable copr.devel.redhat.com/cheimes/ipa-hcc && dnf install ipa-hcc-server
+                </ClipboardCopy>
+                The package must be installed on at least one IPA server. For redundency, the package should be installed on two or more IPA servers,
+                possibly all IPA servers.
+              </TextContent>
+            </li>
+          </ol>
         </FormGroup>
       </Form>
-    </React.Fragment>
+    </>
   );
 };
 
