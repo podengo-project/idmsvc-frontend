@@ -51,6 +51,8 @@ const Header = () => {
 };
 
 const EmptyContent = () => {
+  // FIXME Update this link in the future
+  const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const navigate = useNavigate();
 
   const handleOpenWizard = () => {
@@ -62,21 +64,34 @@ const EmptyContent = () => {
       <Section>
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
-            <RegistryIcon size="xl" />
-            <Title headingLevel="h2" size="lg">
-              No domains
+            <RegistryIcon className="pf-u-color-200" size="xl" />
+            <Title headingLevel="h2" size="lg" className="pf-u-pt-sm">
+              No directory and domain services registered
             </Title>
             <EmptyStateBody>
               <Stack>
-                <StackItem className="empty-state-body-content">
-                  To specify which existing access controls can be
-                  <br /> leveraged for hosts launched through the console, you
-                  <br /> must first register your domain(s). As part of that
-                  <br /> process you will be required to SSO into your server(s)
-                  <br /> and install packages via CLI.
+                <StackItem className="pf-u-pt-sm">
+                  Use access controls from your existing IdM hosts in your cloud
+                  <br /> environment*. To get started, register a service.
                 </StackItem>
-                <StackItem>
-                  <Button onClick={handleOpenWizard}>Add domain</Button>
+                <StackItem className="pf-u-pt-md">
+                  <Button onClick={handleOpenWizard}>Register a service</Button>
+                </StackItem>
+                <StackItem className="pf-u-pt-md">
+                  <Button
+                    component="a"
+                    target="_blank"
+                    variant="link"
+                    isInline
+                    icon={<ExternalLinkAltIcon />}
+                    iconPosition="right"
+                    href={linkLearnMoreAbout}
+                  >
+                    Learn more about directory and domain services{' '}
+                  </Button>
+                </StackItem>
+                <StackItem className="pf-u-pt-lg pf-u-color-100">
+                  *Directory and domain services are currently available only for Red Hat IdM and IPA deployments.
                 </StackItem>
               </Stack>
             </EmptyStateBody>
@@ -204,10 +219,6 @@ const DefaultPage = () => {
   const [itemCount, setItemCount] = useState<number>(0);
   const [perPage] = useState<number>(10);
   const [offset, setOffset] = useState<number>(0);
-
-  useEffect(() => {
-    insights?.chrome?.appAction?.('default-page');
-  }, []);
 
   console.log('INFO:DefaultPage render');
 
