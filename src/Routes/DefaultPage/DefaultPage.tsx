@@ -27,7 +27,7 @@ import './DefaultPage.scss';
 import Section from '@redhat-cloud-services/frontend-components/Section';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { DomainList } from '../../Components/DomainList/DomainList';
-import { AppContext } from '../../AppContext';
+import { AppContext, IAppContext } from '../../AppContext';
 
 // const SampleComponent = lazy(() => import('../../Components/SampleComponent/sample-component'));
 
@@ -54,8 +54,12 @@ const EmptyContent = () => {
   // FIXME Update this link in the future
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const navigate = useNavigate();
+  const appContext = useContext<IAppContext>(AppContext);
 
   const handleOpenWizard = () => {
+    appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
+    appContext.wizard.setToken('');
+    appContext.wizard.setRegisteredStatus('initial');
     navigate('/domains/wizard', { replace: true });
   };
 
@@ -149,6 +153,9 @@ const ListContent = () => {
   }, [page, perPage, offset]);
 
   const handleOpenWizard = () => {
+    appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
+    appContext.wizard.setRegisteredStatus('initial');
+    appContext.wizard.setToken('');
     navigate('/domains/wizard', { replace: true });
   };
 

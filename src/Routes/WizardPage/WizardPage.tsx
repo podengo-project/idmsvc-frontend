@@ -15,6 +15,7 @@ import './WizardPage.scss';
 import { useNavigate } from 'react-router-dom';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { AppContext } from '../../AppContext';
+import { VerifyState } from './Components/VerifyRegistry/VerifyRegistry';
 
 // Lazy load for the wizard pages
 const PagePreparation = React.lazy(() => import('./Components/PagePreparation/PagePreparation'));
@@ -95,11 +96,25 @@ const WizardPage = () => {
       const [, orderIndex] = id.split('-');
       id = parseInt(orderIndex);
     }
+    if (id === 2) {
+      // FIXME Clean-up when the token is created into the page 1
+      // try {
+      //   const response = await resources_api.createDomainToken({ domain_type: 'rhel-idm' }, undefined, undefined);
+      //   const newData = response.data;
+      //   appContext.wizard.setToken(newData.domain_token);
+      //   appContext.wizard.setUUID(newData.domain_id);
+      // } catch (error) {
+      //   // TODO Add error hanlder
+      //   console.log('error noNextPage: ' + error);
+      //   appContext.wizard.setToken('');
+      //   appContext.wizard.setUUID('');
+      // }
+    }
   };
 
   const initCanJumpPage1 = true;
   const initCanJumpPage2 = initCanJumpPage1 && domain.domain_id != '' && appContext.wizard.getToken() != '';
-  const initCanJumpPage3 = initCanJumpPage2;
+  const initCanJumpPage3 = initCanJumpPage2 && appContext.wizard.getRegisteredStatus() === 'completed';
   const initCanJumpPage4 = initCanJumpPage3 && domain.title !== undefined && domain.title.length > 0;
 
   const [canJumpPage1] = useState<boolean>(initCanJumpPage1);
@@ -116,6 +131,35 @@ const WizardPage = () => {
     }
   };
 
+  const onVerify = (value: VerifyState, data?: Domain) => {
+    appContext.wizard.setRegisteredStatus(value);
+    if (value === 'completed') {
+      if (data) {
+        appContext.wizard.setDomain(data);
+      }
+      setCanJumpPage3(true);
+    } else {
+      setCanJumpPage3(false);
+    }
+  };
+
+  const onChangeTitle = (value: string) => {
+    appContext.wizard.setDomain({ ...domain, title: value });
+    if (value.length > 0) {
+      setCanJumpPage4(true);
+    } else {
+      setCanJumpPage4(false);
+    }
+  };
+
+  const onChangeDescription = (value: string) => {
+    appContext.wizard.setDomain({ ...domain, description: value });
+  };
+
+  const onChangeAutoEnrollment = (value: boolean) => {
+    appContext.wizard.setDomain({ ...domain, auto_enrollment_enabled: value });
+  };
+
   /** Configure the wizard pages. */
   const steps = [
     {
@@ -128,16 +172,23 @@ const WizardPage = () => {
     {
       id: 2,
       name: 'Service registration',
-      // FIXME Pass here the 'registering.domain' field from the context
-      // FIXME Pass here the 'registering.token' field from the context
-      component: <PageServiceRegistration data={domain} />,
+      component: <PageServiceRegistration uuid={domain.domain_id ? domain.domain_id : ''} token={appContext.wizard.getToken()} onVerify={onVerify} />,
       canJumpTo: canJumpPage2,
     },
     {
       id: 3,
       name: 'Service details',
       // FIXME Pass here the 'registering.domain' field from the context
-      component: <PageServiceDetails data={domain} />,
+      component: (
+        <PageServiceDetails
+          title={domain.title}
+          description={domain.description}
+          autoEnrollmentEnabled={domain.auto_enrollment_enabled}
+          onChangeTitle={onChangeTitle}
+          onChangeDescription={onChangeDescription}
+          onChangeAutoEnrollment={onChangeAutoEnrollment}
+        />
+      ),
       canJumpTo: canJumpPage3,
     },
     {
@@ -172,7 +223,15 @@ const WizardPage = () => {
           </p>
         </PageHeader>
         <PageSection type={PageSectionTypes.wizard} variant={PageSectionVariants.light}>
-          <Wizard navAriaLabel={`${title} steps`} mainAriaLabel={`${title} content`} steps={steps} onClose={onCloseClick} />
+          <Wizard
+            navAriaLabel={`${title} steps`}
+            mainAriaLabel={`${title} content`}
+            steps={steps}
+            onClose={onCloseClick}
+            onNext={onNextPage}
+            onBack={onPreviousPage}
+            onGoToStep={onGoToStep}
+          />
         </PageSection>
       </Page>
     </>
