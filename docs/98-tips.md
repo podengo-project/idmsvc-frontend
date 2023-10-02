@@ -1,5 +1,19 @@
 # Good practices
 
+## Document your components
+
+Document, document, document. Today we are confident about what we are
+coding, tomorrow maybe we have forgotten everything about that new,
+fancy and awesome component. It is for you, for your team and the
+community. A component that is well documented, can be enhanced by
+other team mates or the community.
+
+Use TSDoc to add documentation to your components.
+
+See: https://tsdoc.org/
+
+TODO Add examples.
+
 ## Break-Down the page and components
 
 This is basically **divide and conquer** principle; smaller things are easier
@@ -28,7 +42,9 @@ For instance:
 import './sample-component.scss';
 import React from 'react';
 
-interface SampleComponentProp {
+/* SampleComponent component */
+
+interface SampleComponentProps {
   name: string;
   description: string;
 }
@@ -39,11 +55,9 @@ interface SampleComponentProp {
  *
  * @param props the props given by the smart component.
  */
-const SampleComponent: React.FC<SampleComponentProp> = (props) => {
+const SampleComponent = (props: SampleComponentProps) => {
   return <span className="sample-component"> {props.children} </span>;
 };
-
-SampleComponent.displayName = 'SampleComponent';
 
 export default SampleComponent;
 ```
@@ -70,7 +84,7 @@ interface SampleComponentState {
 }
 
 /* React component */
-const SampleComponent: React.FC<SampleComponentProp> = (props) => {
+const SampleComponent = (props: SampleComponentProp) => {
   /* Define the states */
   const [state, setState] useState<SampleComponentState>({name: props.name, description: props.description});
 
@@ -106,7 +120,7 @@ interface MyState {
   count: number;
 }
 
-const MyComponent: React.FC<MyComponentProps> = (props) => {
+const MyComponent = (props: MyComponentProps) => {
   const [state, setState] = useState<MyState>({count: 0});
   return <span>MyComponent</span>;
 };
@@ -132,6 +146,36 @@ class MyComponent extends React.Component<MyProps, MyState> {
   }
 }
 ```
+
+## Forward properties when no levels or not many levels
+
+The initial approach would be to define for a new component the interface
+with the values to be passed as properties; this include values used and `events`
+that will receive the parent component. This is the first immediate mechanism
+to communicate with the parent component.
+
+```typescript
+interface MyComponentProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+const MyComponent = (props: MyComponentProps) => {
+  const [state, setState] = useState<string>(props.value);
+  const onChange: (value: string) => {
+    setState(value);
+    props.onChange(state);
+  };
+  return (
+    <input onChange={onChange} value={state} />
+  );
+};
+```
+
+In the above case, MyComponent receive the value to be displayed into
+the `input` component, and when it is changed, the new value is send
+to the parent component by calling the onChange callback provided by
+the parent component.
 
 ## Use context when necessary
 

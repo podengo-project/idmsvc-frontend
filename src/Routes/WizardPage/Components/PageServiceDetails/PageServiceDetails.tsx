@@ -1,18 +1,68 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, TextArea, Title, Tooltip } from '@patternfly/react-core';
+import { Form, FormGroup, Icon, TextArea, Title, Tooltip } from '@patternfly/react-core';
 import { TextInput } from '@patternfly/react-core';
-import { Domain } from '../../../../Api/api';
-import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/question-circle-icon';
+import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 
 import './PageServiceDetails.scss';
 import { Switch } from '@patternfly/react-core';
 
-const PageServiceDetails: React.FC<{ data: Domain }> = (props) => {
-  const [data, setData] = useState<Domain>(props.data);
-  const [isAutoEnrollmentEnabled, setIsAutoEnrollmentEnabled] = React.useState<boolean>(true);
+/**
+ * Represent the properties accepted by the PageServiceDetails
+ * component.
+ * @see {@link PageServiceDetails}
+ */
+interface PageServiceDetailsProps {
+  /** The title that represent the domain. */
+  title?: string;
+  /** The long description for the domain. */
+  description?: string;
+  /** Flag to enable / disable the auto enrollment feature. */
+  autoEnrollmentEnabled?: boolean;
+
+  /** Event fired when the title change. */
+  onChangeTitle?: (value: string) => void;
+  /** Event fired when the description change. */
+  onChangeDescription?: (value: string) => void;
+  /** Event fired when the switch for auto-enrollment change. */
+  onChangeAutoEnrollment?: (value: boolean) => void;
+}
+
+/**
+ * It provides fields to the user to customize the values such as
+ * the title, description and if the domain will be avialable for
+ * auto-enrollment.
+ * @param props the properties received from the parent component.
+ * @returns return the view for the Service Details wizard page.
+ * @public
+ * @see {@link PageServiceDetailsProps} about the properties.
+ * @see {@link WizardPage} to know about the parent component.
+ */
+const PageServiceDetails = (props: PageServiceDetailsProps) => {
+  const [title, setTitle] = useState<string>(props.title ? props.title : '');
+  const [description, setDescription] = useState<string>(props.description ? props.description : '');
+  const [isAutoEnrollmentEnabled, setIsAutoEnrollmentEnabled] = React.useState<boolean>(
+    props.autoEnrollmentEnabled ? props.autoEnrollmentEnabled : false
+  );
 
   const onChangeAutoEnrollment = (checked: boolean) => {
     setIsAutoEnrollmentEnabled(checked);
+    if (props.onChangeAutoEnrollment) {
+      props.onChangeAutoEnrollment(checked);
+    }
+  };
+
+  const onChangeTitle = (value: string, event: React.FormEvent<HTMLInputElement>) => {
+    setTitle(value);
+    if (props.onChangeTitle) {
+      props.onChangeTitle(value);
+    }
+  };
+
+  const onChangeDescription = (value: string, event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(value);
+    if (props.onChangeDescription) {
+      props.onChangeDescription(value);
+    }
   };
 
   const autoEnrollmentTooltipContent = isAutoEnrollmentEnabled
@@ -20,15 +70,11 @@ const PageServiceDetails: React.FC<{ data: Domain }> = (props) => {
     : 'Disabling the option leaves the service registration intact, but does not make it available for the "Domain join on launch" feature within Image Builder. It can be enabled later in the "Register Directory and Domain Service" view.';
 
   return (
-    <React.Fragment>
-      <Form
-        onSubmit={(value) => {
-          console.debug('onSubmit WizardPage' + String(value));
-        }}
-      >
+    <>
+      <Form onSubmit={(e) => e.preventDefault()}>
         <Title headingLevel={'h2'}>Service Details</Title>
         <FormGroup label="Service name" isRequired fieldId="register-domain-name">
-          <TextInput id="register-domain-name" className="domain-name" value={props.data.title} />
+          <TextInput id="register-domain-name" className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl" value={title} onChange={onChangeTitle} />
         </FormGroup>
         <FormGroup label="Service description" fieldId="register-domain-description">
           <TextArea
@@ -36,32 +82,35 @@ const PageServiceDetails: React.FC<{ data: Domain }> = (props) => {
             id="register-domain-description"
             type="text"
             readOnly={false}
-            className="domain-description"
-            value={data.description}
-            onChange={(value) => setData({ ...data, description: value })}
-          ></TextArea>
+            className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
+            value={description}
+            onChange={onChangeDescription}
+          />
         </FormGroup>
         <FormGroup
           label={
             <>
-              Domain join on launch <OutlinedQuestionCircleIcon></OutlinedQuestionCircleIcon>
+              Domain join on launch{' '}
+              <Icon className="pf-u-ml-xs">
+                <Tooltip content={autoEnrollmentTooltipContent}>
+                  <OutlinedQuestionCircleIcon />
+                </Tooltip>
+              </Icon>
             </>
           }
         >
-          <Tooltip content={autoEnrollmentTooltipContent}>
-            <Switch
-              label="Enable upon finishing registration"
-              labelOff="Disable upon finishing registration"
-              id="checked-with-label-switch-on"
-              aria-label="Message when on"
-              isChecked={isAutoEnrollmentEnabled}
-              hasCheckIcon
-              onChange={onChangeAutoEnrollment}
-            />
-          </Tooltip>
+          <Switch
+            label="Enable upon finishing registration"
+            labelOff="Disable upon finishing registration"
+            id="checked-with-label-switch-on"
+            aria-label="Message when on"
+            isChecked={isAutoEnrollmentEnabled}
+            hasCheckIcon
+            onChange={onChangeAutoEnrollment}
+          />
         </FormGroup>
       </Form>
-    </React.Fragment>
+    </>
   );
 };
 
