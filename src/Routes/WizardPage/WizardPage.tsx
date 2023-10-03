@@ -42,12 +42,29 @@ const WizardPage = () => {
 
   /** Event triggered when Close button is clicked. */
   const onCloseClick = () => {
-    // FIXME A few things pending:
-    //       - Mocal confirmation
+    // TODO A few things pending:
+    //       - Modal confirmation
     //         - Confirm =>
     //           - if not registered, dismiss wizard
     //           - else => DELETE /domains/:domain_id
     //         - Cancel or close model => Do not dismiss wizard
+    if (domain.domain_id) {
+      resources_api
+        .updateDomainUser(domain.domain_id, {
+          title: domain.title,
+          description: domain.description,
+          auto_enrollment_enabled: domain.auto_enrollment_enabled,
+        })
+        .then((response) => {
+          if (response.status >= 400) {
+            // TODO show-up notification with error message
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error onClose: ' + error);
+        });
+    }
     navigate('/domains');
   };
 
@@ -56,6 +73,7 @@ const WizardPage = () => {
     _newStep: { id?: string | number; name: React.ReactNode },
     _prevStep: { prevId?: string | number; prevName: React.ReactNode }
   ) => {
+    // TODO If not needed at the end clean-up onPreviousPage
     console.log('onPreviousPage fired');
     return;
   };
@@ -65,6 +83,7 @@ const WizardPage = () => {
     _newStep: { id?: string | number; name: React.ReactNode },
     _prevStep: { prevId?: string | number; prevName: React.ReactNode }
   ) => {
+    // TODO If not needed at the end clean-up onPreviousPage
     console.log('onGoToStep fired');
     return;
   };
@@ -79,37 +98,6 @@ const WizardPage = () => {
     if (typeof id === 'string') {
       const [, orderIndex] = id.split('-');
       id = parseInt(orderIndex);
-    }
-    if (id === 2) {
-      // FIXME Clean-up when the token is created into the page 1
-      // try {
-      //   const response = await resources_api.createDomainToken({ domain_type: 'rhel-idm' }, undefined, undefined);
-      //   const newData = response.data;
-      //   appContext.wizard.setToken(newData.domain_token);
-      //   appContext.wizard.setUUID(newData.domain_id);
-      // } catch (error) {
-      //   // TODO Add error hanlder
-      //   console.log('error noNextPage: ' + error);
-      //   appContext.wizard.setToken('');
-      //   appContext.wizard.setUUID('');
-      // }
-    }
-    if (id === 4) {
-      try {
-        if (domain.domain_id) {
-          const response = await resources_api.updateDomainUser(domain.domain_id, {
-            title: domain.title,
-            description: domain.description,
-            auto_enrollment_enabled: domain.auto_enrollment_enabled,
-          });
-          if (response.status >= 400) {
-            // TODO show-up notification with error message
-          }
-        }
-      } catch (error) {
-        // TODO show-up notification with error message
-        console.log('error noNextPage: ' + error);
-      }
     }
   };
 
