@@ -148,6 +148,8 @@ const PagePreparation = (props: PagePreparationProps) => {
               <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
                 dnf list installed ipa-hcc-server
               </ClipboardCopy>
+            </li>
+            <li className="pf-u-pt-md pf-u-ml-md">
               <TextContent>
                 If the package is not present on your server(s), follow these{' '}
                 <Button
