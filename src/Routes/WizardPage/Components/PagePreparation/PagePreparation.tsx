@@ -148,9 +148,7 @@ const PagePreparation = (props: PagePreparationProps) => {
               <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
                 dnf list installed ipa-hcc-server
               </ClipboardCopy>
-            </li>
-            <li className="pf-u-pt-md pf-u-ml-md">
-              <TextContent>
+              <TextContent className="pf-u-pt-md">
                 If the package is not present on your server(s), follow these{' '}
                 <Button
                   component="a"
@@ -166,6 +164,8 @@ const PagePreparation = (props: PagePreparationProps) => {
                 <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
                   dnf copr enable copr.devel.redhat.com/cheimes/ipa-hcc && dnf install ipa-hcc-server
                 </ClipboardCopy>
+              </TextContent>
+              <TextContent className="pf-u-pt-md">
                 The package must be installed on at least one IPA server. For redundency, the package should be installed on two or more IPA servers,
                 possibly all IPA servers.
               </TextContent>
