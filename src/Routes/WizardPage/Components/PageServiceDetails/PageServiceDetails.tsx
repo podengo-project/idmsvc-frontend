@@ -73,7 +73,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
     <>
       <Form onSubmit={(e) => e.preventDefault()}>
         <Title headingLevel={'h2'}>Service Details</Title>
-        <FormGroup label="Service name" isRequired fieldId="register-domain-name" className="pf-u-mt-xs pf-u-mt-sm pf-u-mt-md pf-u-mt-lg pf-u-mt-xl">
+        <FormGroup label="Service name" isRequired fieldId="register-domain-name">
           <TextInput id="register-domain-name" value={title} onChange={onChangeTitle} className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl" />
         </FormGroup>
         <FormGroup label="Service description" fieldId="register-domain-description">

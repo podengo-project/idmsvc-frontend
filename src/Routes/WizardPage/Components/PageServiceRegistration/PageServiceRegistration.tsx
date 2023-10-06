@@ -62,7 +62,7 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
     <>
       <Title headingLevel={'h2'}>Register your directory and domain service</Title>
       <Form onSubmit={(e) => e.preventDefault()}>
-        <Alert title={alertTitle} variant="warning" isInline className="pf-u-mt-xs pf-u-mt-sm pf-u-mt-md pf-u-mt-lg pf-u-mt-xl">
+        <Alert title={alertTitle} variant="warning" isInline className="pf-u-mt-lg">
           Completing this step registers your directory and domain service, and cannot be undone from the wizard.{' '}
           <div className="pf-u-mt-md">
             <Button component="a" target="_blank" variant="link" isInline href={linkLearnMoreAbout}>

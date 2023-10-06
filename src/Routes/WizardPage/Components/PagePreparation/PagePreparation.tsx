@@ -101,7 +101,7 @@ const PagePreparation = (props: PagePreparationProps) => {
         <FormGroup
           label="Service type"
           fieldId="register-domain-type"
-          className="pf-u-mt-xs pf-u-mt-sm pf-u-mt-md pf-u-mt-lg pf-u-mt-xl"
+          className="pf-u-mt-lg"
           helperText={
             <TextContent style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Icon status="info" isInline>

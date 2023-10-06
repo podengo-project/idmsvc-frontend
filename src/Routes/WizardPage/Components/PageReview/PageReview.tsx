@@ -165,9 +165,7 @@ const PageReview = (props: PageReviewProps) => {
       <Title className="pt-u-mb-xl" headingLevel={'h2'}>
         Review
       </Title>
-      {props.domain.domain_type === 'rhel-idm' && (
-        <PageReviewIpa domain={props.domain} className="pf-u-mt-xs pf-u-mt-sm pf-u-mt-md pf-u-mt-lg pf-u-mt-xl" />
-      )}
+      {props.domain.domain_type === 'rhel-idm' && <PageReviewIpa domain={props.domain} className="pf-u-mt-lg" />}
     </>
   );
 };
