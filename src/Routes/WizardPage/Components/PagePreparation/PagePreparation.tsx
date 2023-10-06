@@ -110,23 +110,7 @@ const PagePreparation = (props: PagePreparationProps) => {
               Only RHEL IdM (IPA) are currently supported.
             </TextContent>
           }
-        >
-          <Select
-            id="register-domain-type"
-            isDisabled
-            isOpen={isOpen}
-            onSelect={onRegisterDomainTypeSelect}
-            // onOpenChange={(isOpen) => setIsOpen(isOpen)}
-            onToggle={onToggleClick}
-            className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
-          >
-            {domainOptions.map((option) => (
-              <SelectOption key={option.value} value={option.value}>
-                {option.title}
-              </SelectOption>
-            ))}
-          </Select>
-        </FormGroup>
+        ></FormGroup>
         <FormGroup label="Service prerequisites">
           <ol>
             <li className="pf-u-pt-sd pf-u-ml-md">
