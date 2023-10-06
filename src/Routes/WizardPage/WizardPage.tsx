@@ -157,7 +157,7 @@ const WizardPage = () => {
       name: 'Preparation',
       component: <PagePreparation onToken={onToken} />,
       canJumpTo: canJumpPage1,
-      enableNext: true,
+      enableNext: canJumpPage2,
     },
     {
       id: 2,
