@@ -28,17 +28,15 @@ export interface DomainProps {
  * @param domain the domain
  * @returns an array with the indexable fields for comparing.
  */
-const getSortableRowValues = (domain: Domain): (string | boolean)[] => {
+const getSortableRowValues = (domain: Domain): string[] => {
+  // FIXME What is status column? where do we retrieve that value form the backend?
   const status = 'Available';
   const { domain_type } = domain;
   let { title, auto_enrollment_enabled } = domain;
-  if (title === undefined) {
-    title = '';
-  }
-  if (auto_enrollment_enabled === undefined) {
-    auto_enrollment_enabled = false;
-  }
-  return [title, domain_type, status, auto_enrollment_enabled];
+  title = title || '';
+  auto_enrollment_enabled = auto_enrollment_enabled || false;
+  const text_auto_enrollment_enabled = auto_enrollment_enabled === true ? 'Enabled' : 'Disabled';
+  return [title, domain_type, status, text_auto_enrollment_enabled];
 };
 
 type fnCompareRows = (a: Domain, b: Domain) => number;
@@ -76,17 +74,6 @@ function createCompareRows(activeSortIndex: number, activeSortDirection: 'asc' |
         return (aValue as string).localeCompare(bValue as string);
       }
       return (bValue as string).localeCompare(aValue as string);
-    } else if (typeof aValue === 'boolean') {
-      // Boolean sort
-      if (activeSortDirection === 'asc') {
-        if ((!aValue as boolean) && (bValue as boolean)) {
-          return -1;
-        }
-        if ((aValue as boolean) && (!bValue as boolean)) {
-          return +1;
-        }
-        return 0;
-      }
     }
     return 0;
   };
@@ -155,9 +142,7 @@ export const DomainList: React.FC = () => {
 
   // Note that we perform the sort as part of the component's render logic and not in onSort.
   // We shouldn't store the list of data in state because we don't want to have to sync that with props.
-  if (activeSortIndex !== null) {
-    domains.sort(createCompareRows(activeSortIndex, activeSortDirection));
-  }
+  activeSortIndex !== null && domains.sort(createCompareRows(activeSortIndex, activeSortDirection));
 
   return (
     <>
