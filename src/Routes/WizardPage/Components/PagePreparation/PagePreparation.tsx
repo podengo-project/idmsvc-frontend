@@ -89,7 +89,7 @@ const PagePreparation = (props: PagePreparationProps) => {
               <Icon status="info" isInline>
                 <InfoCircleIcon />
               </Icon>{' '}
-              Only RHEL IdM (IPA) are currently supported.
+              Only Red Hat Identity Management (IdM) is currently supported.
             </TextContent>
           }
         ></FormGroup>
