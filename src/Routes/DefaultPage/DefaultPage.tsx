@@ -29,8 +29,6 @@ import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { DomainList } from '../../Components/DomainList/DomainList';
 import { AppContext, IAppContext } from '../../AppContext';
 
-// const SampleComponent = lazy(() => import('../../Components/SampleComponent/sample-component'));
-
 const Header = () => {
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const title = 'Directory and Domain Services';
@@ -117,6 +115,7 @@ const ListContent = () => {
   const [perPage, setPerPage] = useState<number>(10);
   const [offset, setOffset] = useState<number>(0);
 
+  // TODO Extract this code in a hook
   useEffect(() => {
     // eslint-disable-next-line prefer-const
     let local_domains: Domain[] = [];
@@ -220,8 +219,6 @@ const DefaultPage = () => {
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
   // States
-  // const [domains, setDomains] = useState<Domain[]>(appContext?.domains);
-
   const [page, setPage] = useState<number>(0);
   const [itemCount, setItemCount] = useState<number>(0);
   const [perPage] = useState<number>(10);
@@ -229,6 +226,7 @@ const DefaultPage = () => {
 
   console.log('INFO:DefaultPage render');
 
+  // TODO Extract in a hook
   useEffect(() => {
     // eslint-disable-next-line prefer-const
     let local_domains: Domain[] = [];
@@ -264,21 +262,22 @@ const DefaultPage = () => {
     };
   }, [page, perPage, offset]);
 
-  if (/* appContext.domains.length == 0 */ itemCount == 0) {
-    return (
-      <>
-        <Header />
-        <EmptyContent />
-      </>
-    );
-  }
-
-  return (
+  const listContent = (
     <>
       <Header />
       <ListContent />
     </>
   );
+
+  const emptyContent = (
+    <>
+      <Header />
+      <EmptyContent />
+    </>
+  );
+
+  const content = itemCount == 0 ? emptyContent : listContent;
+  return content;
 };
 
 export default DefaultPage;

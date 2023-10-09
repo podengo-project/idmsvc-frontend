@@ -123,9 +123,7 @@ const WizardPage = () => {
   const onVerify = (value: VerifyState, data?: Domain) => {
     appContext.wizard.setRegisteredStatus(value);
     if (value === 'completed') {
-      if (data) {
-        appContext.wizard.setDomain(data);
-      }
+      data && appContext.wizard.setDomain(data);
       setCanJumpPage3(true);
     } else {
       setCanJumpPage3(false);
@@ -150,7 +148,7 @@ const WizardPage = () => {
   };
 
   /** Configure the wizard pages. */
-  const steps = [
+  const steps: WizardStep[] = [
     {
       // This page only display the pre-requisites
       id: 1,

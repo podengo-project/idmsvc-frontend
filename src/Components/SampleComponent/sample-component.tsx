@@ -11,6 +11,4 @@ const SampleComponent: React.FC = (props) => {
   return <span className="sample-component"> {props.children} </span>;
 };
 
-SampleComponent.displayName = 'SampleComponent';
-
 export default SampleComponent;

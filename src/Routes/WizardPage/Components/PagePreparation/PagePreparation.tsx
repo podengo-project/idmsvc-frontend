@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 import InfoCircleIcon from '@patternfly/react-icons/dist/esm/icons/info-circle-icon';
-import { Button, ClipboardCopy, Form, FormGroup, Icon, Select, SelectOption, TextContent, Title } from '@patternfly/react-core';
+import { Button, ClipboardCopy, Form, FormGroup, Icon, TextContent, Title } from '@patternfly/react-core';
 
 import './PagePreparation.scss';
-import { DomainType, ResourcesApiFactory } from '../../../../Api';
+import { ResourcesApiFactory } from '../../../../Api';
 import { AppContext, IAppContext } from '../../../../AppContext';
 
 /** Represent the properties for PagePreparation component. */
@@ -31,7 +31,6 @@ const PagePreparation = (props: PagePreparationProps) => {
   const prerequisitesLink = 'https://www.google.com?q=rhel-idm+pre-requisites';
 
   // States
-  const [isOpen, setIsOpen] = useState(false);
   const appContext = useContext<IAppContext>(AppContext);
 
   const base_url = '/api/idmsvc/v1';
@@ -72,23 +71,6 @@ const PagePreparation = (props: PagePreparationProps) => {
         console.log('error creating the token by createDomainToken: ' + reason);
       });
   }, [token, domain_id]);
-
-  const onRegisterDomainTypeSelect = () => {
-    // TODO Not implemented, currently only support rhel-idm
-    console.debug('PagePreparation.onRegisterDomainTypeSelect in WizardPage');
-    return;
-  };
-
-  const onToggleClick = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const domainOptions = [
-    {
-      value: 'rhel-idm' as DomainType,
-      title: 'RHEL IdM (IPA)',
-    },
-  ];
 
   return (
     <>
