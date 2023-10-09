@@ -79,16 +79,24 @@ function createCompareRows(activeSortIndex: number, activeSortDirection: 'asc' |
   };
 }
 
-const DomainListFieldType: React.FC<{ domain_type: DomainType }> = (props) => {
+interface DomainListFieldTypeProps {
+  domain_type: DomainType;
+}
+
+const DomainListFieldType = (props: DomainListFieldTypeProps) => {
   switch (props.domain_type) {
     case 'rhel-idm':
-      return <>RHEL IdM</>;
+      return <>Red Hat IdM</>;
     default:
       return <>{props.domain_type}: Not supported</>;
   }
 };
 
-const DomainListFieldStatus: React.FC<{ domain: Domain }> = (props) => {
+interface DomainListFieldStatusProps {
+  domain: Domain;
+}
+
+const DomainListFieldStatus = (props: DomainListFieldStatusProps) => {
   // TODO TBD Which values to return and logic for them
   if (props.domain.domain_id === undefined || props.domain.domain_id === null) {
     return <>Unavailable</>;
@@ -97,7 +105,7 @@ const DomainListFieldStatus: React.FC<{ domain: Domain }> = (props) => {
   }
 };
 
-export const DomainList: React.FC = () => {
+export const DomainList = () => {
   const context = useContext<IAppContext>(AppContext);
 
   // Index of the currently sorted column
@@ -152,7 +160,7 @@ export const DomainList: React.FC = () => {
             <Th sort={getSortParams(0)}>Name</Th>
             <Th>Type</Th>
             <Th>Status</Th>
-            <Th sort={getSortParams(3)}>Host domain join on launch</Th>
+            <Th sort={getSortParams(3)}>Domain auto-join on launch</Th>
             <Th></Th>
           </Tr>
         </Thead>

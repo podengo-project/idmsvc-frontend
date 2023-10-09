@@ -159,15 +159,14 @@ const WizardPage = () => {
     },
     {
       id: 2,
-      name: 'Service registration',
+      name: 'Domain registration',
       component: <PageServiceRegistration uuid={domain.domain_id ? domain.domain_id : ''} token={appContext.wizard.getToken()} onVerify={onVerify} />,
       canJumpTo: canJumpPage2,
       enableNext: canJumpPage3,
     },
     {
       id: 3,
-      name: 'Service details',
-      // FIXME Pass here the 'registering.domain' field from the context
+      name: 'Domain information',
       component: (
         <PageServiceDetails
           title={domain.title}
@@ -191,7 +190,7 @@ const WizardPage = () => {
     },
   ];
 
-  const title = 'Register directory and domain service';
+  const title = 'Register identity domain';
 
   return (
     <>
@@ -199,7 +198,7 @@ const WizardPage = () => {
         <PageHeader>
           <PageHeaderTitle title={title} />
           <p>
-            Add a service to the registry.{' '}
+            Add an identity domain to the registry.{' '}
             <Button
               component="a"
               target="_blank"
@@ -209,7 +208,7 @@ const WizardPage = () => {
               iconPosition="right"
               href={linkLearnMoreAbout}
             >
-              Learn more about the directory and domain services{' '}
+              Learn more about registering identity domains{' '}
             </Button>
           </p>
         </PageHeader>

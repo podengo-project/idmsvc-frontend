@@ -94,6 +94,9 @@ const PageReviewIpaServers = (props: PageReviewIpaServersProps) => {
  * @see {@link PageReview} about the parent component.
  */
 const PageReviewIpa = (props: PageReviewProps & { className?: string }) => {
+  const auto_enrollment_description: string = props.domain.auto_enrollment_enabled
+    ? 'Enable upon finishing registration'
+    : 'Not enable upon finishing registration';
   return (
     <>
       <DescriptionList
@@ -109,32 +112,30 @@ const PageReviewIpa = (props: PageReviewProps & { className?: string }) => {
         }}
       >
         <DescriptionListGroup>
-          <DescriptionListTerm>Service type</DescriptionListTerm>
-          <DescriptionListDescription disabled>RHEL IdM (IPA)</DescriptionListDescription>
+          <DescriptionListTerm>Identity domain type</DescriptionListTerm>
+          <DescriptionListDescription disabled>Red Hat IdM</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>Kerberos realm</DescriptionListTerm>
           <DescriptionListDescription disabled>{props.domain['rhel-idm']?.realm_name}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>Red Hat IdM/IPA servers</DescriptionListTerm>
+          <DescriptionListTerm>Red Hat IdM servers</DescriptionListTerm>
           <DescriptionListDescription disabled>
             <PageReviewIpaServers servers={props.domain['rhel-idm']?.servers} />
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>Service name</DescriptionListTerm>
+          <DescriptionListTerm>Identity domain name</DescriptionListTerm>
           <DescriptionListDescription disabled>{props.domain.title}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>Service description</DescriptionListTerm>
+          <DescriptionListTerm>Identity domain description</DescriptionListTerm>
           <DescriptionListDescription disabled>{props.domain.description}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>Domain join on launch</DescriptionListTerm>
-          <DescriptionListDescription disabled>
-            {props.domain.auto_enrollment_enabled ? 'Enable upon finishing registration' : 'Not enable upon finishing registration'}
-          </DescriptionListDescription>
+          <DescriptionListTerm>Domain auto-join on launch</DescriptionListTerm>
+          <DescriptionListDescription disabled>{auto_enrollment_description}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
     </>

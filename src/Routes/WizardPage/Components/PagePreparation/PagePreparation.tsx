@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
-import InfoCircleIcon from '@patternfly/react-icons/dist/esm/icons/info-circle-icon';
-import { Button, ClipboardCopy, Form, FormGroup, Icon, TextContent, Title } from '@patternfly/react-core';
+import { Alert, Button, ClipboardCopy, Form, FormGroup, TextContent, Title } from '@patternfly/react-core';
 
 import './PagePreparation.scss';
 import { ResourcesApiFactory } from '../../../../Api';
@@ -74,26 +73,16 @@ const PagePreparation = (props: PagePreparationProps) => {
 
   return (
     <>
-      <Title headingLevel={'h2'}>Preparation for your directory and domain service</Title>
+      <Title headingLevel={'h2'}>Preparation for your identity domain registration</Title>
       <Form
         onSubmit={(value) => {
           console.debug('TODO onSubmit WizardPage' + String(value));
         }}
       >
-        <FormGroup
-          label="Service type"
-          fieldId="register-domain-type"
-          className="pf-u-mt-lg"
-          helperText={
-            <TextContent style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Icon status="info" isInline>
-                <InfoCircleIcon />
-              </Icon>{' '}
-              Only Red Hat Identity Management (IdM) is currently supported.
-            </TextContent>
-          }
-        ></FormGroup>
-        <FormGroup label="Service prerequisites">
+        <FormGroup label="Identity domain type" fieldId="register-domain-type" className="pf-u-mt-lg">
+          <Alert title={'Only Red Hat Identity Management (IdM) is currently supported.'} variant="info" isInline></Alert>
+        </FormGroup>
+        <FormGroup label="Identity domain prerequisites">
           <ol>
             <li className="pf-u-pt-sd pf-u-ml-md">
               Complete the{' '}
@@ -110,12 +99,15 @@ const PagePreparation = (props: PagePreparationProps) => {
               </Button>
             </li>
             <li className="pf-u-pt-md pf-u-ml-md">
-              <TextContent>Verify whether or not the package is present on your server(s) with this command:</TextContent>
+              <TextContent>
+                Verify whether or not the package is present on your Red Hat IdM server(s) by running the following command in a terminal on your Red
+                Hat IdM server(s):
+              </TextContent>
               <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
                 dnf list installed ipa-hcc-server
               </ClipboardCopy>
               <TextContent className="pf-u-pt-md">
-                If the package is not present on your server(s), follow these{' '}
+                If the package is not present on your Red Hat IdM server(s), follow these{' '}
                 <Button
                   component="a"
                   target="_blank"
@@ -132,8 +124,8 @@ const PagePreparation = (props: PagePreparationProps) => {
                 </ClipboardCopy>
               </TextContent>
               <TextContent className="pf-u-pt-md">
-                The package must be installed on at least one IPA server. For redundency, the package should be installed on two or more IPA servers,
-                possibly all IPA servers.
+                The package must be installed on at least one Red Hat IdM server. For redundancy, the package should be installed on two or more Red
+                Hat IdM servers.
               </TextContent>
             </li>
           </ol>

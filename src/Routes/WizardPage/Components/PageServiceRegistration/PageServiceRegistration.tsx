@@ -43,8 +43,10 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
   //   openInNewWindow(installServerPackagesLink);
   // };
 
-  const ipa_hcc_register_cmd = 'ipa-hcc register ' + props.token;
-  const alertTitle = 'Register your directory and domain service';
+  // FIXME Restore the line below after the demo
+  // const ipa_hcc_register_cmd = 'ipa-hcc register ' + props.token;
+  const ipa_hcc_register_cmd = props.token;
+  const alertTitle = 'Register your identity domain';
 
   // FIXME Update the URL with the location for docs
   const linkLearnMoreAbout = 'https://www.google.es/search?q=freeipa+registering+a+domain+service';
@@ -60,20 +62,21 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
 
   return (
     <>
-      <Title headingLevel={'h2'}>Register your directory and domain service</Title>
+      <Title headingLevel={'h2'}>Register your identity domain</Title>
       <Form onSubmit={(e) => e.preventDefault()}>
         <Alert title={alertTitle} variant="warning" isInline className="pf-u-mt-lg">
-          Completing this step registers your directory and domain service, and cannot be undone from the wizard.{' '}
+          Completing this step registers your identity domain, and cannot be undone from the wizard.{' '}
           <div className="pf-u-mt-md">
             <Button component="a" target="_blank" variant="link" isInline href={linkLearnMoreAbout}>
-              Learn more about registering directory and domain services
+              Learn more about registering identity domains
             </Button>
           </div>
         </Alert>
         <ol>
           <li className="pf-u-ml-md">
             <TextContent>
-              Register your IdM server with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your IdM server.
+              Register your Red Hat IdM server with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your Red Hat
+              IdM server.
             </TextContent>
             <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
               {ipa_hcc_register_cmd}

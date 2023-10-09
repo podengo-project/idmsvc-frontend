@@ -65,18 +65,16 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
     }
   };
 
-  const autoEnrollmentTooltipContent = isAutoEnrollmentEnabled
-    ? 'Enabling makes the serice available for the "Domain join on launch" feature within Image Builder.'
-    : 'Disabling the option leaves the service registration intact, but does not make it available for the "Domain join on launch" feature within Image Builder. It can be enabled later in the "Register Directory and Domain Service" view.';
+  const autoEnrollmentTooltipContent = 'This option allows hosts to join this identity domain using domain auto-join on launch';
 
   return (
     <>
       <Form onSubmit={(e) => e.preventDefault()}>
-        <Title headingLevel={'h2'}>Service Details</Title>
-        <FormGroup label="Service name" isRequired fieldId="register-domain-name">
+        <Title headingLevel={'h2'}>Add your identity domain information</Title>
+        <FormGroup label="Identity domain name" isRequired fieldId="register-domain-name">
           <TextInput id="register-domain-name" value={title} onChange={onChangeTitle} className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl" />
         </FormGroup>
-        <FormGroup label="Service description" fieldId="register-domain-description">
+        <FormGroup label="Identity domain description" fieldId="register-domain-description">
           <TextArea
             contentEditable="true"
             id="register-domain-description"
@@ -90,7 +88,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
         <FormGroup
           label={
             <>
-              Domain join on launch{' '}
+              Domain auto-join on launch{' '}
               <Icon className="pf-u-ml-xs">
                 <Tooltip content={autoEnrollmentTooltipContent}>
                   <OutlinedQuestionCircleIcon />

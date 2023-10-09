@@ -38,7 +38,7 @@ const Header = () => {
       <PageHeader>
         <PageHeaderTitle title={title} />
         <p>
-          Manage registered domains to leverage host access controls from your existing identity and access management.{' '}
+          Manage registered identity domains to leverage host access controls from your existing identity and access management.{' '}
           <Button component="a" target="_blank" variant="link" isInline icon={<ExternalLinkAltIcon />} iconPosition="right" href={linkLearnMoreAbout}>
             Learn more about the domain registry.
           </Button>
@@ -68,16 +68,16 @@ const EmptyContent = () => {
           <EmptyState variant={EmptyStateVariant.full}>
             <RegistryIcon className="pf-u-color-200" size="xl" />
             <Title headingLevel="h2" size="lg" className="pf-u-pt-sm">
-              No directory and domain services registered
+              No identity domains registered
             </Title>
             <EmptyStateBody>
               <Stack>
                 <StackItem className="pf-u-pt-sm">
-                  Use access controls from your existing IdM hosts in your cloud
-                  <br /> environment*. To get started, register a service.
+                  Use host access controls from your existing identity domains in your
+                  <br /> cloud environment*. To get started, register an identity domain.
                 </StackItem>
                 <StackItem className="pf-u-pt-md">
-                  <Button onClick={handleOpenWizard}>Register a service</Button>
+                  <Button onClick={handleOpenWizard}>Register identity domain</Button>
                 </StackItem>
                 <StackItem className="pf-u-pt-md">
                   <Button
@@ -89,11 +89,11 @@ const EmptyContent = () => {
                     iconPosition="right"
                     href={linkLearnMoreAbout}
                   >
-                    Learn more about directory and domain services{' '}
+                    Learn more about registering identity domains{' '}
                   </Button>
                 </StackItem>
                 <StackItem className="pf-u-pt-lg pf-u-color-100">
-                  *Directory and domain services are currently available only for Red Hat IdM and IPA deployments.
+                  *Only currently available for Red Hat Identity Management (IdM) deployments.
                 </StackItem>
               </Stack>
             </EmptyStateBody>
@@ -178,7 +178,7 @@ const ListContent = () => {
               <Toolbar>
                 <Flex>
                   <FlexItem>
-                    <Button onClick={handleOpenWizard}>Register a service</Button>
+                    <Button onClick={handleOpenWizard}>Register identity domain</Button>
                   </FlexItem>
                 </Flex>
               </Toolbar>
