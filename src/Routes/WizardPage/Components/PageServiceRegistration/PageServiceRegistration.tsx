@@ -73,8 +73,7 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
         <ol>
           <li className="pf-u-ml-md">
             <TextContent>
-              To register your Red Hat IdM/IPA server with the Red Hat Hybrid Cloud Console, run the following command in your RHEL IdM (IPA)
-              server&#39;s terminal.
+              Register your IdM server with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your IdM server.
             </TextContent>
             <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
               {ipa_hcc_register_cmd}
