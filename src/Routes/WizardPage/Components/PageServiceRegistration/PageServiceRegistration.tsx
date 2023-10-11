@@ -43,9 +43,7 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
   //   openInNewWindow(installServerPackagesLink);
   // };
 
-  // FIXME Restore the line below after the demo
-  // const ipa_hcc_register_cmd = 'ipa-hcc register ' + props.token;
-  const ipa_hcc_register_cmd = props.token;
+  const ipa_hcc_register_cmd = 'ipa-hcc register ' + props.token;
   const alertTitle = 'Register your identity domain';
 
   // FIXME Update the URL with the location for docs
