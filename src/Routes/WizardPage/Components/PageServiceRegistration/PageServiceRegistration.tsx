@@ -73,7 +73,7 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
         <ol>
           <li className="pf-u-ml-md">
             <TextContent>
-              Register your Red Hat IdM server with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your Red Hat
+              Register your Red Hat IdM domain with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your Red Hat
               IdM server.
             </TextContent>
             <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
