@@ -29,14 +29,12 @@ export interface DomainProps {
  * @returns an array with the indexable fields for comparing.
  */
 const getSortableRowValues = (domain: Domain): string[] => {
-  // FIXME What is status column? where do we retrieve that value form the backend?
-  const status = 'Available';
   const { domain_type } = domain;
   let { title, auto_enrollment_enabled } = domain;
   title = title || '';
   auto_enrollment_enabled = auto_enrollment_enabled || false;
   const text_auto_enrollment_enabled = auto_enrollment_enabled === true ? 'Enabled' : 'Disabled';
-  return [title, domain_type, status, text_auto_enrollment_enabled];
+  return [title, domain_type, text_auto_enrollment_enabled];
 };
 
 type fnCompareRows = (a: Domain, b: Domain) => number;
@@ -89,19 +87,6 @@ const DomainListFieldType = (props: DomainListFieldTypeProps) => {
       return <>Red Hat IdM</>;
     default:
       return <>{props.domain_type}: Not supported</>;
-  }
-};
-
-interface DomainListFieldStatusProps {
-  domain: Domain;
-}
-
-const DomainListFieldStatus = (props: DomainListFieldStatusProps) => {
-  // TODO TBD Which values to return and logic for them
-  if (props.domain.domain_id === undefined || props.domain.domain_id === null) {
-    return <>Unavailable</>;
-  } else {
-    return <>Available</>;
   }
 };
 
@@ -159,7 +144,6 @@ export const DomainList = () => {
           <Tr>
             <Th sort={getSortParams(0)}>Name</Th>
             <Th>Type</Th>
-            <Th>Status</Th>
             <Th sort={getSortParams(3)}>Domain auto-join on launch</Th>
             <Th></Th>
           </Tr>
@@ -180,9 +164,6 @@ export const DomainList = () => {
                   </Td>
                   <Td>
                     <DomainListFieldType domain_type={domain.domain_type} />
-                  </Td>
-                  <Td>
-                    <DomainListFieldStatus domain={domain} />
                   </Td>
                   <Td>{domain.auto_enrollment_enabled ? enabledText : disabledText}</Td>
                   <Td isActionCell>
