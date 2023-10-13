@@ -122,21 +122,29 @@ const WizardPage = () => {
 
   const onVerify = (value: VerifyState, data?: Domain) => {
     appContext.wizard.setRegisteredStatus(value);
-    if (value === 'completed') {
-      data && appContext.wizard.setDomain(data);
+    if (value === 'completed' && data !== undefined) {
+      appContext.wizard.setDomain(data);
       setCanJumpPage3(true);
+      // Check whether initial values for user-configurable fields
+      // are valid.  They should be, which will enable the user to
+      // accept the defaults as-is.
+      onUserInputChange(data);
     } else {
       setCanJumpPage3(false);
     }
   };
 
+  // User changed an input that could affect data validity.
+  // Check validity and set "Next" button state accordingly.
+  const onUserInputChange = (domain: Domain): void => {
+    const good = domain.title ? domain.title.length > 0 : false;
+    setCanJumpPage4(good);
+  };
+
   const onChangeTitle = (value: string) => {
-    appContext.wizard.setDomain({ ...domain, title: value });
-    if (value.length > 0) {
-      setCanJumpPage4(true);
-    } else {
-      setCanJumpPage4(false);
-    }
+    const newDomain: Domain = { ...domain, title: value };
+    appContext.wizard.setDomain(newDomain);
+    onUserInputChange(newDomain);
   };
 
   const onChangeDescription = (value: string) => {
