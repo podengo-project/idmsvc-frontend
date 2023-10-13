@@ -121,6 +121,12 @@ const WizardPage = () => {
   };
 
   const onVerify = (value: VerifyState, data?: Domain) => {
+    if (appContext.wizard.getRegisteredStatus() === 'completed') {
+      // verify was previously completed (e.g. user stepped the wizard
+      // back to the token page.  Do not overwrite the domain value,
+      // so that we do not discard any user-specified settings.
+      return;
+    }
     appContext.wizard.setRegisteredStatus(value);
     if (value === 'completed') {
       data && appContext.wizard.setDomain(data);
