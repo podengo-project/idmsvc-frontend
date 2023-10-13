@@ -3,7 +3,7 @@ import './DomainList.scss';
 import { Fragment, useContext, useState } from 'react';
 import React from 'react';
 
-import { Domain, DomainType } from '../../Api/api';
+import { Domain, DomainType, ResourcesApiFactory } from '../../Api/api';
 import { Link } from 'react-router-dom';
 import { AppContext, IAppContext } from '../../AppContext';
 
@@ -106,6 +106,9 @@ const DomainListFieldStatus = (props: DomainListFieldStatusProps) => {
 };
 
 export const DomainList = () => {
+  const base_url = '/api/idmsvc/v1';
+  const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
+
   const context = useContext<IAppContext>(AppContext);
 
   // Index of the currently sorted column
@@ -116,7 +119,7 @@ export const DomainList = () => {
   // Sort direction of the currently sorted column
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
-  const [domains] = useState<Domain[]>(context.domains);
+  const [domains, setDomains] = useState<Domain[]>(context.domains);
   const enabledText = 'Enabled';
   const disabledText = 'Disabled';
 
@@ -133,10 +136,40 @@ export const DomainList = () => {
     columnIndex,
   });
 
+  // given a domain object, replace it in the `domains` state
+  // (matching by uuid).
+  const replaceDomain = (newDomain: Domain): void => {
+    const newDomains = domains.map((domain) => {
+      return domain.domain_id === newDomain.domain_id ? newDomain : domain;
+    });
+    setDomains(newDomains);
+  };
+
+  const onEnableDisable = (domain: Domain) => {
+    console.log(`clicked on Enable/Disable, on row ${domain.title}`);
+    if (domain.domain_id) {
+      resources_api
+        .updateDomainUser(domain.domain_id, {
+          auto_enrollment_enabled: !domain.auto_enrollment_enabled,
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            replaceDomain(response.data);
+          } else {
+            // TODO show-up notification with error message
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error onClose: ' + error);
+        });
+    }
+  };
+
   const defaultActions = (domain: Domain): IAction[] => [
     {
       title: 'Enable/Disable',
-      onClick: () => console.log(`clicked on Enable/Disable, on row ${domain.title}`),
+      onClick: () => onEnableDisable(domain),
     },
     {
       title: 'Edit',
