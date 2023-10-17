@@ -130,6 +130,17 @@ export const DomainList = () => {
     setDomains(newDomains);
   };
 
+  // remove domain(s) matching the given uuid from the `domains` state
+  const removeDomain = (uuid: string): void => {
+    const newDomains: Domain[] = [];
+    for (const domain of domains) {
+      if (domain.domain_id !== uuid) {
+        newDomains.push(domain);
+      }
+    }
+    setDomains(newDomains);
+  };
+
   const onEnableDisable = (domain: Domain) => {
     console.log(`clicked on Enable/Disable, on row ${domain.title}`);
     if (domain.domain_id) {
@@ -140,6 +151,25 @@ export const DomainList = () => {
         .then((response) => {
           if (response.status == 200) {
             replaceDomain(response.data);
+          } else {
+            // TODO show-up notification with error message
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error onClose: ' + error);
+        });
+    }
+  };
+
+  const onDelete = (domain: Domain) => {
+    if (domain.domain_id !== undefined) {
+      const domainId = domain.domain_id;
+      resources_api
+        .deleteDomain(domainId)
+        .then((response) => {
+          if (response.status == 204) {
+            removeDomain(domainId);
           } else {
             // TODO show-up notification with error message
           }
@@ -162,7 +192,7 @@ export const DomainList = () => {
     },
     {
       title: 'Delete',
-      onClick: () => console.log(`clicked on Delete, on row ${domain.title}`),
+      onClick: () => onDelete(domain),
     },
   ];
 
