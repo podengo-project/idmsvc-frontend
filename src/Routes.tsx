@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import WizardPage from './Routes/WizardPage/WizardPage';
+import DetailPage from './Routes/DetailPage/DetailPage';
 
 const DefaultPage = lazy(() => import(/* webpackChunkName: "DefaultPage" */ './Routes/DefaultPage/DefaultPage'));
 const OopsPage = lazy(() => import(/* webpackChunkName: "OopsPage" */ './Routes/OopsPage/OopsPage'));
@@ -26,6 +27,7 @@ const DomainRegistryRoutes = () => (
   >
     <Routes>
       <Route path="/domains" Component={DefaultPage} />
+      <Route path="/details/:domain_id" Component={DetailPage} />
       <Route path="/domains/wizard" Component={WizardPage} />
       <Route path="/oops" Component={OopsPage} />
       <Route path="/no-permissions" Component={NoPermissionsPage} />

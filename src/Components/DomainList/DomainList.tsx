@@ -223,7 +223,7 @@ export const DomainList = () => {
               <>
                 <Tr key={domain.domain_id}>
                   <Td>
-                    <Link to="/domains/{domain.domain_id}">{domain.title}</Link>
+                    <Link to={'/details/' + domain.domain_id}>{domain.title}</Link>
                   </Td>
                   <Td>
                     <DomainListFieldType domain_type={domain.domain_type} />
