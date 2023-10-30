@@ -4,8 +4,9 @@ import { Fragment, useContext, useState } from 'react';
 import React from 'react';
 
 import { Domain, DomainType, ResourcesApiFactory } from '../../Api/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppContext, IAppContext } from '../../AppContext';
+import { Button } from '@patternfly/react-core';
 
 export interface IColumnType<T> {
   key: string;
@@ -95,6 +96,7 @@ export const DomainList = () => {
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
   const context = useContext<IAppContext>(AppContext);
+  const navigate = useNavigate();
 
   // Index of the currently sorted column
   // Note: if you intend to make columns reorderable, you may instead want to use a non-numeric key
@@ -104,7 +106,7 @@ export const DomainList = () => {
   // Sort direction of the currently sorted column
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
-  const [domains, setDomains] = useState<Domain[]>(context.domains);
+  const [domains, setDomains] = useState<Domain[]>(context.getDomains());
   const enabledText = 'Enabled';
   const disabledText = 'Disabled';
 
@@ -200,6 +202,13 @@ export const DomainList = () => {
   // We shouldn't store the list of data in state because we don't want to have to sync that with props.
   activeSortIndex !== null && domains.sort(createCompareRows(activeSortIndex, activeSortDirection));
 
+  const onShowDetails = (domain: Domain | undefined) => {
+    if (domain !== undefined) {
+      context.setEditing(domain);
+      navigate('/details/' + domain?.domain_id);
+    }
+  };
+
   return (
     <>
       <TableComposable>
@@ -223,7 +232,14 @@ export const DomainList = () => {
               <>
                 <Tr key={domain.domain_id}>
                   <Td>
-                    <Link to={'/details/' + domain.domain_id}>{domain.title}</Link>
+                    <Button
+                      variant="link"
+                      onClick={() => {
+                        onShowDetails(domain);
+                      }}
+                    >
+                      {domain.title}
+                    </Button>
                   </Td>
                   <Td>
                     <DomainListFieldType domain_type={domain.domain_type} />

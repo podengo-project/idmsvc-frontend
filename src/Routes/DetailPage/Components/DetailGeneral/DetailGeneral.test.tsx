@@ -1,0 +1,1 @@
+@import '~@redhat-cloud-services/frontend-components-utilities/styles/variables';

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { init } from './store';
@@ -10,13 +10,16 @@ import { Domain } from './Api';
 import { VerifyState } from './Routes/WizardPage/Components/VerifyRegistry/VerifyRegistry';
 
 const AppEntry = () => {
-  const appContext = useContext(AppContext);
   const [domains, setDomains] = useState<Domain[]>([]);
   const [wizardToken, setWizardToken] = useState<string>('');
   const [wizardDomain, setWizardDomain] = useState<Domain>({} as Domain);
   const [wizardRegisterStatus, setWizardRegisterStatus] = useState<VerifyState>('initial');
+  const [editing, setEditing] = useState<Domain | undefined>(undefined);
+
+  const cbGetDomains = (): Domain[] => {
+    return domains;
+  };
   const cbSetDomains = (domains: Domain[]) => {
-    appContext.domains = domains;
     setDomains(domains);
   };
   const cbGetWizardToken = (): string => {
@@ -37,12 +40,20 @@ const AppEntry = () => {
   const cbSetRegisterStatus = (value: VerifyState) => {
     setWizardRegisterStatus(value);
   };
+  const cbGetEditing = (): Domain | undefined => {
+    return editing;
+  };
+  const cbSetEditing = (value: Domain | undefined) => {
+    setEditing(value);
+  };
   return (
     <Provider store={init(...(process.env.NODE_ENV !== 'production' ? [logger] : [])).getStore()}>
       <Router basename={getBaseName(window.location.pathname)}>
         <AppContext.Provider
           value={{
-            domains: domains,
+            getEditing: cbGetEditing,
+            setEditing: cbSetEditing,
+            getDomains: cbGetDomains,
             setDomains: cbSetDomains,
             wizard: {
               getToken: cbGetWizardToken,

@@ -10,6 +10,7 @@ import {
   CardBody,
   EmptyState,
   EmptyStateBody,
+  EmptyStateIcon,
   EmptyStateVariant,
   Flex,
   FlexItem,
@@ -34,21 +35,23 @@ const Header = () => {
   const title = 'Directory and Domain Services';
 
   return (
-    <>
-      <PageHeader>
-        <PageHeaderTitle title={title} />
-        <p>
-          Manage registered identity domains to leverage host access controls from your existing identity and access management.{' '}
-          <Button component="a" target="_blank" variant="link" isInline icon={<ExternalLinkAltIcon />} iconPosition="right" href={linkLearnMoreAbout}>
-            Learn more about the domain registry.
-          </Button>
-        </p>
-      </PageHeader>
-    </>
+    <PageHeader>
+      <PageHeaderTitle title={title} />
+      <p>
+        Manage registered identity domains to leverage host access controls from your existing identity and access management.{' '}
+        <Button component="a" target="_blank" variant="link" isInline icon={<ExternalLinkAltIcon />} iconPosition="right" href={linkLearnMoreAbout}>
+          Learn more about the domain registry.
+        </Button>
+      </p>
+    </PageHeader>
   );
 };
 
-const EmptyContent = () => {
+interface EmptyContentProps {
+  isLoading: boolean;
+}
+
+const EmptyContent = (props: EmptyContentProps) => {
   // FIXME Update this link in the future
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const navigate = useNavigate();
@@ -66,7 +69,7 @@ const EmptyContent = () => {
       <Section>
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
-            <RegistryIcon className="pf-u-color-200" size="xl" />
+            <EmptyStateIcon icon={RegistryIcon} />
             <Title headingLevel="h2" size="lg" className="pf-u-pt-sm">
               No identity domains registered
             </Title>
@@ -117,8 +120,7 @@ const ListContent = () => {
 
   // TODO Extract this code in a hook
   useEffect(() => {
-    // eslint-disable-next-line prefer-const
-    let local_domains: Domain[] = [];
+    const local_domains: Domain[] = [];
     resources_api
       .listDomains(undefined, offset, perPage, undefined)
       .then((res) => {
@@ -220,7 +222,7 @@ const DefaultPage = () => {
 
   // States
   const [page, setPage] = useState<number>(0);
-  const [itemCount, setItemCount] = useState<number>(0);
+  const [itemCount, setItemCount] = useState<number>(appContext.getDomains().length || -1);
   const [perPage] = useState<number>(10);
   const [offset, setOffset] = useState<number>(0);
 
@@ -228,8 +230,7 @@ const DefaultPage = () => {
 
   // TODO Extract in a hook
   useEffect(() => {
-    // eslint-disable-next-line prefer-const
-    let local_domains: Domain[] = [];
+    const local_domains: Domain[] = [];
     resources_api
       .listDomains(undefined, offset, perPage, undefined)
       .then((res) => {
@@ -239,14 +240,14 @@ const DefaultPage = () => {
             .readDomain(item.domain_id)
             .then((res_domain) => {
               local_domains[count++] = res_domain.data;
-              if (res.data.data.length == local_domains.length) {
-                appContext.setDomains(local_domains);
-                const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
-                const newPage = newOffset / perPage;
-                setItemCount(res.data.meta.count);
-                setOffset(newOffset);
-                setPage(newPage);
-              }
+              // if (res.data.data.length == local_domains.length) {
+              appContext.setDomains(local_domains);
+              const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
+              const newPage = newOffset / perPage;
+              setItemCount(res.data.meta.count);
+              setOffset(newOffset);
+              setPage(newPage);
+              // }
               console.log('INFO:domain list updated');
             })
             .catch((reason) => {
@@ -260,7 +261,7 @@ const DefaultPage = () => {
     return () => {
       // Finalizer
     };
-  }, [page, perPage, offset]);
+  }, []);
 
   const listContent = (
     <>
@@ -272,11 +273,12 @@ const DefaultPage = () => {
   const emptyContent = (
     <>
       <Header />
-      <EmptyContent />
+      <EmptyContent isLoading={itemCount < 0} />
     </>
   );
 
-  const content = itemCount == 0 ? emptyContent : listContent;
+  // TODO Use similar logic to display a Spinner icon
+  const content = itemCount <= 0 ? emptyContent : listContent;
   return content;
 };
 
