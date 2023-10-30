@@ -6,17 +6,7 @@ In order to access the https://[env].foo.redhat.com in your browser, you have to
 
 To setup the hosts file run following command:
 
-```bash
-npm run patch:hosts
-```
-
-If this command throws an error run it as a `sudo`:
-
-```bash
-sudo npm run patch:hosts
-```
-
-The commands adds these entries to `/etc/hosts`
+Add the below to your `/etc/hosts` file:
 
 ```
 127.0.0.1 prod.foo.redhat.com
@@ -24,6 +14,13 @@ The commands adds these entries to `/etc/hosts`
 127.0.0.1 qa.foo.redhat.com
 127.0.0.1 ci.foo.redhat.com
 ```
+
+## Install react developer tools
+
+A recommended tool to install is react developer tools, which is installed as a plugin for your
+favourite browser.
+
+- [React Developer Tools](https://react.dev/learn/react-developer-tools).
 
 ## Setup and run chrome-service-backend
 
