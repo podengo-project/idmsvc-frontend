@@ -7,6 +7,9 @@ creation of a context for the micro-frontend.
   towards the ListDomains.
 - Provide the same data information for the different impacted objects.
 
+> Avoid to use context if it evoke a performance because an excess of the
+> render on the frontend.
+
 ## Defining the context
 
 For using a context, we need to define the context (in this case it is defined
@@ -17,78 +20,88 @@ it were required).
 import { createContext } from 'react';
 import { Domain } from './Api';
 
-export interface IAppContext {
+export interface AppContextType {
   domains: Domain[];
   setDomains: (domains: Domain[]) => void;
 }
 
-export const AppContext = createContext<IAppContext>({
-  domains: [],
-  setDomains: (domains: Domain[]) => {
-    throw new Error('Function "setDomains" not implemented: domains=' + domains);
-  },
-});
+export const AppContext = createContext<AppContextType>(undefined);
+
+export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => {
+  const [getter, setter] = useState<T>(undefined);
+
+  return (
+    <AppContext.Provider
+      value={{
+        /** Map the interface to the getter and setter of this component for instance:
+         *   domains: getter,
+         *   setDomains: setter,
+        */
+        },
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+}
 ```
 
 Let's see what we have here:
 
-- IAppContext define an interface with properties to be shared and some
+- `AppContextType` define an interface with properties to be shared and some
   callbacks to update the properties above.
-- The callbacks will use some state associated to a root component, so
-  when we change the state from a deeper component, the view is properly
-  rendered.
+- Create the context for the type `AppContextType`.
+- Define the `AppContextProvider` which map getter and setter, and extend with
+  the `children`.
 
-We will define the callbacks at `src/AppEntry.tsx`:
-
-## Referencing the context in the root component
+## Wrap your application by the context provider
 
 ```typescript
-import React, { useState } from 'react';
+import React from 'react';
 
 // ...
 
 const AppEntry = () => {
-  // Declare the state
-  const [domains, setDomains] = useState<Domain[]>([]);
-  const cbSetDomains = (domains: Domain[]) => {
-    setDomains(domains);
-  };
   return (
     <Provider store={init(...(process.env.NODE_ENV !== 'production' ? [logger] : [])).getStore()}>
       <Router basename={getBaseName(window.location.pathname)}>
-        <AppContext.Provider value={{ domains: domains, setDomains: cbSetDomains }}>
+        <AppContextProvider>
           <App />
-        </AppContext.Provider>
+        </AppContextProvider>
       </Router>
     </Provider>
   );
 };
 ```
 
-As we see the callback is invoking the setter for the state, which raise the
-render mechanism for the view.
-
-See that we inject the domains value and the setter callback into the `value` property
-for the `AppContext.Provider` tag.
+Now we only reference the `AppContextProvider` wrapping our application. The
+setter and getter are configured inside the AppContextProvider, which provide
+a cleaner code.
 
 ## Use the context form other inner components
 
 Using the context from any component nested in our App would be kind of the below:
 
 ```typescript
-const appContext = useContext(AppContext);
+// we get the reference to the context
+const appContext = useContext<AppContextType | undefined>(AppContext);
 
-const domains = appContext.domains;  // Retrieving the value from the context
+// We use a property
+const domains = appContext?.domains;
 
+// We use a setter which will fire a render cycle with the change
 const myEvent = () => {
-  appContext.setDomains(newDomain);  // This will fire from the root component the render
+  appContext?.setDomains(newDomains);
 };
 ```
 
-What is happening here?
-- I get the reference to the context.
-- I read a value from the context.
-- I set a value into the context by using the injected callback when we
-  used the context into the root component; recall that it is calling a setDomain state,
-  which is the one that trigger the render of the view.
+> Remember we mapped the set... function returned by useState hook
+> for this callback, so we are calling a change of the state for
+> the context. So it is calling a setDomain state, which is the one
+> that trigger the render of the view.
 
+## Final considerations
+
+Similar approach could be followed when we want to define a context closer to some component,
+such as the wizard page (not using this approach currently), but instead of wrapping the application
+we would wrap an inner component.
