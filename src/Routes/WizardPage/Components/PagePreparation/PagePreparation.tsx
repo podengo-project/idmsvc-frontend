@@ -4,7 +4,7 @@ import { Alert, Button, ClipboardCopy, Form, FormGroup, TextContent, Title } fro
 
 import './PagePreparation.scss';
 import { ResourcesApiFactory } from '../../../../Api';
-import { AppContext, IAppContext } from '../../../../AppContext';
+import { AppContext, AppContextType } from '../../../../AppContext';
 
 /** Represent the properties for PagePreparation component. */
 interface PagePreparationProps {
@@ -30,14 +30,14 @@ const PagePreparation = (props: PagePreparationProps) => {
   const prerequisitesLink = 'https://www.google.com?q=rhel-idm+pre-requisites';
 
   // States
-  const appContext = useContext<IAppContext>(AppContext);
+  const appContext = useContext<AppContextType | undefined>(AppContext);
 
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
-  const token = appContext.wizard.getToken();
-  const domain = appContext.wizard.getDomain();
-  const domain_id = domain.domain_id ? domain.domain_id : '';
+  const token = appContext?.wizard.token;
+  const domain = appContext?.wizard.domain;
+  const domain_id = domain?.domain_id ? domain.domain_id : '';
 
   /**
    * side effect to retrieve a token in the background.
@@ -52,18 +52,20 @@ const PagePreparation = (props: PagePreparationProps) => {
     resources_api
       .createDomainToken({ domain_type: 'rhel-idm' }, undefined, undefined)
       .then((value) => {
-        appContext.wizard.setToken(value.data.domain_token);
-        const domain_id = value.data.domain_id;
-        const domain_name = 'My domain';
-        const domain_type = value.data.domain_type;
-        const token = value.data.domain_token;
-        const expiration = value.data.expiration;
-        appContext.wizard.setDomain({
-          domain_id: domain_id,
-          domain_name: domain_name,
-          domain_type: domain_type,
-        });
-        props.onToken?.(token, domain_id, expiration);
+        if (appContext !== undefined) {
+          appContext.wizard.setToken(value.data.domain_token);
+          const domain_id = value.data.domain_id;
+          const domain_name = 'My domain';
+          const domain_type = value.data.domain_type;
+          const token = value.data.domain_token;
+          const expiration = value.data.expiration;
+          appContext.wizard.setDomain({
+            domain_id: domain_id,
+            domain_name: domain_name,
+            domain_type: domain_type,
+          });
+          props.onToken?.(token, domain_id, expiration);
+        }
       })
       .catch((reason) => {
         // FIXME handle the error here

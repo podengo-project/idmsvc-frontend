@@ -28,7 +28,7 @@ import './DefaultPage.scss';
 import Section from '@redhat-cloud-services/frontend-components/Section';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { DomainList } from '../../Components/DomainList/DomainList';
-import { AppContext, IAppContext } from '../../AppContext';
+import { AppContext, AppContextType } from '../../AppContext';
 
 const Header = () => {
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
@@ -55,13 +55,15 @@ const EmptyContent = (props: EmptyContentProps) => {
   // FIXME Update this link in the future
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const navigate = useNavigate();
-  const appContext = useContext<IAppContext>(AppContext);
+  const appContext = useContext<AppContextType | undefined>(AppContext);
 
   const handleOpenWizard = () => {
-    appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
-    appContext.wizard.setToken('');
-    appContext.wizard.setRegisteredStatus('initial');
-    navigate('/domains/wizard', { replace: true });
+    if (appContext !== undefined) {
+      appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
+      appContext.wizard.setToken('');
+      appContext.wizard.setRegisteredStatus('initial');
+      navigate('/domains/wizard', { replace: true });
+    }
   };
 
   return (
@@ -131,7 +133,7 @@ const ListContent = () => {
             .then((res_domain) => {
               local_domains[count++] = res_domain.data;
               if (res.data.data.length == local_domains.length) {
-                appContext.setDomains(local_domains);
+                appContext?.setDomains(local_domains);
                 const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
                 const newPage = newOffset / perPage;
                 setItemCount(res.data.meta.count);
@@ -154,10 +156,12 @@ const ListContent = () => {
   }, [page, perPage, offset]);
 
   const handleOpenWizard = () => {
-    appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
-    appContext.wizard.setRegisteredStatus('initial');
-    appContext.wizard.setToken('');
-    navigate('/domains/wizard', { replace: true });
+    if (appContext !== undefined) {
+      appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
+      appContext.wizard.setRegisteredStatus('initial');
+      appContext.wizard.setToken('');
+      navigate('/domains/wizard', { replace: true });
+    }
   };
 
   const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
@@ -222,7 +226,7 @@ const DefaultPage = () => {
 
   // States
   const [page, setPage] = useState<number>(0);
-  const [itemCount, setItemCount] = useState<number>(appContext.getDomains().length || -1);
+  const [itemCount, setItemCount] = useState<number>(appContext?.domains.length || -1);
   const [perPage] = useState<number>(10);
   const [offset, setOffset] = useState<number>(0);
 
@@ -240,14 +244,14 @@ const DefaultPage = () => {
             .readDomain(item.domain_id)
             .then((res_domain) => {
               local_domains[count++] = res_domain.data;
-              // if (res.data.data.length == local_domains.length) {
-              appContext.setDomains(local_domains);
-              const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
-              const newPage = newOffset / perPage;
-              setItemCount(res.data.meta.count);
-              setOffset(newOffset);
-              setPage(newPage);
-              // }
+              if (res.data.data.length == local_domains.length) {
+                appContext?.setDomains(local_domains);
+                const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
+                const newPage = newOffset / perPage;
+                setItemCount(res.data.meta.count);
+                setOffset(newOffset);
+                setPage(newPage);
+              }
               console.log('INFO:domain list updated');
             })
             .catch((reason) => {

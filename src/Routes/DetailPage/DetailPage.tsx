@@ -1,12 +1,25 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Card, CardBody, Dropdown, DropdownItem, Flex, FlexItem, KebabToggle, Page, PageSection, Tab, TabTitleText, Tabs, setTabIndex } from '@patternfly/react-core';
+import {
+  Card,
+  CardBody,
+  Dropdown,
+  DropdownItem,
+  Flex,
+  FlexItem,
+  KebabToggle,
+  Page,
+  PageSection,
+  Tab,
+  TabTitleText,
+  Tabs,
+} from '@patternfly/react-core';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './DetailPage.scss';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
-import { AppContext } from '../../AppContext';
+import { AppContext, AppContextType } from '../../AppContext';
 import { DetailGeneral } from './Components/DetailGeneral/DetailGeneral';
 import { DetailServers } from './Components/DetailServers/DetailServers';
 
@@ -21,7 +34,7 @@ interface DetailContentProps extends React.HTMLProps<HTMLDivElement> {
  * @see https://reactrouter.com/en/main/hooks/use-params
  */
 const DetailPage = () => {
-  const appContext = useContext(AppContext);
+  const appContext = useContext<AppContextType | undefined>(AppContext);
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
   const navigate = useNavigate();
@@ -31,7 +44,7 @@ const DetailPage = () => {
 
   // States
   const [domain, setDomain] = useState<Domain>();
-  const domains = appContext.getDomains();
+  const domains = appContext?.domains;
 
   console.log('INFO:DetailPage render:domain_id=' + domain_id);
 

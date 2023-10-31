@@ -4,8 +4,8 @@ import { Fragment, useContext, useState } from 'react';
 import React from 'react';
 
 import { Domain, DomainType, ResourcesApiFactory } from '../../Api/api';
-import { Link, useNavigate } from 'react-router-dom';
-import { AppContext, IAppContext } from '../../AppContext';
+import { useNavigate } from 'react-router-dom';
+import { AppContext, AppContextType } from '../../AppContext';
 import { Button } from '@patternfly/react-core';
 
 export interface IColumnType<T> {
@@ -95,7 +95,7 @@ export const DomainList = () => {
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
-  const context = useContext<IAppContext>(AppContext);
+  const context = useContext<AppContextType | undefined>(AppContext);
   const navigate = useNavigate();
 
   // Index of the currently sorted column
@@ -106,7 +106,7 @@ export const DomainList = () => {
   // Sort direction of the currently sorted column
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
-  const [domains, setDomains] = useState<Domain[]>(context.getDomains());
+  const [domains, setDomains] = useState<Domain[]>(context?.domains || ([] as Domain[]));
   const enabledText = 'Enabled';
   const disabledText = 'Disabled';
 
@@ -204,7 +204,7 @@ export const DomainList = () => {
 
   const onShowDetails = (domain: Domain | undefined) => {
     if (domain !== undefined) {
-      context.setEditing(domain);
+      context?.setEditing(domain);
       navigate('/details/' + domain?.domain_id);
     }
   };

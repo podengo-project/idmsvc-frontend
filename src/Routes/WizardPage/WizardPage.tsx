@@ -34,7 +34,7 @@ const WizardPage = () => {
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
   const appContext = useContext(AppContext);
-  const domain = appContext.wizard.getDomain();
+  const domain = appContext?.wizard.domain;
   const navigate = useNavigate();
 
   // FIXME Update the URL with the location for docs
@@ -48,7 +48,7 @@ const WizardPage = () => {
     //           - if not registered, dismiss wizard
     //           - else => DELETE /domains/:domain_id
     //         - Cancel or close model => Do not dismiss wizard
-    if (domain.domain_id) {
+    if (domain?.domain_id) {
       resources_api
         .updateDomainUser(domain.domain_id, {
           title: domain.title,
@@ -102,9 +102,9 @@ const WizardPage = () => {
   };
 
   const initCanJumpPage1 = true;
-  const initCanJumpPage2 = initCanJumpPage1 && domain.domain_id != '' && appContext.wizard.getToken() != '';
-  const initCanJumpPage3 = initCanJumpPage2 && appContext.wizard.getRegisteredStatus() === 'completed';
-  const initCanJumpPage4 = initCanJumpPage3 && domain.title !== undefined && domain.title.length > 0;
+  const initCanJumpPage2 = initCanJumpPage1 && domain?.domain_id != '' && appContext?.wizard.token != '';
+  const initCanJumpPage3 = initCanJumpPage2 && appContext?.wizard.registeredStatus === 'completed';
+  const initCanJumpPage4 = initCanJumpPage3 && domain?.title !== undefined && domain.title.length > 0;
 
   const [canJumpPage1] = useState<boolean>(initCanJumpPage1);
   const [canJumpPage2, setCanJumpPage2] = useState<boolean>(initCanJumpPage2);
@@ -121,15 +121,15 @@ const WizardPage = () => {
   };
 
   const onVerify = (value: VerifyState, data?: Domain) => {
-    if (appContext.wizard.getRegisteredStatus() === 'completed') {
+    if (appContext?.wizard.registeredStatus === 'completed') {
       // verify was previously completed (e.g. user stepped the wizard
       // back to the token page.  Do not overwrite the domain value,
       // so that we do not discard any user-specified settings.
       return;
     }
-    appContext.wizard.setRegisteredStatus(value);
+    appContext?.wizard.setRegisteredStatus(value);
     if (value === 'completed' && data !== undefined) {
-      appContext.wizard.setDomain(data);
+      appContext?.wizard.setDomain(data);
       setCanJumpPage3(true);
       // Check whether initial values for user-configurable fields
       // are valid.  They should be, which will enable the user to
@@ -148,17 +148,23 @@ const WizardPage = () => {
   };
 
   const onChangeTitle = (value: string) => {
-    const newDomain: Domain = { ...domain, title: value };
-    appContext.wizard.setDomain(newDomain);
-    onUserInputChange(newDomain);
+    if (domain !== undefined) {
+      const newDomain: Domain = { ...domain, title: value };
+      appContext?.wizard.setDomain(newDomain);
+      onUserInputChange(newDomain);
+    }
   };
 
   const onChangeDescription = (value: string) => {
-    appContext.wizard.setDomain({ ...domain, description: value });
+    if (domain !== undefined) {
+      appContext?.wizard.setDomain({ ...domain, description: value });
+    }
   };
 
   const onChangeAutoEnrollment = (value: boolean) => {
-    appContext.wizard.setDomain({ ...domain, auto_enrollment_enabled: value });
+    if (domain !== undefined) {
+      appContext?.wizard.setDomain({ ...domain, auto_enrollment_enabled: value });
+    }
   };
 
   /** Configure the wizard pages. */
@@ -174,7 +180,9 @@ const WizardPage = () => {
     {
       id: 2,
       name: 'Domain registration',
-      component: <PageServiceRegistration uuid={domain.domain_id ? domain.domain_id : ''} token={appContext.wizard.getToken()} onVerify={onVerify} />,
+      component: (
+        <PageServiceRegistration uuid={domain?.domain_id ? domain?.domain_id : ''} token={appContext?.wizard.token || ''} onVerify={onVerify} />
+      ),
       canJumpTo: canJumpPage2,
       enableNext: canJumpPage3,
     },
@@ -183,9 +191,9 @@ const WizardPage = () => {
       name: 'Domain information',
       component: (
         <PageServiceDetails
-          title={domain.title}
-          description={domain.description}
-          autoEnrollmentEnabled={domain.auto_enrollment_enabled}
+          title={domain?.title}
+          description={domain?.description}
+          autoEnrollmentEnabled={domain?.auto_enrollment_enabled}
           onChangeTitle={onChangeTitle}
           onChangeDescription={onChangeDescription}
           onChangeAutoEnrollment={onChangeAutoEnrollment}
@@ -197,7 +205,7 @@ const WizardPage = () => {
     {
       id: 4,
       name: 'Review',
-      component: <PageReview domain={domain} />,
+      component: <PageReview domain={domain || ({} as Domain)} />,
       nextButtonText: 'Finish',
       canJumpTo: canJumpPage4,
       enableNext: true,
