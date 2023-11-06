@@ -126,11 +126,11 @@ const PageReviewIpa = (props: PageReviewProps & { className?: string }) => {
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>Identity domain name</DescriptionListTerm>
+          <DescriptionListTerm>Display name</DescriptionListTerm>
           <DescriptionListDescription disabled>{props.domain.title}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>Identity domain description</DescriptionListTerm>
+          <DescriptionListTerm>Description</DescriptionListTerm>
           <DescriptionListDescription disabled>{props.domain.description}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>

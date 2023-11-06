@@ -71,13 +71,13 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
     <>
       <Form onSubmit={(e) => e.preventDefault()}>
         <Title headingLevel={'h2'}>Add your identity domain information</Title>
-        <FormGroup label="Identity domain name" isRequired fieldId="register-domain-name">
-          <TextInput id="register-domain-name" value={title} onChange={onChangeTitle} className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl" />
+        <FormGroup label="Display name" isRequired fieldId="register-title">
+          <TextInput id="register-title" value={title} onChange={onChangeTitle} className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl" />
         </FormGroup>
-        <FormGroup label="Identity domain description" fieldId="register-domain-description">
+        <FormGroup label="Description" fieldId="register-description">
           <TextArea
             contentEditable="true"
-            id="register-domain-description"
+            id="register-description"
             type="text"
             readOnly={false}
             className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
