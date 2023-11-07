@@ -8,6 +8,7 @@ import {
   Modal,
   ModalVariant,
   Switch,
+  Text,
   TextArea,
   TextInput,
   Tooltip,
@@ -22,17 +23,17 @@ import DownloadIcon from '@patternfly/react-icons/dist/esm/icons/download-icon';
 interface DetailGeneralProps {
   domain?: Domain;
   onShowServerTab?: () => void;
+  onChange?: (domain: Domain) => void;
 }
 
 export const DetailGeneral = (props: DetailGeneralProps) => {
-  const base_url = '/api/idmsvc/v1';
-  const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
-
-  // const context = useContext(AppContext);
   const domain = props.domain;
   if (domain === undefined) {
     return <></>;
   }
+
+  const base_url = '/api/idmsvc/v1';
+  const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
   // States
   const [autoJoin, setAutoJoin] = useState<boolean | undefined>(domain.auto_enrollment_enabled);
@@ -56,6 +57,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         .then((response) => {
           if (response.status == 200) {
             setTitle(response.data.title || '');
+            if (props.onChange !== undefined) props.onChange({ ...domain, title: response.data.title });
           } else {
             // TODO show-up notification with error message
           }
@@ -83,6 +85,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         .then((response) => {
           if (response.status == 200) {
             setDescription(response.data.description || '');
+            if (props.onChange !== undefined) props.onChange({ ...domain, description: response.data.description });
           } else {
             // TODO show-up notification with error message
           }
@@ -110,6 +113,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         .then((response) => {
           if (response.status == 200) {
             setAutoJoin(response.data.auto_enrollment_enabled);
+            if (props.onChange !== undefined) props.onChange({ ...domain, auto_enrollment_enabled: response.data.auto_enrollment_enabled });
           } else {
             // TODO show-up notification with error message
           }
@@ -182,16 +186,18 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>
-            Description
-            <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Description'}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </Icon>
+          <DescriptionListTerm className="pf-u-align-text-top">
+            <Text>
+              Description
+              <Icon className="pf-u-ml-xs">
+                <Tooltip content={'Description'}>
+                  <OutlinedQuestionCircleIcon />
+                </Tooltip>
+              </Icon>
+            </Text>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {description}{' '}
+          <DescriptionListDescription className="pf-u-text-wrap">
+            <span style={{ whiteSpace: 'pre-line' }}>{description} </span>
             <Button
               className="pf-global--primary-color--100"
               variant="link"
@@ -266,6 +272,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
               isInline
               variant="link"
               onClick={() => {
+                // TODO Add changes when the API endpoint is implemented
                 console.warn('not implemented');
                 new Error('not implemented');
                 return;
@@ -309,7 +316,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </Button>,
         ]}
       >
-        <TextArea value={editDescription} onChange={(value) => setEditDescription(value)} />
+        <TextArea autoResize resizeOrientation="vertical" value={editDescription} onChange={(value) => setEditDescription(value)} />
       </Modal>
     </>
   );
