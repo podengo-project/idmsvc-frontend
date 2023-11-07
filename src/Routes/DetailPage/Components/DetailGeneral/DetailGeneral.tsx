@@ -5,7 +5,10 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
   Icon,
+  Modal,
+  ModalVariant,
   Switch,
+  TextInput,
   Tooltip,
 } from '@patternfly/react-core';
 import React from 'react';
@@ -30,7 +33,41 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
     return <></>;
   }
 
+  // States
   const [autoJoin, setAutoJoin] = useState<boolean | undefined>(domain.auto_enrollment_enabled);
+  const [title, setTitle] = useState<string>(domain.title || '');
+
+  const [editTitle, setEditTitle] = useState<string>(domain.title || '');
+
+  const [isTitleModalOpen, setIsTitleModalOpen] = useState<boolean>(false);
+
+  // Control handlers
+  const handleSaveTitleButton = () => {
+    console.log('Save Title button pressed');
+    if (domain.domain_id) {
+      resources_api
+        .updateDomainUser(domain.domain_id, {
+          title: editTitle,
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            setTitle(response.data.title || '');
+          } else {
+            // TODO show-up notification with error message
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error at handleSaveTitleButton: ' + error);
+        });
+    }
+    setIsTitleModalOpen(false);
+  };
+
+  const handleCancelTitleButton = () => {
+    console.log('Cancel Title button pressed');
+    setIsTitleModalOpen(false);
+  };
 
   const handleAutoJoin = (checked: boolean, event: React.FormEvent<HTMLInputElement>) => {
     console.log('toggled auto-join enable/disable');
@@ -98,12 +135,12 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
             </Icon>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {domain?.title}{' '}
+            {title}{' '}
             <Button
               variant="plain"
               onClick={() => {
-                console.warn('not implemented');
-                new Error('not implemented');
+                setEditTitle(title);
+                setIsTitleModalOpen(true);
                 return;
               }}
             >
@@ -212,6 +249,22 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
+      <Modal
+        variant={ModalVariant.small}
+        title="Edit display name"
+        isOpen={isTitleModalOpen}
+        onClose={handleCancelTitleButton}
+        actions={[
+          <Button key="save" variant="primary" isDisabled={title == editTitle} onClick={handleSaveTitleButton}>
+            Save
+          </Button>,
+          <Button key="cancel" variant="link" onClick={handleCancelTitleButton}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <TextInput value={editTitle} type="text" onChange={(value) => setEditTitle(value)} />
+      </Modal>
     </>
   );
 };
