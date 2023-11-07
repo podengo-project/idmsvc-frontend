@@ -9,7 +9,8 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import React from 'react';
-import { Domain } from '../../../../Api';
+import { useState } from 'react';
+import { Domain, ResourcesApiFactory } from '../../../../Api';
 import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 import PencilAltIcon from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
 import DownloadIcon from '@patternfly/react-icons/dist/esm/icons/download-icon';
@@ -20,15 +21,36 @@ interface DetailGeneralProps {
 }
 
 export const DetailGeneral = (props: DetailGeneralProps) => {
+  const base_url = '/api/idmsvc/v1';
+  const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
+
   // const context = useContext(AppContext);
   const domain = props.domain;
   if (domain === undefined) {
     return <></>;
   }
 
+  const [autoJoin, setAutoJoin] = useState<boolean | undefined>(domain.auto_enrollment_enabled);
+
   const handleAutoJoin = (checked: boolean, event: React.FormEvent<HTMLInputElement>) => {
-    new Error('handleAutoJoin not implemented');
-    return;
+    console.log('toggled auto-join enable/disable');
+    if (domain.domain_id) {
+      resources_api
+        .updateDomainUser(domain.domain_id, {
+          auto_enrollment_enabled: !autoJoin,
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            setAutoJoin(response.data.auto_enrollment_enabled);
+          } else {
+            // TODO show-up notification with error message
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error onClose: ' + error);
+        });
+    }
   };
 
   return (
@@ -160,7 +182,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
             </Icon>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            <Switch hasCheckIcon={true} label="Enabled" labelOff="Disabled" isChecked={domain.auto_enrollment_enabled} onChange={handleAutoJoin} />
+            <Switch hasCheckIcon={true} label="Enabled" labelOff="Disabled" isChecked={autoJoin} onChange={handleAutoJoin} />
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
