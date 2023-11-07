@@ -8,6 +8,7 @@ import {
   Modal,
   ModalVariant,
   Switch,
+  TextArea,
   TextInput,
   Tooltip,
 } from '@patternfly/react-core';
@@ -36,10 +37,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
   // States
   const [autoJoin, setAutoJoin] = useState<boolean | undefined>(domain.auto_enrollment_enabled);
   const [title, setTitle] = useState<string>(domain.title || '');
+  const [description, setDescription] = useState<string>(domain.description || '');
 
   const [editTitle, setEditTitle] = useState<string>(domain.title || '');
+  const [editDescription, setEditDescription] = useState<string>(domain.description || '');
 
   const [isTitleModalOpen, setIsTitleModalOpen] = useState<boolean>(false);
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState<boolean>(false);
 
   // Control handlers
   const handleSaveTitleButton = () => {
@@ -67,6 +71,33 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
   const handleCancelTitleButton = () => {
     console.log('Cancel Title button pressed');
     setIsTitleModalOpen(false);
+  };
+
+  const handleSaveDescriptionButton = () => {
+    console.log('Save Description button pressed');
+    if (domain.domain_id) {
+      resources_api
+        .updateDomainUser(domain.domain_id, {
+          description: editDescription,
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            setDescription(response.data.description || '');
+          } else {
+            // TODO show-up notification with error message
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error at handleSaveDescriptionButton: ' + error);
+        });
+    }
+    setIsDescriptionModalOpen(false);
+  };
+
+  const handleCancelDescriptionButton = () => {
+    console.log('Cancel Description button pressed');
+    setIsDescriptionModalOpen(false);
   };
 
   const handleAutoJoin = (checked: boolean, event: React.FormEvent<HTMLInputElement>) => {
@@ -160,14 +191,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
             </Icon>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            {domain?.description}{' '}
+            {description}{' '}
             <Button
               className="pf-global--primary-color--100"
               variant="link"
               onClick={() => {
-                console.warn('not implemented');
-                new Error('not implemented');
-                return;
+                setEditDescription(description);
+                setIsDescriptionModalOpen(true);
               }}
             >
               <Icon>
@@ -264,6 +294,22 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         ]}
       >
         <TextInput value={editTitle} type="text" onChange={(value) => setEditTitle(value)} />
+      </Modal>
+      <Modal
+        variant={ModalVariant.small}
+        title="Edit description"
+        isOpen={isDescriptionModalOpen}
+        onClose={handleCancelDescriptionButton}
+        actions={[
+          <Button key="save" variant="primary" isDisabled={description == editDescription} onClick={handleSaveDescriptionButton}>
+            Save
+          </Button>,
+          <Button key="cancel" variant="link" onClick={handleCancelDescriptionButton}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <TextArea value={editDescription} onChange={(value) => setEditDescription(value)} />
       </Modal>
     </>
   );
