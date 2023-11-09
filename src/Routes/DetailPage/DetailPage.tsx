@@ -23,10 +23,6 @@ import { AppContext, AppContextType } from '../../AppContext';
 import { DetailGeneral } from './Components/DetailGeneral/DetailGeneral';
 import { DetailServers } from './Components/DetailServers/DetailServers';
 
-interface DetailContentProps extends React.HTMLProps<HTMLDivElement> {
-  domain: Domain | undefined;
-}
-
 /**
  * It represents the detail page to show the information about a
  * registered domain.
@@ -43,22 +39,14 @@ const DetailPage = () => {
   const { domain_id } = useParams();
 
   // States
-  const [domain, setDomain] = useState<Domain>();
-  const domains = appContext?.domains;
+  const [domain, setDomain] = useState<Domain | undefined>(appContext?.getDomain(domain_id || ''));
 
   console.log('INFO:DetailPage render:domain_id=' + domain_id);
 
-  const setTitle = (value: string) => {
-    domain !== undefined && setDomain({ ...domain, title: value });
-  };
-
-  const setAutoEnrollment = (value: boolean) => {
-    domain !== undefined && setDomain({ ...domain, auto_enrollment_enabled: value });
-  };
-
+  // TODO encapsulate in a custom hook to reuse
   // Load Domain resource
   useEffect(() => {
-    if (domain_id !== undefined) {
+    if (domain_id !== undefined && domain === undefined) {
       resources_api
         .readDomain(domain_id)
         .then((res) => {
@@ -78,44 +66,6 @@ const DetailPage = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (domain !== undefined && domain.title !== undefined) {
-  //     setTitle(domain.title);
-  //   }
-  // }, [domain?.title]);
-
-  // const replaceDomain = (newDomain: Domain): void => {
-  //   const newDomains = domains.map((domain) => {
-  //     return domain.domain_id === newDomain.domain_id ? newDomain : domain;
-  //   });
-  //   appContext.setDomains(newDomains);
-  // };
-
-  // const onJoinableHandler = (value: boolean) => {
-  //   console.log(`clicked on Enable/Disable, on ${domain?.domain_id}`);
-  //   if (domain?.domain_id) {
-  //     resources_api
-  //       .updateDomainUser(domain?.domain_id, {
-  //         auto_enrollment_enabled: value,
-  //       })
-  //       .then((response) => {
-  //         if (response.status == 200) {
-  //           setAutoEnrollment(value);
-  //         } else {
-  //           // TODO show-up notification with error message
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         // TODO show-up notification with error message
-  //         console.log('error onClose: ' + error);
-  //       });
-  //   }
-  // };
-
-  // const onDeleteHandler = (/* event: MouseEvent<HTMLButtonElement, MouseEvent> */): void => {
-  //   throw new Error('Function not implemented.');
-  // };
-
   // Kebab menu
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
 
@@ -132,17 +82,36 @@ const DetailPage = () => {
     setIsKebabOpen(!isKebabOpen);
   };
 
-  const dropdownItems: JSX.Element[] = [<DropdownItem key="delete">Delete</DropdownItem>];
+  const dropdownItems: JSX.Element[] = [
+    <DropdownItem
+      key="delete"
+      onClick={(value) => {
+        console.log('Deleting domain: ' + value);
+        if (domain_id !== undefined) {
+          resources_api
+            .deleteDomain(domain_id)
+            .then((res) => {
+              if (res.status === 204) {
+                console.info('Domain ' + value + ' was deleted');
+                appContext?.deleteDomain(domain_id);
+                navigate('/domains', { replace: true });
+              }
+            })
+            .catch((reason) => {
+              // TODO Send error notification to chrome
+              console.log(reason);
+            });
+        }
+      }}
+    >
+      Delete
+    </DropdownItem>,
+  ];
 
   // Tabs
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
-  const [isBox, setIsBox] = React.useState<boolean>(false);
   const handleTabClick = (event: React.MouseEvent<any> | React.KeyboardEvent | MouseEvent, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
-  };
-
-  const toggleBox = (checked: boolean) => {
-    setIsBox(checked);
   };
 
   // Return render
@@ -169,7 +138,7 @@ const DetailPage = () => {
             hasBorderBottom={false}
             activeKey={activeTabKey}
             onSelect={handleTabClick}
-            isBox={isBox}
+            isBox={false}
             aria-label="Tabs in the detail page"
             role="region"
           >
@@ -185,6 +154,10 @@ const DetailPage = () => {
                   domain={domain}
                   onShowServerTab={() => {
                     setActiveTabKey(1);
+                  }}
+                  onChange={(value: Domain) => {
+                    setDomain(value);
+                    appContext?.updateDomain(value);
                   }}
                 />
               )}
