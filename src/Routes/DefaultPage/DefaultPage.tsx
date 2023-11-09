@@ -47,11 +47,7 @@ const Header = () => {
   );
 };
 
-interface EmptyContentProps {
-  isLoading: boolean;
-}
-
-const EmptyContent = (props: EmptyContentProps) => {
+const EmptyContent = () => {
   // FIXME Update this link in the future
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const navigate = useNavigate();
@@ -277,7 +273,7 @@ const DefaultPage = () => {
   const emptyContent = (
     <>
       <Header />
-      <EmptyContent isLoading={itemCount < 0} />
+      <EmptyContent />
     </>
   );
 
