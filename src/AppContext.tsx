@@ -13,6 +13,12 @@ export interface AppContextType {
   domains: Domain[];
   /** Callback to set the value of `domains`. */
   setDomains: (domains: Domain[]) => void;
+  /** Update an existing domain in domains */
+  updateDomain: (domain: Domain) => void;
+  /** Delete the domain identified by id */
+  deleteDomain: (id: string) => void;
+  /** Get the domain identified by id */
+  getDomain: (id: string) => Domain | undefined;
   /** The current editing domain */
   editing?: Domain;
   /** Set the current editing domain */
@@ -65,11 +71,62 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   const [wizardRegisteredStatus, _setWizardRegisteredStatus] = useState<VerifyState>('initial');
   const [wizardDomain, _setWizardDomain] = useState<Domain>();
 
+  /**
+   * Update a domain into the list of domains kept into the application context
+   * if it exists.
+   * @param domain The domain to be updated into the context.
+   */
+  const _updateDomain = (domain: Domain) => {
+    const newDomains: Domain[] = {} as Domain[];
+    for (const idx in domains) {
+      if (domains[idx].domain_id === domain.domain_id) {
+        newDomains[idx] = domain;
+      } else {
+        newDomains[idx] = domains[idx];
+      }
+    }
+    _setDomains(newDomains);
+  };
+
+  /**
+   * Delete a domain from the application context if it exists, which is
+   * identified by the its id.
+   * @param id the domain identifier.
+   */
+  const _deleteDomain = (id: string) => {
+    const newDomains: Domain[] = {} as Domain[];
+    for (const idx in domains) {
+      if (domains[idx].domain_id !== id) {
+        newDomains[idx] = domains[idx];
+      }
+    }
+    _setDomains(newDomains);
+  };
+
+  /**
+   * Retrieve a domain from the application context if it exists.
+   * @param id the domain identifier.
+   * @returns The domain that exists into the application context
+   * or undefined if it is not found.
+   */
+  const _getDomain = (id: string): Domain | undefined => {
+    if (id === '') return undefined;
+    for (const idx in domains) {
+      if (domains[idx].domain_id === id) {
+        return domains[idx];
+      }
+    }
+    return undefined;
+  };
+
   return (
     <AppContext.Provider
       value={{
         domains: domains,
         setDomains: _setDomains,
+        updateDomain: _updateDomain,
+        deleteDomain: _deleteDomain,
+        getDomain: _getDomain,
         editing: editing,
         setEditing: _setEditing,
         wizard: {
