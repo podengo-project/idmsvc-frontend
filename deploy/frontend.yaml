@@ -1,7 +1,8 @@
+---
 apiVersion: v1
 kind: Template
 metadata:
-  name: idmsvc
+  name: idmsvc-frontend
 objects:
   - apiVersion: cloud.redhat.com/v1alpha1
     kind: Frontend
@@ -9,7 +10,7 @@ objects:
       name: ${APP_NAME}
     spec:
       envName: ${ENV_NAME}
-      title: "Directory & Domain Services"
+      title: "Directory and Domain Services"
       deploymentRepo: https://github.com/podengo-project/idmsvc-frontend
       API:
         versions:
@@ -18,18 +19,18 @@ objects:
         paths:
           - /apps/${APP_NAME}
       image: ${IMAGE}:${IMAGE_TAG}
-      navItems: 
+      navItems:
         - appId: "${APP_NAME}"
-          title: "Directory & Domain Services"
+          title: "Directory and Domain Services"
           href: "/settings/${APP_NAME}"
-          product: "Domain"
+          product: "Red Hat Insights"
       module:
         manifestLocation: "/apps/${APP_NAME}/fed-mods.json"
         modules:
           - id: "${APP_NAME}"
             module: "./RootApp"
-            routes: 
-            - pathname: "/settings/${APP_NAME}"
+            routes:
+              - pathname: "/settings/${APP_NAME}"
 
 parameters:
   - name: ENV_NAME
@@ -37,6 +38,6 @@ parameters:
   - name: IMAGE_TAG
     required: true
   - name: IMAGE
-    value: TBD
+    value: "quay.io/cloudservices/idmsvc-frontend"
   - name: APP_NAME
     value: idmsvc
