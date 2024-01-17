@@ -2,7 +2,7 @@ FROM registry.redhat.io/rhel9/nodejs-16:1-110 AS builder
 # https://github.com/cypress-io/cypress/issues/25236
 # TODO Set env variable indicated into the URL
 USER root
-# The working dir is at /opt/app-root/src
+WORKDIR /opt/app-root/src
 COPY package*.json .
 RUN npm install
 COPY src src
@@ -24,20 +24,15 @@ RUN ./gen.app.info.sh
 
 
 FROM quay.io/cloudservices/caddy-ubi:11145b1
-
+WORKDIR /opt/app-root/src
 
 COPY build/package/Caddyfile /opt/app-root/src/Caddyfile
 COPY --from=builder /opt/app-root/src/dist /opt/app-root/src/dist/
-
-COPY --from=builder /opt/app-root/src/app.info.json /opt/app-root/src/dist/app.info.json
-COPY --from=builder /opt/app-root/src/app.info.deps.json /opt/app-root/src/dist/app.info.deps.json
+COPY --from=builder /opt/app-root/src/app.info.json /opt/app-root/src/dist/
+COPY --from=builder /opt/app-root/src/app.info.deps.json /opt/app-root/src/dist/
 COPY --from=builder /opt/app-root/src/app.info.stable.json /opt/app-root/src/dist/stable/app.info.json
 COPY --from=builder /opt/app-root/src/app.info.preview.json /opt/app-root/src/dist/preview/app.info.json
-
-COPY ./package.json /opt/app-root/src
-
-
-WORKDIR /opt/app-root/src
+COPY ./package.json /opt/app-root/src/
 
 RUN sed -i -e 's/\/beta\/apps/\/apps/g' /opt/app-root/src/dist/stable/fed-mods.json
 

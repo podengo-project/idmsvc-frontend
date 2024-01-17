@@ -33,3 +33,5 @@ POOL ?= default
 # NOTE This could be necessary when too many deployments are made.
 # export GITLAB_TOKEN :=
 
+# Cluster to use for development purpose
+CLUSTER ?= crc-eph.r9lp.p1.openshiftapps.com
