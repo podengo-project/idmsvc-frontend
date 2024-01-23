@@ -187,14 +187,17 @@ export const DomainList = () => {
     {
       title: 'Enable/Disable',
       onClick: () => onEnableDisable(domain),
+      ouiaId: 'ButtonActionEnableDisable',
     },
     {
       title: 'Edit',
       onClick: () => console.log(`clicked on Edit, on row ${domain.title}`),
+      ouiaId: 'ButtonActionEdit',
     },
     {
       title: 'Delete',
       onClick: () => onDelete(domain),
+      ouiaId: 'ButtonActionDelete',
     },
   ];
 
@@ -228,15 +231,17 @@ export const DomainList = () => {
             } else {
               rowActions[0].title = 'Enable';
             }
+            let row = 1;
             return (
               <>
-                <Tr key={domain.domain_id}>
+                <Tr key={domain.domain_id} ouiaId={'RowListDomain' + row++}>
                   <Td>
                     <Button
                       variant="link"
                       onClick={() => {
                         onShowDetails(domain);
                       }}
+                      ouiaId="LinkListDomainDetails"
                     >
                       {domain.title}
                     </Button>

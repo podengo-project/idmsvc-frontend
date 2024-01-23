@@ -96,6 +96,7 @@ export const DetailServers = (props: DetailServersProps) => {
   activeSortIndex !== null && servers.sort(createCompareRows(activeSortIndex, activeSortDirection));
 
   // FIXME Is subscription_manager_id unique?
+  let row = 1;
   return (
     <>
       <Stack>
@@ -117,7 +118,7 @@ export const DetailServers = (props: DetailServersProps) => {
             </Thead>
             <Tbody>
               {servers.map((server) => (
-                <Tr key={server.subscription_manager_id}>
+                <Tr key={server.subscription_manager_id} ouiaId={'RowDetailServer' + row++}>
                   <Th>{server.fqdn}</Th>
                   <Th>{server.location}</Th>
                   <Th>{server.hcc_enrollment_server ? 'Yes' : 'No'}</Th>

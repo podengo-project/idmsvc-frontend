@@ -101,7 +101,7 @@ const VerifyRegistryFooter = (props: VerifyRegistryFooterProps) => {
     <>
       {props.state == 'initial' && (
         <>
-          <Button className="pf-u-my-xs" variant="secondary" onClick={props.onTest}>
+          <Button className="pf-u-my-xs" variant="secondary" onClick={props.onTest} ouiaId="ButtonVerifyTest">
             Test
           </Button>
         </>
@@ -109,21 +109,29 @@ const VerifyRegistryFooter = (props: VerifyRegistryFooterProps) => {
       {props.state == 'waiting' && <></>}
       {props.state == 'timed-out' && (
         <>
-          <Button variant="secondary" onClick={props.onTest}>
+          <Button variant="secondary" onClick={props.onTest} ouiaId="ButtonVerifyTestAgain">
             Test again
           </Button>
         </>
       )}
       {props.state == 'not-found' && (
         <>
-          <Button isInline variant="link" target="_blank" href={linkTroubleshootRegistration} icon={<ExternalLinkAltIcon />} iconPosition="right">
+          <Button
+            isInline
+            variant="link"
+            target="_blank"
+            href={linkTroubleshootRegistration}
+            icon={<ExternalLinkAltIcon />}
+            iconPosition="right"
+            ouiaId="ButtonVerifyTroubleshoot"
+          >
             Troubleshoot registration
           </Button>
         </>
       )}
       {props.state == 'completed' && (
         <>
-          <Button variant="secondary" onClick={props.onTest}>
+          <Button variant="secondary" onClick={props.onTest} ouiaId="ButtonVerifyCompleted">
             Test
           </Button>
         </>

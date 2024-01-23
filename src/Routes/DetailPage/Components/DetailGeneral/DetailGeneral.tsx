@@ -178,6 +178,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
                 setIsTitleModalOpen(true);
                 return;
               }}
+              ouiaId="ButtonDetailGeneralEditTitle"
             >
               <Icon>
                 <PencilAltIcon />
@@ -205,6 +206,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
                 setEditDescription(description);
                 setIsDescriptionModalOpen(true);
               }}
+              ouiaId="ButtonDetailGeneralEditDescription"
             >
               <Icon>
                 <PencilAltIcon />
@@ -229,6 +231,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
               onClick={() => {
                 props.onShowServerTab && props.onShowServerTab();
               }}
+              ouiaId="ButtonDetailGeneralEditAutoenrollment"
             >
               {domain?.['rhel-idm']?.servers.length}
             </Button>
@@ -255,7 +258,14 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
             </Icon>
           </DescriptionListTerm>
           <DescriptionListDescription>
-            <Switch hasCheckIcon={true} label="Enabled" labelOff="Disabled" isChecked={autoJoin} onChange={handleAutoJoin} />
+            <Switch
+              hasCheckIcon={true}
+              label="Enabled"
+              labelOff="Disabled"
+              isChecked={autoJoin}
+              onChange={handleAutoJoin}
+              ouiaId="ButtonDetailGeneralAutoenroll"
+            />
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
@@ -277,6 +287,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
                 new Error('not implemented');
                 return;
               }}
+              ouiaId="LinkDetailGeneralCertificate"
             >
               <Icon>
                 <DownloadIcon />
@@ -291,27 +302,41 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         title="Edit display name"
         isOpen={isTitleModalOpen}
         onClose={handleCancelTitleButton}
+        ouiaId="ModalTitle"
         actions={[
-          <Button key="save" variant="primary" isDisabled={title == editTitle} onClick={handleSaveTitleButton}>
+          <Button
+            key="save"
+            variant="primary"
+            isDisabled={title == editTitle}
+            onClick={handleSaveTitleButton}
+            ouiaId="ButtonModalDomainDomainTitleSave"
+          >
             Save
           </Button>,
-          <Button key="cancel" variant="link" onClick={handleCancelTitleButton}>
+          <Button key="cancel" variant="link" onClick={handleCancelTitleButton} ouiaId="ButtonModalDomainDomainTitleCancel">
             Cancel
           </Button>,
         ]}
       >
-        <TextInput value={editTitle} type="text" onChange={(value) => setEditTitle(value)} />
+        <TextInput value={editTitle} type="text" onChange={(value) => setEditTitle(value)} ouiaId="TextModalDomainTitle" />
       </Modal>
       <Modal
         variant={ModalVariant.small}
         title="Edit description"
         isOpen={isDescriptionModalOpen}
         onClose={handleCancelDescriptionButton}
+        ouiaId="ModalDesription"
         actions={[
-          <Button key="save" variant="primary" isDisabled={description == editDescription} onClick={handleSaveDescriptionButton}>
+          <Button
+            key="save"
+            variant="primary"
+            isDisabled={description == editDescription}
+            onClick={handleSaveDescriptionButton}
+            ouiaId="ButtonModalDescriptionSave"
+          >
             Save
           </Button>,
-          <Button key="cancel" variant="link" onClick={handleCancelDescriptionButton}>
+          <Button key="cancel" variant="link" onClick={handleCancelDescriptionButton} ouiaId="ButtonModalDescriptionSave">
             Cancel
           </Button>,
         ]}

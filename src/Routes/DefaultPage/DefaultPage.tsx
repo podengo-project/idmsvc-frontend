@@ -36,10 +36,19 @@ const Header = () => {
 
   return (
     <PageHeader>
-      <PageHeaderTitle title={title} />
+      <PageHeaderTitle title={title} ouiaId="TextDefaultTitle" />
       <p>
         Manage registered identity domains to leverage host access controls from your existing identity and access management.{' '}
-        <Button component="a" target="_blank" variant="link" isInline icon={<ExternalLinkAltIcon />} iconPosition="right" href={linkLearnMoreAbout}>
+        <Button
+          component="a"
+          target="_blank"
+          variant="link"
+          isInline
+          icon={<ExternalLinkAltIcon />}
+          iconPosition="right"
+          href={linkLearnMoreAbout}
+          ouiaId="LinkDefaultLearnMoreAbout1"
+        >
           Learn more about the domain registry.
         </Button>
       </p>
@@ -78,7 +87,9 @@ const EmptyContent = () => {
                   <br /> cloud environment*. To get started, register an identity domain.
                 </StackItem>
                 <StackItem className="pf-u-pt-md">
-                  <Button onClick={handleOpenWizard}>Register identity domain</Button>
+                  <Button onClick={handleOpenWizard} ouiaId="ButtonDefaultRegisterIdentityDomain">
+                    Register identity domain
+                  </Button>
                 </StackItem>
                 <StackItem className="pf-u-pt-md">
                   <Button
@@ -89,6 +100,7 @@ const EmptyContent = () => {
                     icon={<ExternalLinkAltIcon />}
                     iconPosition="right"
                     href={linkLearnMoreAbout}
+                    ouiaId="LinkDefaultLearnMoreAbout2"
                   >
                     Learn more about registering identity domains{' '}
                   </Button>
@@ -180,7 +192,9 @@ const ListContent = () => {
               <Toolbar>
                 <Flex>
                   <FlexItem>
-                    <Button onClick={handleOpenWizard}>Register identity domain</Button>
+                    <Button ouiaId="ButtonDefaultRegisterIdentityDomain" onClick={handleOpenWizard}>
+                      Register identity domain
+                    </Button>
                   </FlexItem>
                 </Flex>
               </Toolbar>

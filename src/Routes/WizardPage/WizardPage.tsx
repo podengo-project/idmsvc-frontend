@@ -218,7 +218,7 @@ const WizardPage = () => {
     <>
       <Page>
         <PageHeader>
-          <PageHeaderTitle title={title} />
+          <PageHeaderTitle title={title} ouiaId="TextWizardTitle" />
           <p>
             Add an identity domain to the registry.{' '}
             <Button
@@ -229,6 +229,7 @@ const WizardPage = () => {
               icon={<ExternalLinkAltIcon />}
               iconPosition="right"
               href={linkLearnMoreAbout}
+              ouiaId="LinkWizardHeaderLearnAbout"
             >
               Learn more about registering identity domains{' '}
             </Button>

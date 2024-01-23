@@ -75,14 +75,21 @@ const PagePreparation = (props: PagePreparationProps) => {
 
   return (
     <>
-      <Title headingLevel={'h2'}>Preparation for your identity domain registration</Title>
+      <Title headingLevel={'h2'} ouiaId="TextWizardPagePreparationTitle">
+        Preparation for your identity domain registration
+      </Title>
       <Form
         onSubmit={(value) => {
           console.debug('TODO onSubmit WizardPage' + String(value));
         }}
       >
         <FormGroup label="Identity domain type" fieldId="register-domain-type" className="pf-u-mt-lg">
-          <Alert title={'Only Red Hat Identity Management (IdM) is currently supported.'} variant="info" isInline></Alert>
+          <Alert
+            title={'Only Red Hat Identity Management (IdM) is currently supported.'}
+            variant="info"
+            isInline
+            ouiaId="AlertWizardPagePrepare"
+          ></Alert>
         </FormGroup>
         <FormGroup label="Identity domain prerequisites">
           <ol>
@@ -96,6 +103,7 @@ const PagePreparation = (props: PagePreparationProps) => {
                 iconPosition="right"
                 isInline
                 href={prerequisitesLink}
+                ouiaId="ButtonWizardPagePreparePrerequisites"
               >
                 prerequisites
               </Button>
@@ -105,7 +113,7 @@ const PagePreparation = (props: PagePreparationProps) => {
                 Verify whether or not the package is present on your Red Hat IdM server(s) by running the following command in a terminal on your Red
                 Hat IdM server(s):
               </TextContent>
-              <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
+              <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextWizardPagePrepareCheckInstall">
                 dnf list installed ipa-hcc-server
               </ClipboardCopy>
               <TextContent className="pf-u-pt-md">
@@ -118,10 +126,11 @@ const PagePreparation = (props: PagePreparationProps) => {
                   iconPosition="right"
                   isInline
                   href={installServerPackagesLink}
+                  ouiaId="LinkWizardPagePrepareInstall"
                 >
                   steps to install the server packages
                 </Button>
-                <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly>
+                <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextWizardPagePrepareInstallPackage">
                   dnf copr enable copr.devel.redhat.com/cheimes/ipa-hcc && dnf install ipa-hcc-server
                 </ClipboardCopy>
               </TextContent>

@@ -52,11 +52,12 @@ interface PageReviewIpaServersProps {
  * @see {@link PageReviewIpa} about the parent component.
  */
 const PageReviewIpaServersBody = (props: PageReviewIpaServersProps) => {
+  let row = 1;
   return (
     <Tbody>
       {props.servers?.map((server) => {
         return (
-          <Tr key={server.subscription_manager_id}>
+          <Tr key={server.subscription_manager_id} ouiaId={'RowReviewServers' + row++}>
             <Td>{server.fqdn}</Td>
             <Td>{server.subscription_manager_id}</Td>
           </Tr>
@@ -77,7 +78,7 @@ const PageReviewIpaServersBody = (props: PageReviewIpaServersProps) => {
 const PageReviewIpaServers = (props: PageReviewIpaServersProps) => {
   return (
     <>
-      <TableComposable variant="compact">
+      <TableComposable variant="compact" ouiaId="TextWizardReviewTable">
         <PageReviewIpaServersHead />
         <PageReviewIpaServersBody servers={props.servers} />
       </TableComposable>
@@ -163,7 +164,7 @@ interface PageReviewProps {
 const PageReview = (props: PageReviewProps) => {
   return (
     <>
-      <Title className="pt-u-mb-xl" headingLevel={'h2'}>
+      <Title className="pt-u-mb-xl" headingLevel={'h2'} ouiaId="TextWizardReviewTitle">
         Review
       </Title>
       {props.domain.domain_type === 'rhel-idm' && <PageReviewIpa domain={props.domain} className="pf-u-mt-lg" />}

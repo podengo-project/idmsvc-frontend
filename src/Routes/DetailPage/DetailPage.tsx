@@ -103,6 +103,7 @@ const DetailPage = () => {
             });
         }
       }}
+      ouiaId="ButtonDetailsDelete"
     >
       Delete
     </DropdownItem>,
@@ -121,7 +122,7 @@ const DetailPage = () => {
         <PageHeader className="pf-u-mb-0">
           <Flex>
             <FlexItem className="pf-u-mr-auto">
-              <PageHeaderTitle title={domain?.title} />
+              <PageHeaderTitle title={domain?.title} ouiaId="TextDetailTitle" />
             </FlexItem>
             <FlexItem>
               <Dropdown
@@ -142,8 +143,8 @@ const DetailPage = () => {
             aria-label="Tabs in the detail page"
             role="region"
           >
-            <Tab title={<TabTitleText>General</TabTitleText>} eventKey={0} />
-            <Tab title={<TabTitleText>Servers</TabTitleText>} eventKey={1} />
+            <Tab title={<TabTitleText>General</TabTitleText>} eventKey={0} ouiaId="ButtonDetailGeneral" />
+            <Tab title={<TabTitleText>Servers</TabTitleText>} eventKey={1} ouiaId="ButtonDetailServers" />
           </Tabs>
         </PageHeader>
         <PageSection>

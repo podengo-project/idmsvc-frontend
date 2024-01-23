@@ -70,9 +70,17 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
   return (
     <>
       <Form onSubmit={(e) => e.preventDefault()}>
-        <Title headingLevel={'h2'}>Add your identity domain information</Title>
+        <Title headingLevel={'h2'} ouiaId="TextWizardDetailsTitle">
+          Add your identity domain information
+        </Title>
         <FormGroup label="Display name" isRequired fieldId="register-title">
-          <TextInput id="register-title" value={title} onChange={onChangeTitle} className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl" />
+          <TextInput
+            id="register-title"
+            value={title}
+            onChange={onChangeTitle}
+            className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
+            ouiaId="TextWizardDetailsDomainTitle"
+          />
         </FormGroup>
         <FormGroup label="Description" fieldId="register-description">
           <TextArea
@@ -105,6 +113,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
             isChecked={isAutoEnrollmentEnabled}
             hasCheckIcon
             onChange={onChangeAutoEnrollment}
+            ouiaId="ButtonWizardDetailsDomainAutoenrollment"
           />
         </FormGroup>
       </Form>
