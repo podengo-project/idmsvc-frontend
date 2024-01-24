@@ -4,6 +4,8 @@
 #	source .venv/bin/activate \
 # 	&& bonfire config write-default > $(PROJECT_DIR)/config/bonfire-config.yaml
 
+EPHEMERAL_DEPS := install-python-tools config/bonfire.yaml
+
 ifeq (,$(APP_NAME))
 $(error APP_NAME is empty; did you miss to set APP_NAME=my-app at your scripts/mk/variables.mk)
 endif
@@ -59,6 +61,10 @@ ephemeral-login: .old-ephemeral-login ## Help in login to the ephemeral cluster
 	@echo "- Copy 'Log in with this token' command"
 	@echo "- Paste the command in your terminal"
 	@echo ""
+	@echo "(once) Remember to set-up config/bonfire.yaml if not yet"
+	@echo "# cp -vf config/bonfire.example.yaml config/bonfire.yaml"
+	@echo "# $$EDITOR config/bonfire.yaml"
+	@echo ""
 	@echo "Now you should have access to the cluster, remember to use bonfire to manage namespace lifecycle:"
 	@echo '# make ephemeral-namespace-create'
 	@echo ""
@@ -70,16 +76,24 @@ ephemeral-login: .old-ephemeral-login ## Help in login to the ephemeral cluster
 	@echo ""
 	@echo "Finally if you don't need the reserved namespace or just you want to cleanup and restart with a fresh namespace you run:"
 	@echo '# make ephemeral-namespace-delete-all'
+	@echo ""
 
 # Download https://gitlab.cee.redhat.com/klape/get-token/-/blob/main/get-token.py
 $(GO_OUTPUT/get-token.py):
 	curl -Ls -o "$(GO_OUTPUT/get-token.py)" "https://gitlab.cee.redhat.com/klape/get-token/-/raw/main/get-token.py"
 
-# NOTE Changes to config/bonfire.yaml could impact to this rule
-# make ephemeral-deploy EPHEMERAL_NO_BUILD=y CONTAINER_IMAGE_BASE=quay.io/cloudservices/idmsvc-frontend CONTAINER_IMAGE_TAG=7b4abc3
+# CONTAINER_IMAGE_BASE should be a public image
+.PHONY: ephemeral-build
+ephemeral-build: $(EPHEMERAL_DEPS) ## Build and deploy image using 'build_deploy.sh' script; It create CONTAINER_IMAGE_BASE:CONTAINER_IMAGE_TAG image
+	@$(MAKE) registry-login \
+		CONTAINER_REGISTRY_USER="$(QUAY_USER)" \
+		CONTAINER_REGISTRY_TOKEN="$(QUAY_TOKEN)" \
+		CONTAINER_REGISTRY="quay.io"
+	$(MAKE) container-build CONTAINER_BUILD_OPTS="--build-arg APP_NAME=$(APP_NAME) --build-arg GIT_HASH=$(shell git rev-parse --verify HEAD) --build-arg SRC_HASH=$(shell git rev-parse HEAD) --build-arg APP_NAME=$(APP_NAME)"
+	$(MAKE) container-push
+
 .PHONY: ephemeral-deploy
-ephemeral-deploy:  ## Deploy application using 'config/bonfire.yaml' file
-	[ "$(EPHEMERAL_NO_BUILD)" == "y" ] || $(MAKE) ephemeral-build-deploy
+ephemeral-deploy: $(EPHEMERAL_DEPS) ## Deploy application using 'config/bonfire.yaml'.
 	source .venv/bin/activate && \
 	bonfire deploy \
 	    --source appsre \
@@ -93,9 +107,14 @@ ephemeral-deploy:  ## Deploy application using 'config/bonfire.yaml' file
 		$(EPHEMERAL_OPTS) \
 		"$(APP_NAME)"
 
+.PHONY: ephemeral-build-deploy
+ephemeral-build-deploy:  ## Build and deploy the image (run ephemeral-build and ephemeral-deploy sequentially)
+	$(MAKE) ephemeral-build
+	$(MAKE) ephemeral-deploy
+
 # NOTE Changes to config/bonfire.yaml could impact to this rule
 .PHONY: ephemeral-undeploy
-ephemeral-undeploy: ## Undeploy application from the current namespace
+ephemeral-undeploy: $(EPHEMERAL_DEPS) ## Undeploy application from the current namespace
 	source .venv/bin/activate && \
 	bonfire process \
 	    --source appsre \
@@ -109,7 +128,7 @@ ephemeral-undeploy: ## Undeploy application from the current namespace
 	! oc get secrets/content-sources-certs &>/dev/null || oc delete secrets/content-sources-certs
 
 .PHONY: ephemeral-process
-ephemeral-process: ## Process application from the current namespace
+ephemeral-process: $(EPHEMERAL_DEPS) ## Process application from the current namespace
 	source .venv/bin/activate && \
 	bonfire process \
 	    --source appsre \
@@ -122,47 +141,35 @@ ephemeral-process: ## Process application from the current namespace
 
 # TODO Add command to specify to bonfire the clowdenv template to be used
 .PHONY: ephemeral-namespace-create
-ephemeral-namespace-create:  ## Create a namespace (requires ephemeral environment)
+ephemeral-namespace-create: $(EPHEMERAL_DEPS) ## Create a namespace (requires ephemeral environment)
 	oc project "$(shell source .venv/bin/activate && bonfire namespace reserve --force --pool "$(POOL)" -d "$(EPHEMERAL_DURATION)" 2>/dev/null)"
 
 .PHONY: ephemeral-namespace-delete
-ephemeral-namespace-delete: ## Delete current namespace (requires ephemeral environment)
+ephemeral-namespace-delete: $(EPHEMERAL_DEPS) ## Delete current namespace (requires ephemeral environment)
 	source .venv/bin/activate && \
 	bonfire namespace release --force "$(oc project -q)"
 
 .PHONY: ephemeral-namespace-delete-all
-ephemeral-namespace-delete-all: ## Delete all namespace created by us (requires ephemeral environment)
+ephemeral-namespace-delete-all: $(EPHEMERAL_DEPS) ## Delete all namespace created by us (requires ephemeral environment)
 	source .venv/bin/activate && \
 	for item in $$( bonfire namespace list --mine --output json | jq -r '. | to_entries | map(select(.key | match("ephemeral-*";"i"))) | map(.key) | .[]' ); do \
 	  bonfire namespace release --force $$item ; \
 	done
 
 .PHONY: ephemeral-namespace-list
-ephemeral-namespace-list: ## List all the namespaces reserved to the current user (requires ephemeral environment)
+ephemeral-namespace-list: $(EPHEMERAL_DEPS) ## List all the namespaces reserved to the current user (requires ephemeral environment)
 	source .venv/bin/activate && \
 	bonfire namespace list --mine
 
 .PHONY: ephemeral-namespace-extend
-ephemeral-namespace-extend: ## Extend for EPHEMERAL_DURATION ("4h" default) the usage of the current ephemeral environment
+ephemeral-namespace-extend: $(EPHEMERAL_DEPS) ## Extend for EPHEMERAL_DURATION ("4h" default) the usage of the current ephemeral environment
 	source .venv/bin/activate && \
 	bonfire namespace extend --duration "$(EPHEMERAL_DURATION)" "$(NAMESPACE)"
 
 .PHONY: ephemeral-namespace-describe
-ephemeral-namespace-describe: ## Display information about the current namespace
-	@source .venv/bin/activate && \
+ephemeral-namespace-describe: $(EPHEMERAL_DEPS) ## Display information about the current namespace
+	source .venv/bin/activate && \
 	bonfire namespace describe "$(NAMESPACE)"
-
-
-# CONTAINER_IMAGE_BASE should be a public image
-# Tested by 'make ephemeral-build-deploy CONTAINER_IMAGE_BASE=quay.io/avisied0/hmsidm-frontend'
-.PHONY: ephemeral-build-deploy
-ephemeral-build-deploy:  ## Build and deploy image using 'build_deploy.sh' scripts; It requires to pass DOCKER_IMAGE_BASE
-	@$(MAKE) registry-login \
-		CONTAINER_REGISTRY_USER="$(QUAY_USER)" \
-		CONTAINER_REGISTRY_TOKEN="$(QUAY_TOKEN)" \
-		CONTAINER_REGISTRY="quay.io"
-	$(MAKE) container-build CONTAINER_BUILD_OPTS="--build-arg APP_NAME=$(APP_NAME) --build-arg GIT_HASH=$(shell git rev-parse --verify HEAD) --build-arg SRC_HASH=$(shell git rev-parse HEAD) --build-arg APP_NAME=$(APP_NAME)"
-	$(MAKE) container-push
 
 .PHONY: ephemeral-pr-checks
 ephemeral-pr-checks:
@@ -170,7 +177,7 @@ ephemeral-pr-checks:
 
 # FIXME This rule will require some updates but it will be something similar
 .PHONY: ephemeral-test-backend
-ephemeral-test-backend:  ## Run IQE tests in the ephemeral environment (require to run ephemeral-deploy before)
+ephemeral-test-backend: $(EPHEMERAL_DEPS) ## Run IQE tests in the ephemeral environment (require to run ephemeral-deploy before)
 	source .venv/bin/activate && \
 	bonfire deploy-iqe-cji \
 	  --env clowder_smoke \
@@ -184,6 +191,6 @@ ephemeral-run-dnsutil:  ## Run a shell in a new pod to debug dns situations
 	oc run dnsutil --rm --image=registry.k8s.io/e2e-test-images/jessie-dnsutils:1.3 -it -- bash
 
 .PHONY: bonfire-deploy
-bonfire-deploy:  ## Run raw bonfire command with no customizations
+bonfire-deploy: $(EPHEMERAL_DEPS)  ## Run raw bonfire command with no customizations
 	source .venv/bin/activate && \
 	bonfire deploy --frontends true "$(APP_NAME)"
