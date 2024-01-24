@@ -19,7 +19,7 @@ apps:
         repo: ../idm-domains-backend
         path: deployments/clowder.yaml
         parameters:
-          ENV_NAME: ""
+          ENV_NAME: "ephemeral"
           # TODO Add here your local repository where you have
           #      have pushed your development image
           #      - Update USERNAME by your account name.
@@ -46,7 +46,7 @@ apps:
         parameters:
           # This field is override by the bonfire command that is
           # launched with the makefile
-          ENV_NAME: ""
+          ENV_NAME: "ephemeral"
           # IMAGE is override by the values defined at
           # 'secrets/private.mk and
           # scripts/mk/variables.mk
