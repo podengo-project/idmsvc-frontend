@@ -24,6 +24,9 @@ favourite browser.
 
 ## Setup and run chrome-service-backend
 
+> Useful when trying your service config changes
+> before commit to chrome-service-backend repository.
+
 Clone repositories and use Alejandro's branch:
 
 ```bash
@@ -42,11 +45,11 @@ make dev-static port=9999
 
 1. `make run` to start the server.
 
-2. Open the [hmsidm beta app](https://stage.foo.redhat.com:1337/beta/settings/hmsidm) in your browser.
+2. Open the [idmsvc beta app][idmsvc_beta_app] in your browser.
 
 3. Currently, `App.tsx` will throw a type error until your app is registered and a `navId` has been set.
 
-Update `config/dev.webpack.config.js` according to your application URL. [Read more](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy).
+Update `config/dev.webpack.config.js` according to your application URL. [Read more][frontend_use_proxy].
 
 See: [Contributing](./docs/CONTRIBUTING.md).
 
@@ -57,9 +60,13 @@ See: [Contributing](./docs/CONTRIBUTING.md).
 
 ## Development
 
+Update git submodule and regenerate API with `make update-api`.
+
 Generate `src/Api` from the openapi specification by running `make generate-api`.
 
-Update git submodule and regenerate API with`make update-api`.
-
 * [Development Docs](docs/INDEX.md).
-* [Pattern Fly 4 - Components](https://www.patternfly.org/v4/components/about-modal).
+* [Pattern Fly 4 - Components][patternfly_4].
+
+[idmsvc_beta_app]: https://stage.foo.redhat.com:1337/beta/settings/idmsvc
+[patternfly_4]: https://v4-archive.patternfly.org/v4/components/about-modal
+[frontend_use_proxy]: https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy
