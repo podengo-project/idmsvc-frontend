@@ -6,8 +6,8 @@
 .vscode/*
 
 # We want the extensions recommendations for this workspace
-!.vscode/extensions.json•
-!.vscode/settings.json•
+!.vscode/extensions.json
+!.vscode/settings.json
 
 # ide config
 .idea/
