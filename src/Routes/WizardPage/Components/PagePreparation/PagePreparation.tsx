@@ -75,7 +75,7 @@ const PagePreparation = (props: PagePreparationProps) => {
 
   return (
     <>
-      <Title headingLevel={'h2'} ouiaId="TextWizardPagePreparationTitle">
+      <Title headingLevel={'h2'} ouiaId="TextPagePreparationTitle">
         Preparation for your identity domain registration
       </Title>
       <Form
@@ -88,7 +88,7 @@ const PagePreparation = (props: PagePreparationProps) => {
             title={'Only Red Hat Identity Management (IdM) is currently supported.'}
             variant="info"
             isInline
-            ouiaId="AlertWizardPagePrepare"
+            ouiaId="AlertPagePreparationPrepare"
           ></Alert>
         </FormGroup>
         <FormGroup label="Identity domain prerequisites">
@@ -103,7 +103,7 @@ const PagePreparation = (props: PagePreparationProps) => {
                 iconPosition="right"
                 isInline
                 href={prerequisitesLink}
-                ouiaId="ButtonWizardPagePreparePrerequisites"
+                ouiaId="ButtonPagePreparationPrerequisites"
               >
                 prerequisites
               </Button>
@@ -126,11 +126,11 @@ const PagePreparation = (props: PagePreparationProps) => {
                   iconPosition="right"
                   isInline
                   href={installServerPackagesLink}
-                  ouiaId="LinkWizardPagePrepareInstall"
+                  ouiaId="LinkPagePreparationInstall"
                 >
                   steps to install the server packages
                 </Button>
-                <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextWizardPagePrepareInstallPackage">
+                <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextPagePreparationInstallPackage">
                   dnf copr enable @podengo/ipa-hcc && dnf install ipa-hcc-server
                 </ClipboardCopy>
               </TextContent>

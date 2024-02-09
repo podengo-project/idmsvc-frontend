@@ -27,7 +27,7 @@ import { TableComposable, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-tab
 const PageReviewIpaServersHead = () => {
   return (
     <Thead>
-      <Tr>
+      <Tr ouiaId="TrPageReviewIpaServers">
         <Th>Name</Th>
         <Th>UUID</Th>
       </Tr>

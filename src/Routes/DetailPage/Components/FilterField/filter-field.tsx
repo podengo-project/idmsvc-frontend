@@ -36,6 +36,7 @@ export const InputFilterServer = (props: InputFilterServerProps) => {
       key="Name"
       value="Name"
       component="button"
+      ouiaId="DropitemFilterFieldName"
       onClick={() => {
         setFilter('Name');
       }}
@@ -46,6 +47,7 @@ export const InputFilterServer = (props: InputFilterServerProps) => {
       key="Location"
       value="Location"
       component="button"
+      ouiaId="DropitemFilterFieldLocation"
       onClick={() => {
         setFilter('Location');
       }}
@@ -70,9 +72,16 @@ export const InputFilterServer = (props: InputFilterServerProps) => {
           }
           isOpen={isOpen}
           dropdownItems={dropdownItems}
+          ouiaId="DropdownFilterField"
         />
-        <TextInput id="input-filter-dropdown" aria-label="input with dropdown and button" value={value} onChange={onChange} />
-        <Button id="input-filter-button" variant="control" icon={<SearchIcon />} />
+        <TextInput
+          id="input-filter-dropdown"
+          aria-label="input with dropdown and button"
+          value={value}
+          onChange={onChange}
+          ouiaId="TextinputFilterField"
+        />
+        <Button id="input-filter-button" variant="control" icon={<SearchIcon />} ouiaId="ButtonFilterField" />
       </InputGroup>
     </>
   );

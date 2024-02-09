@@ -132,6 +132,7 @@ const DetailPage = () => {
                 isPlain
                 dropdownItems={dropdownItems}
                 position="right"
+                ouiaId=""
               />
             </FlexItem>
           </Flex>
@@ -148,7 +149,7 @@ const DetailPage = () => {
           </Tabs>
         </PageHeader>
         <PageSection>
-          <Card>
+          <Card ouiaId="CardDetailPage">
             <CardBody>
               {activeTabKey === 0 && (
                 <DetailGeneral

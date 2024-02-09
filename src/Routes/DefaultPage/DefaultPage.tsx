@@ -36,7 +36,7 @@ const Header = () => {
 
   return (
     <PageHeader>
-      <PageHeaderTitle title={title} ouiaId="TextDefaultTitle" />
+      <PageHeaderTitle title={title} />
       <p>
         Manage registered identity domains to leverage host access controls from your existing identity and access management.{' '}
         <Button
@@ -77,7 +77,7 @@ const EmptyContent = () => {
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
             <EmptyStateIcon icon={RegistryIcon} />
-            <Title headingLevel="h2" size="lg" className="pf-u-pt-sm">
+            <Title headingLevel="h2" size="lg" className="pf-u-pt-sm" ouiaId="TitleEmptyContent">
               No identity domains registered
             </Title>
             <EmptyStateBody>

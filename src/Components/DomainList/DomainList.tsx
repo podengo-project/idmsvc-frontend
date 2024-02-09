@@ -216,7 +216,7 @@ export const DomainList = () => {
     <>
       <TableComposable>
         <Thead>
-          <Tr>
+          <Tr ouiaId="TrDomainListHeader">
             <Th sort={getSortParams(0)}>Name</Th>
             <Th>Type</Th>
             <Th sort={getSortParams(3)}>Domain auto-join on launch</Th>
@@ -241,7 +241,7 @@ export const DomainList = () => {
                       onClick={() => {
                         onShowDetails(domain);
                       }}
-                      ouiaId="LinkListDomainDetails"
+                      ouiaId="LinkDomainListDetails"
                     >
                       {domain.title}
                     </Button>

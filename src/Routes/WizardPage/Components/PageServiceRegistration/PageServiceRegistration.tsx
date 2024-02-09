@@ -60,7 +60,7 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
 
   return (
     <>
-      <Title headingLevel={'h2'} ouiaId="TextWizardRegistrationTitle">
+      <Title headingLevel={'h2'} ouiaId="TitleWizardRegistration">
         Register your identity domain
       </Title>
       <Form onSubmit={(e) => e.preventDefault()}>
