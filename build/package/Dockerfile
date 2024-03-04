@@ -26,6 +26,7 @@ RUN ./gen.app.info.sh
 FROM quay.io/cloudservices/caddy-ubi:11145b1
 WORKDIR /opt/app-root/src
 
+RUN mkdir -p /opt/app-root/src/dist/stable /opt/app-root/src/dist/preview
 COPY build/package/Caddyfile /opt/app-root/src/Caddyfile
 COPY --from=builder /opt/app-root/src/dist /opt/app-root/src/dist/
 COPY --from=builder /opt/app-root/src/app.info.json /opt/app-root/src/dist/
