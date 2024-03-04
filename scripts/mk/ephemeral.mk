@@ -1,10 +1,7 @@
 
 # .PHONY: ephemeral-setup
 # ephemeral-setup: ## Configure bonfire to run locally
-#	source .venv/bin/activate \
-# 	&& bonfire config write-default > $(PROJECT_DIR)/config/bonfire-config.yaml
-
-EPHEMERAL_DEPS := install-python-tools config/bonfire.yaml
+# 	$(BONFIRE) config write-default > $(PROJECT_DIR)/config/bonfire-config.yaml
 
 ifeq (,$(APP_NAME))
 $(error APP_NAME is empty; did you miss to set APP_NAME=my-app at your scripts/mk/variables.mk)
@@ -43,6 +40,8 @@ endif
 endif
 
 EPHEMERAL_BONFIRE_PATH ?= config/bonfire.yaml
+
+EPHEMERAL_DEPS := $(BONFIRE) $(EPHEMERAL_BONFIRE_PATH)
 
 # Enable frontend deployment
 EPHEMERAL_OPTS += --frontends true
@@ -85,17 +84,26 @@ $(GO_OUTPUT/get-token.py):
 # CONTAINER_IMAGE_BASE should be a public image
 .PHONY: ephemeral-build
 ephemeral-build: $(EPHEMERAL_DEPS) ## Build and deploy image using 'build_deploy.sh' script; It create CONTAINER_IMAGE_BASE:CONTAINER_IMAGE_TAG image
-	@$(MAKE) registry-login \
-		CONTAINER_REGISTRY_USER="$(QUAY_USER)" \
-		CONTAINER_REGISTRY_TOKEN="$(QUAY_TOKEN)" \
-		CONTAINER_REGISTRY="quay.io"
+	$(MAKE) ephemeral-registry-login
 	$(MAKE) container-build CONTAINER_BUILD_OPTS="--build-arg APP_NAME=$(APP_NAME) --build-arg GIT_HASH=$(shell git rev-parse --verify HEAD) --build-arg SRC_HASH=$(shell git rev-parse HEAD) --build-arg APP_NAME=$(APP_NAME)"
 	$(MAKE) container-push
 
+.PHONY: ephemeral-registry-login
+ephemeral-registry-login:  ## log into container registries for ephemeral build
+	$(CONTAINER_ENGINE) login --get-login quay.io 2>/dev/null || \
+		$(MAKE) registry-login \
+			CONTAINER_REGISTRY_USER="$(QUAY_USER)" \
+			CONTAINER_REGISTRY_TOKEN="$(QUAY_TOKEN)" \
+			CONTAINER_REGISTRY="quay.io"
+	$(CONTAINER_ENGINE) login --get-login registry.redhat.io 2>/dev/null || \
+		$(MAKE) registry-login \
+			CONTAINER_REGISTRY_USER="$(RH_REGISTRY_USER)" \
+			CONTAINER_REGISTRY_TOKEN="$(RH_REGISTRY_TOKEN)" \
+			CONTAINER_REGISTRY="registry.redhat.io"
+
 .PHONY: ephemeral-deploy
 ephemeral-deploy: $(EPHEMERAL_DEPS) ## Deploy application using 'config/bonfire.yaml'.
-	source .venv/bin/activate && \
-	bonfire deploy \
+	$(BONFIRE) deploy \
 	    --source appsre \
 		--local-config-path "$(EPHEMERAL_BONFIRE_PATH)" \
 		--local-config-method override \
@@ -115,8 +123,7 @@ ephemeral-build-deploy:  ## Build and deploy the image (run ephemeral-build and 
 # NOTE Changes to config/bonfire.yaml could impact to this rule
 .PHONY: ephemeral-undeploy
 ephemeral-undeploy: $(EPHEMERAL_DEPS) ## Undeploy application from the current namespace
-	source .venv/bin/activate && \
-	bonfire process \
+	$(BONFIRE) process \
 	    --source appsre \
 		--local-config-path "$(EPHEMERAL_BONFIRE_PATH)" \
 		--local-config-method override \
@@ -129,8 +136,7 @@ ephemeral-undeploy: $(EPHEMERAL_DEPS) ## Undeploy application from the current n
 
 .PHONY: ephemeral-process
 ephemeral-process: $(EPHEMERAL_DEPS) ## Process application from the current namespace
-	source .venv/bin/activate && \
-	bonfire process \
+	$(BONFIRE) process \
 	    --source appsre \
 		--local-config-path "$(EPHEMERAL_BONFIRE_PATH)" \
 		--namespace "$(NAMESPACE)" \
@@ -142,34 +148,29 @@ ephemeral-process: $(EPHEMERAL_DEPS) ## Process application from the current nam
 # TODO Add command to specify to bonfire the clowdenv template to be used
 .PHONY: ephemeral-namespace-create
 ephemeral-namespace-create: $(EPHEMERAL_DEPS) ## Create a namespace (requires ephemeral environment)
-	oc project "$(shell source .venv/bin/activate && bonfire namespace reserve --force --pool "$(POOL)" -d "$(EPHEMERAL_DURATION)" 2>/dev/null)"
+	oc project "$(shell $(BONFIRE) namespace reserve --force --pool "$(POOL)" -d "$(EPHEMERAL_DURATION)" 2>/dev/null)"
 
 .PHONY: ephemeral-namespace-delete
 ephemeral-namespace-delete: $(EPHEMERAL_DEPS) ## Delete current namespace (requires ephemeral environment)
-	source .venv/bin/activate && \
-	bonfire namespace release --force "$(oc project -q)"
+	$(BONFIRE) namespace release --force "$(oc project -q)"
 
 .PHONY: ephemeral-namespace-delete-all
 ephemeral-namespace-delete-all: $(EPHEMERAL_DEPS) ## Delete all namespace created by us (requires ephemeral environment)
-	source .venv/bin/activate && \
 	for item in $$( bonfire namespace list --mine --output json | jq -r '. | to_entries | map(select(.key | match("ephemeral-*";"i"))) | map(.key) | .[]' ); do \
-	  bonfire namespace release --force $$item ; \
+	  $(BONFIRE) namespace release --force $$item ; \
 	done
 
 .PHONY: ephemeral-namespace-list
 ephemeral-namespace-list: $(EPHEMERAL_DEPS) ## List all the namespaces reserved to the current user (requires ephemeral environment)
-	source .venv/bin/activate && \
-	bonfire namespace list --mine
+	$(BONFIRE) namespace list --mine
 
 .PHONY: ephemeral-namespace-extend
 ephemeral-namespace-extend: $(EPHEMERAL_DEPS) ## Extend for EPHEMERAL_DURATION ("4h" default) the usage of the current ephemeral environment
-	source .venv/bin/activate && \
-	bonfire namespace extend --duration "$(EPHEMERAL_DURATION)" "$(NAMESPACE)"
+	$(BONFIRE) namespace extend --duration "$(EPHEMERAL_DURATION)" "$(NAMESPACE)"
 
 .PHONY: ephemeral-namespace-describe
 ephemeral-namespace-describe: $(EPHEMERAL_DEPS) ## Display information about the current namespace
-	source .venv/bin/activate && \
-	bonfire namespace describe "$(NAMESPACE)"
+	$(BONFIRE) namespace describe "$(NAMESPACE)"
 
 .PHONY: ephemeral-pr-checks
 ephemeral-pr-checks:
@@ -178,8 +179,7 @@ ephemeral-pr-checks:
 # FIXME This rule will require some updates but it will be something similar
 .PHONY: ephemeral-test-backend
 ephemeral-test-backend: $(EPHEMERAL_DEPS) ## Run IQE tests in the ephemeral environment (require to run ephemeral-deploy before)
-	source .venv/bin/activate && \
-	bonfire deploy-iqe-cji \
+	$(BONFIRE) deploy-iqe-cji \
 	  --env clowder_smoke \
 	  --cji-name "$(APP_NAME)-$(APP_COMPONENT)" \
 	  --namespace "$(NAMESPACE)" \
@@ -192,5 +192,4 @@ ephemeral-run-dnsutil:  ## Run a shell in a new pod to debug dns situations
 
 .PHONY: bonfire-deploy
 bonfire-deploy: $(EPHEMERAL_DEPS)  ## Run raw bonfire command with no customizations
-	source .venv/bin/activate && \
-	bonfire deploy --frontends true "$(APP_NAME)"
+	$(BONFIRE) deploy --frontends true "$(APP_NAME)"
