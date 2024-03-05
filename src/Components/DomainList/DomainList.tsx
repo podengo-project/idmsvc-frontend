@@ -218,6 +218,7 @@ export const DomainList = () => {
         <Thead>
           <Tr ouiaId="TrDomainListHeader">
             <Th sort={getSortParams(0)}>Name</Th>
+            <Th>UUID</Th>
             <Th>Type</Th>
             <Th sort={getSortParams(3)}>Domain auto-join on launch</Th>
             <Th></Th>
@@ -246,6 +247,7 @@ export const DomainList = () => {
                       {domain.title}
                     </Button>
                   </Td>
+                  <Td>{domain.domain_id}</Td>
                   <Td>
                     <DomainListFieldType domain_type={domain.domain_type} />
                   </Td>
