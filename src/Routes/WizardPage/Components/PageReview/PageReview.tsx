@@ -12,7 +12,16 @@
  */
 import React from 'react';
 
-import { DescriptionList, DescriptionListDescription, DescriptionListGroup, DescriptionListTerm, Title } from '@patternfly/react-core';
+import {
+  DescriptionList,
+  DescriptionListDescription,
+  DescriptionListGroup,
+  DescriptionListTerm,
+  DescriptionListTermHelpText,
+  DescriptionListTermHelpTextButton,
+  Popover,
+  Title,
+} from '@patternfly/react-core';
 
 import './PageReview.scss';
 import { Domain, DomainIpaServer } from '../../../../Api/api';
@@ -137,6 +146,14 @@ const PageReviewIpa = (props: PageReviewProps & { className?: string }) => {
         <DescriptionListGroup>
           <DescriptionListTerm>Domain auto-join on launch</DescriptionListTerm>
           <DescriptionListDescription disabled>{auto_enrollment_description}</DescriptionListDescription>
+        </DescriptionListGroup>
+        <DescriptionListGroup>
+          <DescriptionListTermHelpText>
+            <Popover headerContent={<div>UUID</div>} bodyContent={<div>Unique identifier for this registration</div>}>
+              <DescriptionListTermHelpTextButton>UUID</DescriptionListTermHelpTextButton>
+            </Popover>
+          </DescriptionListTermHelpText>
+          <DescriptionListDescription disabled>{props.domain.domain_id}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
     </>
