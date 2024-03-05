@@ -11,25 +11,11 @@ apps:
       # possible to deploy local changes before the are merged or
       # pushed to the repository.
       - name: backend
-        # host: github
-        # repo: https://github.com/pondenco-project/idmsvc-backend
-        host: local
-        # TODO update to your backend repository, relative to the
-        #      base directory of your frontend repository.
-        repo: ../idm-domains-backend
+        host: github
+        repo: https://github.com/pondengo-project/idmsvc-backend
         path: deployments/clowder.yaml
         parameters:
           ENV_NAME: "ephemeral"
-          # TODO Add here your local repository where you have
-          #      have pushed your development image
-          #      - Update USERNAME by your account name.
-          #      - Update 'hmsidm-backend' by the name of the quay.io
-          #        repository which you created.
-          IMAGE: "quay.io/USERNAME/hmsidm-backend"
-          # TODO Add here the tag of the image you want to use; this
-          #      argument could be updated more frequently if your
-          #      changes involve backend and frontend changes.
-          IMAGE_TAG: "24c3db1"
           # LOGGING_LEVEL: "info"
           CLIENTS_RBAC_BASE_URL: "http://rbac-service:8000/api/rbac/v1"
           CLIENTS_RBAC_ENABLED: "True"
@@ -48,8 +34,7 @@ apps:
           # launched with the makefile
           ENV_NAME: "ephemeral"
           # IMAGE is override by the values defined at
-          # 'secrets/private.mk and
-          # scripts/mk/variables.mk
+          # 'secrets/private.mk' and 'scripts/mk/variables.mk'
           IMAGE: "quay.io/cloudservices/idmsvc-frontend"
           # IMAGE_TAG is override by the current git hash, be aware
           # you need to build and push the container image before
@@ -60,4 +45,4 @@ apps:
           # image because the matching of the tags; so in this situations
           # add some commit just to force a different hash, and be sure
           # that what you are deploying is your current local state.
-          IMAGE_TAG: "pr-24-5714d07"
+          # IMAGE_TAG: "pr-24-5714d07"
