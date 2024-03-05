@@ -32,14 +32,26 @@ Clone repositories and use Alejandro's branch:
 ```bash
 git clone https://github.com/RedHatInsights/chrome-service-backend.git -o upstream
 cd chrome-service-backend
-git remote add --fetch avisiedo https://github.com/avisiedo/chrome-service-backend.git
-git checkout hms-2031-domain-registry
 ```
 
-Run the server in the foregrand:
+Run the server in the foreground:
 ```bash
 make dev-static port=9999
 ```
+
+## Additional configurations
+
+The below will be necessary to deploy on the dev cluster.
+
+- Run `cp -vf config/bonfire.example.yaml config/bonfire.yaml`.
+- Update the `config/bonfire.yaml` file by following the TODO
+  placeholders.
+- Run `mkdir -p secrets/ephemeral && cp -vf scripts/mk/private.example.mk secrets/private.mk`.
+- Update the `secrets/private.mk` file by following the TODO
+  placeholders.
+- Generate app-secret by: `${PATH_TO_IDMSVC_BACKEND_REPO}/scripts/gen-app-secret.py secrets/ephemeral/app-secret.yaml`.
+
+Now you can deploy into dev cluster by `make ephemeral-build-deploy`.
 
 ## Getting started
 
