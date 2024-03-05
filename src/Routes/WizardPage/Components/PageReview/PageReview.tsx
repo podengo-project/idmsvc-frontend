@@ -29,7 +29,7 @@ const PageReviewIpaServersHead = () => {
     <Thead>
       <Tr ouiaId="TrPageReviewIpaServers">
         <Th>Name</Th>
-        <Th>UUID</Th>
+        <Th>Subscription Manager ID</Th>
       </Tr>
     </Thead>
   );
