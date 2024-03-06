@@ -12,7 +12,7 @@ apps:
       # pushed to the repository.
       - name: backend
         host: github
-        repo: https://github.com/pondengo-project/idmsvc-backend
+        repo: pondengo-project/idmsvc-backend
         path: deployments/clowder.yaml
         parameters:
           ENV_NAME: "ephemeral"
@@ -20,6 +20,7 @@ apps:
           CLIENTS_RBAC_BASE_URL: "http://rbac-service:8000/api/rbac/v1"
           CLIENTS_RBAC_ENABLED: "True"
           # SERVICE_REPLICAS: 3
+          APP_ACCEPT_X_RH_FAKE_IDENTITY: "true"
 
       # The frontend component that will be deployed in ephemeral
       # environment by using the repository automation.
