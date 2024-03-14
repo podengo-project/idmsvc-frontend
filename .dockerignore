@@ -3,7 +3,6 @@ secrets
 
 # Ignore common directories
 .git
-dist
 bin
 node_modules
 .venv
