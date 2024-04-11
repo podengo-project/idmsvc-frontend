@@ -1,3 +1,7 @@
+.podman
+.docker
+.kube
+
 # Ignore /secrets directory content
 secrets
 
@@ -10,4 +14,5 @@ config/bonfire.yaml
 .npm
 .cache
 .devcontainer
+*.log
 
