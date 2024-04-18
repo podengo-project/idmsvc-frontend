@@ -7,7 +7,18 @@
 import React, { useContext, useState } from 'react';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
-import { Button, Page, PageSection, PageSectionTypes, PageSectionVariants, Wizard, WizardStep } from '@patternfly/react-core';
+import {
+  Button,
+  Modal,
+  ModalVariant,
+  Page,
+  PageSection,
+  PageSectionTypes,
+  PageSectionVariants,
+  Text,
+  Wizard,
+  WizardStep,
+} from '@patternfly/react-core';
 
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
@@ -36,36 +47,79 @@ const WizardPage = () => {
   const appContext = useContext(AppContext);
   const domain = appContext?.wizard.domain;
   const navigate = useNavigate();
+  const [isCancelConfirmationModalOpen, SetIsCancelConfirmationModalOpen] = useState<boolean>(false);
 
   // FIXME Update the URL with the location for docs
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
+  const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
 
-  /** Event triggered when Close button is clicked. */
-  const onCloseClick = () => {
-    // TODO A few things pending:
-    //       - Modal confirmation
-    //         - Confirm =>
-    //           - if not registered, dismiss wizard
-    //           - else => DELETE /domains/:domain_id
-    //         - Cancel or close model => Do not dismiss wizard
+  /** Event triggered when we do click on continue button at cancel confirmation modal */
+  const onConfirmCancelWizardContinueButtonClick = () => {
+    SetIsCancelConfirmationModalOpen(false);
+  };
+
+  const dismissCancelConfirmationAndGoToDefaultView = () => {
+    SetIsCancelConfirmationModalOpen(false);
+    navigate('/domains');
+  };
+
+  const onConfirmCancelWizardCancelButtonClick = () => {
     if (domain?.domain_id) {
       resources_api
-        .updateDomainUser(domain.domain_id, {
-          title: domain.title,
-          description: domain.description,
-          auto_enrollment_enabled: domain.auto_enrollment_enabled,
+        .deleteDomain(domain?.domain_id)
+        .then((result) => {
+          if (result.status === 204 || result.status === 404) {
+            dismissCancelConfirmationAndGoToDefaultView();
+          } else {
+            // TODO add error notification
+            dismissCancelConfirmationAndGoToDefaultView();
+          }
+        })
+        .catch(() => {
+          // TODO add error notification
+          dismissCancelConfirmationAndGoToDefaultView();
+        });
+    } else {
+      dismissCancelConfirmationAndGoToDefaultView();
+    }
+  };
+
+  /** Event triggered when Finish button is clicked. */
+  const onWizardSave = () => {
+    console.log('onWizardSave fired');
+    if (domain?.domain_id) {
+      const domain_id: string = domain?.domain_id;
+      resources_api
+        .updateDomainUser(domain_id, {
+          title: domain?.title,
+          description: domain?.description,
+          auto_enrollment_enabled: domain?.auto_enrollment_enabled,
         })
         .then((response) => {
           if (response.status >= 400) {
-            // TODO show-up notification with error message
+            // TODO Notify error
           }
+          navigate('/domains');
         })
         .catch((error) => {
-          // TODO show-up notification with error message
-          console.log('error onClose: ' + error);
+          // TODO Notify error
+          navigate('/domains');
         });
+    } else {
+      navigate('/domains');
     }
-    navigate('/domains');
+  };
+
+  /** Event triggered when Cancel button is clicked on the wizard. */
+  const onWizardCancel = () => {
+    console.log('onWizardCancel fired');
+    SetIsCancelConfirmationModalOpen(true);
+  };
+
+  /** Event triggered when Cancel button is clicked on the wizard. */
+  const onWizardClose = () => {
+    console.log('onWizardClose fired');
+    SetIsCancelConfirmationModalOpen(true);
   };
 
   /** Event triggered when Back button is clicked. */
@@ -74,7 +128,7 @@ const WizardPage = () => {
     _prevStep: { prevId?: string | number; prevName: React.ReactNode }
   ) => {
     // TODO If not needed at the end clean-up onPreviousPage
-    console.log('onPreviousPage fired');
+    console.log('onPreviousPage fired for id=' + _newStep.id);
     return;
   };
 
@@ -84,7 +138,7 @@ const WizardPage = () => {
     _prevStep: { prevId?: string | number; prevName: React.ReactNode }
   ) => {
     // TODO If not needed at the end clean-up onPreviousPage
-    console.log('onGoToStep fired');
+    console.log('onGoToStep fired' + _newStep.id);
     return;
   };
 
@@ -240,11 +294,46 @@ const WizardPage = () => {
             navAriaLabel={`${title} steps`}
             mainAriaLabel={`${title} content`}
             steps={steps}
-            onClose={onCloseClick}
             onNext={onNextPage}
             onBack={onPreviousPage}
             onGoToStep={onGoToStep}
+            onAbort={onWizardCancel}
+            onSave={onWizardSave}
+            onClose={onWizardClose}
           />
+          <Modal
+            variant={ModalVariant.small}
+            title="Cancel identity domain registration"
+            titleIconVariant={'warning'}
+            isOpen={isCancelConfirmationModalOpen}
+            onClose={onConfirmCancelWizardContinueButtonClick}
+            ouiaId="ModalDesription"
+            actions={[
+              <Button key="cancel" variant="primary" onClick={onConfirmCancelWizardCancelButtonClick} ouiaId="ButtonModalCancelRegistrationCancel">
+                Cancel registration
+              </Button>,
+              <Button key="continue" variant="link" onClick={onConfirmCancelWizardContinueButtonClick} ouiaId="ButtonModalCancelRegistrationContinue">
+                Continue registration
+              </Button>,
+            ]}
+          >
+            <Text>
+              Proceeding with the cancellation, your data will not be saved in the Red Hat Hybrid Cloud Console. However, this action does not affect
+              the identity server side if any action is done there.
+            </Text>
+            <Button
+              component="a"
+              target="_blank"
+              variant="link"
+              icon={<ExternalLinkAltIcon />}
+              iconPosition="right"
+              isInline
+              href={linkLearnMoreAboutRemovingDirectoryAndDomainServices}
+              ouiaId="ButtonPagePreparationPrerequisites"
+            >
+              Learn more about removing Directory and Domain Services Packages from your Red hat IdM server
+            </Button>
+          </Modal>
         </PageSection>
       </Page>
     </>
