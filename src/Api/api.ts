@@ -113,7 +113,7 @@ export interface Domain {
    */
   domain_id?: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof Domain
    */
@@ -145,13 +145,19 @@ export interface DomainIpa {
    */
   servers: Array<DomainIpaServer>;
   /**
+   * List of automount locations for AutoFS
+   * @type {Array<string>}
+   * @memberof DomainIpa
+   */
+  automount_locations?: Array<string>;
+  /**
    * A base64 representation of all the list of chain of certificates, including the server ca.
    * @type {Array<Certificate>}
    * @memberof DomainIpa
    */
   ca_certs: Array<Certificate>;
   /**
-   * List of allowed locations
+   * List of DNS locations
    * @type {Array<Location>}
    * @memberof DomainIpa
    */
@@ -163,7 +169,7 @@ export interface DomainIpa {
    */
   realm_domains: Array<string>;
   /**
-   * A Kerberos realm name (usually all upper-case domain name)
+   * A Kerberos realm name (usually all upper-case domain name). The realm can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof DomainIpa
    */
@@ -295,7 +301,7 @@ export interface DomainRegisterResponse {
    */
   domain_id: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof DomainRegisterResponse
    */
@@ -345,7 +351,7 @@ export interface DomainResponse {
    */
   domain_id: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof DomainResponse
    */
@@ -407,7 +413,7 @@ export interface DomainUpdateResponse {
    */
   domain_id?: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof DomainUpdateResponse
    */
@@ -489,7 +495,7 @@ export interface HostConf {
    */
   domain_id?: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof HostConf
    */
@@ -509,6 +515,12 @@ export interface HostConf {
  */
 export interface HostConfIpa {
   /**
+   * Automount location name for ipa-client-automount
+   * @type {string}
+   * @memberof HostConfIpa
+   */
+  automount_location?: string;
+  /**
    * A string of concatenated, PEM-encoded X.509 certificates
    * @type {string}
    * @memberof HostConfIpa
@@ -521,7 +533,13 @@ export interface HostConfIpa {
    */
   enrollment_servers: Array<HostConfIpaServer>;
   /**
-   * A Kerberos realm name (usually all upper-case domain name)
+   * List of additional arguments for ipa-client-install
+   * @type {Array<string>}
+   * @memberof HostConfIpa
+   */
+  ipa_client_install_args?: Array<string>;
+  /**
+   * A Kerberos realm name (usually all upper-case domain name). The realm can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof HostConfIpa
    */
@@ -565,7 +583,7 @@ export interface HostConfResponseSchema {
    */
   domain_id: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof HostConfResponseSchema
    */
@@ -621,7 +639,7 @@ export interface ListDomainsData {
    */
   domain_id: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof ListDomainsData
    */
@@ -765,7 +783,7 @@ export interface RegisterDomainRequest {
    */
   domain_id?: string;
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof RegisterDomainRequest
    */
@@ -810,7 +828,7 @@ export interface SigningKeysResponse {
  */
 export interface UpdateDomainAgentRequest {
   /**
-   * A name of a domain (all lower-case)
+   * A name of a domain (all lower-case). The domain name can only be set during initial registration and not be modified by updates.
    * @type {string}
    * @memberof UpdateDomainAgentRequest
    */
