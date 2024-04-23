@@ -140,6 +140,7 @@ const ListContent = () => {
             .readDomain(item.domain_id)
             .then((res_domain) => {
               local_domains[count++] = res_domain.data;
+              // This is executed when the last item was read
               if (res.data.data.length == local_domains.length) {
                 appContext?.setDomains(local_domains);
                 const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
