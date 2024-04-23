@@ -22,6 +22,7 @@ import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { AppContext, AppContextType } from '../../AppContext';
 import { DetailGeneral } from './Components/DetailGeneral/DetailGeneral';
 import { DetailServers } from './Components/DetailServers/DetailServers';
+import ConfirmDeleteDomain from '../../Components/ConfirmDeleteDomain/ConfirmDeleteDomain';
 
 /**
  * It represents the detail page to show the information about a
@@ -40,6 +41,7 @@ const DetailPage = () => {
 
   // States
   const [domain, setDomain] = useState<Domain | undefined>(appContext?.getDomain(domain_id || ''));
+  const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState<boolean>(false);
 
   console.log('INFO:DetailPage render:domain_id=' + domain_id);
 
@@ -82,26 +84,40 @@ const DetailPage = () => {
     setIsKebabOpen(!isKebabOpen);
   };
 
+  const OnShowConfirmDelete = () => {
+    setIsOpenConfirmDelete(true);
+  };
+
+  const onDismissConfirmDelete = () => {
+    setIsOpenConfirmDelete(false);
+  };
+
+  const onDelete = (domain?: Domain) => {
+    if (domain?.domain_id !== undefined) {
+      const domainId = domain.domain_id;
+      resources_api
+        .deleteDomain(domainId)
+        .then((response) => {
+          if (response.status == 204) {
+            appContext?.deleteDomain(domainId);
+            navigate('/domains', { replace: true });
+          } else {
+            // TODO show-up notification with error message
+            console.error(`response.status=${response.status}; response.data=${response.data}`);
+          }
+        })
+        .catch((error) => {
+          // TODO show-up notification with error message
+          console.log('error onClose: ' + error);
+        });
+    }
+  };
+
   const dropdownItems: JSX.Element[] = [
     <DropdownItem
       key="delete"
-      onClick={(value) => {
-        console.log('Deleting domain: ' + value);
-        if (domain_id !== undefined) {
-          resources_api
-            .deleteDomain(domain_id)
-            .then((res) => {
-              if (res.status === 204) {
-                console.info('Domain ' + value + ' was deleted');
-                appContext?.deleteDomain(domain_id);
-                navigate('/domains', { replace: true });
-              }
-            })
-            .catch((reason) => {
-              // TODO Send error notification to chrome
-              console.log(reason);
-            });
-        }
+      onClick={() => {
+        domain !== undefined && OnShowConfirmDelete();
       }}
       ouiaId="ButtonDetailsDelete"
     >
@@ -168,6 +184,7 @@ const DetailPage = () => {
           </Card>
         </PageSection>
       </Page>
+      <ConfirmDeleteDomain domain={domain} isOpen={isOpenConfirmDelete} onCancel={onDismissConfirmDelete} onDelete={onDelete} />
     </>
   );
 };

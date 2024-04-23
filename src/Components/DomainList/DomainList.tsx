@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext, AppContextType } from '../../AppContext';
 import { Button } from '@patternfly/react-core';
 import AutoJoinChangeConfirmDialog from '../AutoJoinChangeConfirmDialog/AutoJoinChangeConfirmDialog';
+import ConfirmDeleteDomain from '../ConfirmDeleteDomain/ConfirmDeleteDomain';
 
 export interface IColumnType<T> {
   key: string;
@@ -108,7 +109,9 @@ export const DomainList = () => {
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
   const domains = context?.domains || ([] as Domain[]);
+
   const [isOpenAutoJoinChangeConfirm, setIsOpenAutoJoinChangeConfirm] = useState(false);
+  const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState<boolean>(false);
   const [currentDomain, setCurrentDomain] = useState<Domain>();
 
   const enabledText = 'Enabled';
@@ -166,8 +169,18 @@ export const DomainList = () => {
     }
   };
 
-  const onDelete = (domain: Domain) => {
-    if (domain.domain_id !== undefined) {
+  const OnShowConfirmDelete = (domain: Domain) => {
+    setIsOpenConfirmDelete(true);
+    setCurrentDomain(domain);
+  };
+
+  const onDismissConfirmDelete = () => {
+    setIsOpenConfirmDelete(false);
+  };
+
+  const onDelete = (domain?: Domain) => {
+    setIsOpenConfirmDelete(false);
+    if (domain?.domain_id !== undefined) {
       const domainId = domain.domain_id;
       resources_api
         .deleteDomain(domainId)
@@ -198,7 +211,7 @@ export const DomainList = () => {
     },
     {
       title: 'Delete',
-      onClick: () => onDelete(domain),
+      onClick: () => OnShowConfirmDelete(domain),
       ouiaId: 'ButtonActionDelete',
     },
   ];
@@ -269,6 +282,7 @@ export const DomainList = () => {
         onConfirm={onConfirmAutoJoinChange}
         onCancel={() => setIsOpenAutoJoinChangeConfirm(false)}
       />
+      <ConfirmDeleteDomain domain={currentDomain} isOpen={isOpenConfirmDelete} onCancel={onDismissConfirmDelete} onDelete={onDelete} />
     </>
   );
 };
