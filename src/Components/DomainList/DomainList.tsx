@@ -1,6 +1,6 @@
 import { ActionsColumn, IAction, TableComposable, Tbody, Td, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
 import './DomainList.scss';
-import { Fragment, useContext, useState } from 'react';
+import { Fragment, useContext } from 'react';
 import React from 'react';
 
 import { Domain, DomainType, ResourcesApiFactory } from '../../Api/api';
@@ -106,7 +106,7 @@ export const DomainList = () => {
   // Sort direction of the currently sorted column
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
-  const [domains, setDomains] = useState<Domain[]>(context?.domains || ([] as Domain[]));
+  const domains = context?.domains || ([] as Domain[]);
   const enabledText = 'Enabled';
   const disabledText = 'Disabled';
 
@@ -123,24 +123,9 @@ export const DomainList = () => {
     columnIndex,
   });
 
-  // given a domain object, replace it in the `domains` state
-  // (matching by uuid).
-  const replaceDomain = (newDomain: Domain): void => {
-    const newDomains = domains.map((domain) => {
-      return domain.domain_id === newDomain.domain_id ? newDomain : domain;
-    });
-    setDomains(newDomains);
-  };
-
   // remove domain(s) matching the given uuid from the `domains` state
   const removeDomain = (uuid: string): void => {
-    const newDomains: Domain[] = [];
-    for (const domain of domains) {
-      if (domain.domain_id !== uuid) {
-        newDomains.push(domain);
-      }
-    }
-    setDomains(newDomains);
+    context?.deleteDomain(uuid);
   };
 
   const onEnableDisable = (domain: Domain) => {
@@ -152,7 +137,7 @@ export const DomainList = () => {
         })
         .then((response) => {
           if (response.status == 200) {
-            replaceDomain(response.data);
+            context?.updateDomain(response.data);
           } else {
             // TODO show-up notification with error message
           }

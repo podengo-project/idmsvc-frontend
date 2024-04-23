@@ -77,7 +77,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
    * @param domain The domain to be updated into the context.
    */
   const _updateDomain = (domain: Domain) => {
-    const newDomains: Domain[] = {} as Domain[];
+    const newDomains: Domain[] = [];
     for (const idx in domains) {
       if (domains[idx].domain_id === domain.domain_id) {
         newDomains[idx] = domain;
@@ -94,7 +94,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
    * @param id the domain identifier.
    */
   const _deleteDomain = (id: string) => {
-    const newDomains: Domain[] = {} as Domain[];
+    const newDomains: Domain[] = [];
     for (const idx in domains) {
       if (domains[idx].domain_id !== id) {
         newDomains[idx] = domains[idx];
