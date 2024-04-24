@@ -77,6 +77,7 @@ const DetailPage = () => {
 
   const onKebabToggle = (
     isOpen: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     event: MouseEvent | TouchEvent | KeyboardEvent | React.KeyboardEvent<any> | React.MouseEvent<HTMLButtonElement>
   ) => {
     event.stopPropagation();
@@ -134,7 +135,7 @@ const DetailPage = () => {
 
   // Tabs
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
-  const handleTabClick = (event: React.MouseEvent<any> | React.KeyboardEvent | MouseEvent, tabIndex: string | number) => {
+  const handleTabClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
   };
 
