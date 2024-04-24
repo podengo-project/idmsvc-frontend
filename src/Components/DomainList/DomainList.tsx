@@ -1,12 +1,13 @@
 import { ActionsColumn, IAction, TableComposable, Tbody, Td, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
 import './DomainList.scss';
-import { Fragment, useContext } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import React from 'react';
 
 import { Domain, DomainType, ResourcesApiFactory } from '../../Api/api';
 import { useNavigate } from 'react-router-dom';
 import { AppContext, AppContextType } from '../../AppContext';
 import { Button } from '@patternfly/react-core';
+import AutoJoinChangeConfirmDialog from '../AutoJoinChangeConfirmDialog/AutoJoinChangeConfirmDialog';
 
 export interface IColumnType<T> {
   key: string;
@@ -107,6 +108,9 @@ export const DomainList = () => {
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
   const domains = context?.domains || ([] as Domain[]);
+  const [isOpenAutoJoinChangeConfirm, setIsOpenAutoJoinChangeConfirm] = useState(false);
+  const [currentDomain, setCurrentDomain] = useState<Domain>();
+
   const enabledText = 'Enabled';
   const disabledText = 'Disabled';
 
@@ -128,8 +132,21 @@ export const DomainList = () => {
     context?.deleteDomain(uuid);
   };
 
-  const onEnableDisable = (domain: Domain) => {
-    console.log(`clicked on Enable/Disable, on row ${domain.title}`);
+  const showAutoJoinChangeConfirmDialog = (domain: Domain) => {
+    setCurrentDomain(domain);
+    setIsOpenAutoJoinChangeConfirm(true);
+  };
+
+  const onConfirmAutoJoinChange = (domain?: Domain) => {
+    console.log('onConfirmAutoJoinChange');
+    setIsOpenAutoJoinChangeConfirm(false);
+    if (domain) {
+      toggleAutoJoin(domain);
+    }
+  };
+
+  const toggleAutoJoin = (domain: Domain) => {
+    console.log(`toggling auto_enrollment_enabled of domain: ${domain?.title}`);
     if (domain.domain_id) {
       resources_api
         .updateDomainUser(domain.domain_id, {
@@ -171,7 +188,7 @@ export const DomainList = () => {
   const defaultActions = (domain: Domain): IAction[] => [
     {
       title: 'Enable/Disable',
-      onClick: () => onEnableDisable(domain),
+      onClick: () => showAutoJoinChangeConfirmDialog(domain),
       ouiaId: 'ButtonActionEnableDisable',
     },
     {
@@ -246,6 +263,12 @@ export const DomainList = () => {
           })}
         </Tbody>
       </TableComposable>
+      <AutoJoinChangeConfirmDialog
+        domain={currentDomain}
+        isOpen={isOpenAutoJoinChangeConfirm}
+        onConfirm={onConfirmAutoJoinChange}
+        onCancel={() => setIsOpenAutoJoinChangeConfirm(false)}
+      />
     </>
   );
 };
