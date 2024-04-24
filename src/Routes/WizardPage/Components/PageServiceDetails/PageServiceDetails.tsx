@@ -51,14 +51,14 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
     }
   };
 
-  const onChangeTitle = (value: string, event: React.FormEvent<HTMLInputElement>) => {
+  const onChangeTitle = (value: string) => {
     setTitle(value);
     if (props.onChangeTitle) {
       props.onChangeTitle(value);
     }
   };
 
-  const onChangeDescription = (value: string, event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onChangeDescription = (value: string) => {
     setDescription(value);
     if (props.onChangeDescription) {
       props.onChangeDescription(value);

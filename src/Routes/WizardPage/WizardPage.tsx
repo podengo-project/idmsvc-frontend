@@ -177,20 +177,14 @@ const WizardPage = () => {
   };
 
   /** Event triggered when Back button is clicked. */
-  const onPreviousPage = (
-    _newStep: { id?: string | number; name: React.ReactNode },
-    _prevStep: { prevId?: string | number; prevName: React.ReactNode }
-  ) => {
+  const onPreviousPage = (_newStep: { id?: string | number; name: React.ReactNode }) => {
     // TODO If not needed at the end clean-up onPreviousPage
     console.log('onPreviousPage fired for id=' + _newStep.id);
     return;
   };
 
   /** Event triggered when a specific page is clicked. */
-  const onGoToStep = (
-    _newStep: { id?: string | number; name: React.ReactNode },
-    _prevStep: { prevId?: string | number; prevName: React.ReactNode }
-  ) => {
+  const onGoToStep = (_newStep: { id?: string | number; name: React.ReactNode }) => {
     // TODO If not needed at the end clean-up onPreviousPage
     console.log('onGoToStep fired' + _newStep.id);
     return;

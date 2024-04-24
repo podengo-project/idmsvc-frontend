@@ -56,7 +56,7 @@ export const InputFilterServer = (props: InputFilterServerProps) => {
     </DropdownItem>,
   ];
 
-  const onChange = (value: string, event: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (value: string) => {
     setValue(value);
   };
 
