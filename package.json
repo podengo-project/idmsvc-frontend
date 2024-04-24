@@ -17,6 +17,7 @@
     "patch:hosts": "fec patch-etc-hosts",
     "start": "HOT=true fec dev",
     "test": "TZ=UTC jest --verbose --no-cache",
+    "test-watch": "TZ=UTC jest --watch",
     "postinstall": "rimraf .cache",
     "prettier": "prettier --write src",
     "verify": "npm-run-all build lint test",
