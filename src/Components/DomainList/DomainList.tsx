@@ -206,7 +206,7 @@ export const DomainList = () => {
     },
     {
       title: 'Edit',
-      onClick: () => console.log(`clicked on Edit, on row ${domain.title}`),
+      onClick: () => onShowDetails(domain),
       ouiaId: 'ButtonActionEdit',
     },
     {
