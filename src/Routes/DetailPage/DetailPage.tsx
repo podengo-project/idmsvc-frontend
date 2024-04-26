@@ -39,34 +39,35 @@ const DetailPage = () => {
   // Params
   const { domain_id } = useParams();
 
+  if (domain_id === undefined) {
+    navigate('/domains', { replace: true });
+    return <></>;
+  }
+
   // States
-  const [domain, setDomain] = useState<Domain | undefined>(appContext?.getDomain(domain_id || ''));
+  const [domain, setDomain] = useState<Domain | undefined>(appContext?.getDomain(domain_id) || undefined);
   const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState<boolean>(false);
 
   console.log('INFO:DetailPage render:domain_id=' + domain_id);
 
-  // TODO encapsulate in a custom hook to reuse
-  // Load Domain resource
+  // Load Domain to display
   useEffect(() => {
-    if (domain_id !== undefined && domain === undefined) {
+    if (domain_id) {
       resources_api
         .readDomain(domain_id)
         .then((res) => {
           if (res.status === 200) {
-            console.info('res.data=' + res.data);
-            setDomain(res.data as Domain);
+            appContext?.updateDomain(res.data);
+            setDomain(res.data);
           }
         })
         .catch((reason) => {
-          // TODO Send error notification to chrome
           console.log(reason);
+          console.error('Failed to load domain');
+          navigate('/domains', { replace: true });
         });
     }
-
-    return () => {
-      // Finalizer
-    };
-  }, []);
+  }, [domain_id]);
 
   // Kebab menu
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
