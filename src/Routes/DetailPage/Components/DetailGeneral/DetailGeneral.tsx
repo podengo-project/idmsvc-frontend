@@ -142,7 +142,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListTerm>
             Identity domain type
             <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Identity domain type'}>
+              <Tooltip content={'Only Red Hat Identity Management (IdM) is currently supported.'}>
                 <OutlinedQuestionCircleIcon />
               </Tooltip>
             </Icon>
@@ -150,25 +150,11 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListDescription>Red Hat IdM</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>
-            Kerberos realm
-            <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Kerberos realm'}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </Icon>
-          </DescriptionListTerm>
+          <DescriptionListTerm>Kerberos realm</DescriptionListTerm>
           <DescriptionListDescription>{domain?.['rhel-idm']?.realm_name}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>
-            Display name
-            <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Display name'}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </Icon>
-          </DescriptionListTerm>
+          <DescriptionListTerm>Display name</DescriptionListTerm>
           <DescriptionListDescription>
             {title}{' '}
             <Button
@@ -188,14 +174,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm className="pf-u-align-text-top">
-            <Text>
-              Description
-              <Icon className="pf-u-ml-xs">
-                <Tooltip content={'Description'}>
-                  <OutlinedQuestionCircleIcon />
-                </Tooltip>
-              </Icon>
-            </Text>
+            <Text>Description</Text>
           </DescriptionListTerm>
           <DescriptionListDescription className="pf-u-text-wrap">
             <span style={{ whiteSpace: 'pre-line' }}>{description} </span>
@@ -215,14 +194,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm>
-            Red Hat IdM servers
-            <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Red Hat IdM servers'}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </Icon>
-          </DescriptionListTerm>
+          <DescriptionListTerm>Red Hat IdM servers</DescriptionListTerm>
           <DescriptionListDescription>
             <Button
               isInline
@@ -241,7 +213,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListTerm>
             UUID
             <Icon className="pf-u-ml-xs">
-              <Tooltip content={'UUID'}>
+              <Tooltip content={'Unique ID of this domain registration'}>
                 <OutlinedQuestionCircleIcon />
               </Tooltip>
             </Icon>
@@ -252,7 +224,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListTerm>
             Domain auto-join on launch
             <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Domain auto-join on launch'}>
+              <Tooltip content={'This option allows hosts to join this identity domain using domain auto-join on launch'}>
                 <OutlinedQuestionCircleIcon />
               </Tooltip>
             </Icon>
