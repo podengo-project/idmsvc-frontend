@@ -19,7 +19,7 @@ import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-com
 
 import './DetailPage.scss';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
-import { AppContext, AppContextType } from '../../AppContext';
+import { AppContext } from '../../AppContext';
 import { DetailGeneral } from './Components/DetailGeneral/DetailGeneral';
 import { DetailServers } from './Components/DetailServers/DetailServers';
 import ConfirmDeleteDomain from '../../Components/ConfirmDeleteDomain/ConfirmDeleteDomain';
@@ -31,7 +31,7 @@ import ConfirmDeleteDomain from '../../Components/ConfirmDeleteDomain/ConfirmDel
  * @see https://reactrouter.com/en/main/hooks/use-params
  */
 const DetailPage = () => {
-  const appContext = useContext<AppContextType | undefined>(AppContext);
+  const appContext = useContext(AppContext);
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
   const navigate = useNavigate();

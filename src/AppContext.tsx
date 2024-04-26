@@ -9,9 +9,17 @@ import React from 'react';
  * @public
  */
 export interface AppContextType {
-  /** Represent the current list of domains to be displayed in the listDomains view. */
+  /** The current list of domains to be displayed in the listDomains view. */
+  listDomains: Domain[];
+  /** Set the value of the list of domains. */
+  setListDomains: (domains: Domain[]) => void;
+  /** The total number of domains. */
+  totalDomains: number;
+  /** Set the value of the total number of domains. */
+  setTotalDomains: (value: number) => void;
+  /** Loaded full domains */
   domains: Domain[];
-  /** Callback to set the value of `domains`. */
+  /** Set the value of `domains`. */
   setDomains: (domains: Domain[]) => void;
   /** Update an existing domain in domains */
   updateDomain: (domain: Domain) => void;
@@ -48,7 +56,27 @@ export interface AppContextType {
  * Represent the application context.
  * @public
  */
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType>({
+  listDomains: [],
+  setListDomains: () => undefined,
+  totalDomains: 0,
+  setTotalDomains: () => undefined,
+  domains: [],
+  setDomains: () => undefined,
+  updateDomain: () => undefined,
+  deleteDomain: () => undefined,
+  getDomain: () => undefined,
+  editing: undefined,
+  setEditing: () => undefined,
+  wizard: {
+    token: '',
+    setToken: () => undefined,
+    registeredStatus: 'initial',
+    setRegisteredStatus: () => undefined,
+    domain: {} as Domain,
+    setDomain: () => undefined,
+  },
+});
 
 /**
  * The properties accepted by the AppContextProvider.
@@ -64,7 +92,10 @@ interface AppContextProviderProps {
  * @returns the application context.
  */
 export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => {
-  const [domains, _setDomains] = useState<Domain[]>([]);
+  const [listDomains, setListDomains] = useState<Domain[]>([]);
+  const [totalDomains, setTotalDomains] = useState<number>(0);
+
+  const [domains, setDomains] = useState<Domain[]>([]);
   const [editing, _setEditing] = useState<Domain>();
 
   const [wizardToken, _setWizardSetToken] = useState<string>();
@@ -76,16 +107,30 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
    * if it exists.
    * @param domain The domain to be updated into the context.
    */
-  const _updateDomain = (domain: Domain) => {
-    const newDomains: Domain[] = [];
-    for (const idx in domains) {
-      if (domains[idx].domain_id === domain.domain_id) {
-        newDomains[idx] = domain;
+  const _updateDomain = (domains: Domain[], domain: Domain, add: boolean) => {
+    let set = false;
+    const newDomains: Domain[] = domains.map((item) => {
+      if (item.domain_id === domain.domain_id) {
+        set = true;
+        return domain;
       } else {
-        newDomains[idx] = domains[idx];
+        return item;
       }
+    });
+    if (!set && add) {
+      newDomains.push(domain);
     }
-    _setDomains(newDomains);
+    return newDomains;
+  };
+
+  const updateDomain = (domain: Domain) => {
+    setDomains(_updateDomain(domains, domain, true));
+    setListDomains(_updateDomain(listDomains, domain, false));
+  };
+
+  const _deleteDomain = (domains: Domain[], id: string) => {
+    const newDomains: Domain[] = domains.filter((domain) => domain.domain_id !== id);
+    return newDomains;
   };
 
   /**
@@ -93,14 +138,12 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
    * identified by the its id.
    * @param id the domain identifier.
    */
-  const _deleteDomain = (id: string) => {
-    const newDomains: Domain[] = [];
-    for (const idx in domains) {
-      if (domains[idx].domain_id !== id) {
-        newDomains[idx] = domains[idx];
-      }
+  const deleteDomain = (id: string) => {
+    setDomains(_deleteDomain(domains, id));
+    setListDomains(_deleteDomain(listDomains, id));
+    if (totalDomains > 0) {
+      setTotalDomains(totalDomains - 1);
     }
-    _setDomains(newDomains);
   };
 
   /**
@@ -110,24 +153,23 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
    * or undefined if it is not found.
    */
   const _getDomain = (id: string): Domain | undefined => {
-    if (id === '') return undefined;
-    for (const idx in domains) {
-      if (domains[idx].domain_id === id) {
-        return domains[idx];
-      }
-    }
-    return undefined;
+    if (!id) return undefined;
+    return domains.find((domain) => domain.domain_id === id);
   };
 
   return (
     <AppContext.Provider
       value={{
-        domains: domains,
-        setDomains: _setDomains,
-        updateDomain: _updateDomain,
-        deleteDomain: _deleteDomain,
+        listDomains,
+        setListDomains,
+        totalDomains,
+        setTotalDomains,
+        domains,
+        setDomains,
+        updateDomain,
+        deleteDomain,
         getDomain: _getDomain,
-        editing: editing,
+        editing,
         setEditing: _setEditing,
         wizard: {
           token: wizardToken || '',
