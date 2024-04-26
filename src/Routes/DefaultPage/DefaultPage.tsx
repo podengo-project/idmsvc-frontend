@@ -17,6 +17,7 @@ import {
   Page,
   PageSection,
   Pagination,
+  Spinner,
   Stack,
   StackItem,
   Title,
@@ -28,7 +29,7 @@ import './DefaultPage.scss';
 import Section from '@redhat-cloud-services/frontend-components/Section';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { DomainList } from '../../Components/DomainList/DomainList';
-import { AppContext, AppContextType } from '../../AppContext';
+import { AppContext } from '../../AppContext';
 
 const Header = () => {
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
@@ -56,20 +57,27 @@ const Header = () => {
   );
 };
 
+const RegisterDomainButton = () => {
+  const appContext = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const handleOpenWizard = () => {
+    appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
+    appContext.wizard.setToken('');
+    appContext.wizard.setRegisteredStatus('initial');
+    navigate('/domains/wizard', { replace: true });
+  };
+
+  return (
+    <Button ouiaId="ButtonDefaultRegisterIdentityDomain" onClick={handleOpenWizard}>
+      Register identity domain
+    </Button>
+  );
+};
+
 const EmptyContent = () => {
   // FIXME Update this link in the future
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
-  const navigate = useNavigate();
-  const appContext = useContext<AppContextType | undefined>(AppContext);
-
-  const handleOpenWizard = () => {
-    if (appContext !== undefined) {
-      appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
-      appContext.wizard.setToken('');
-      appContext.wizard.setRegisteredStatus('initial');
-      navigate('/domains/wizard', { replace: true });
-    }
-  };
 
   return (
     <>
@@ -87,9 +95,7 @@ const EmptyContent = () => {
                   <br /> cloud environment*. To get started, register an identity domain.
                 </StackItem>
                 <StackItem className="pf-u-pt-md">
-                  <Button onClick={handleOpenWizard} ouiaId="ButtonDefaultRegisterIdentityDomain">
-                    Register identity domain
-                  </Button>
+                  <RegisterDomainButton />
                 </StackItem>
                 <StackItem className="pf-u-pt-md">
                   <Button
@@ -117,72 +123,17 @@ const EmptyContent = () => {
   );
 };
 
-const ListContent = () => {
-  const appContext = useContext(AppContext);
-  const navigate = useNavigate();
-  const base_url = '/api/idmsvc/v1';
-  const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
+interface ListContentProps {
+  page: number;
+  setPage: (value: number) => void;
+  perPage: number;
+  setPerPage: (value: number) => void;
+  itemCount: number;
+}
 
-  const [page, setPage] = useState<number>(0);
-  const [itemCount, setItemCount] = useState<number>(0);
-  const [perPage, setPerPage] = useState<number>(10);
-  const [offset, setOffset] = useState<number>(0);
-
-  // TODO Extract this code in a hook
-  useEffect(() => {
-    const local_domains: Domain[] = [];
-    resources_api
-      .listDomains(undefined, offset, perPage, undefined)
-      .then((res) => {
-        let count = 0;
-        res.data.data.map((item) => {
-          resources_api
-            .readDomain(item.domain_id)
-            .then((res_domain) => {
-              local_domains[count++] = res_domain.data;
-              // This is executed when the last item was read
-              if (res.data.data.length == local_domains.length) {
-                appContext?.setDomains(local_domains);
-                const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
-                const newPage = newOffset / perPage;
-                setItemCount(res.data.meta.count);
-                setOffset(newOffset);
-                setPage(newPage);
-              }
-              console.log('INFO:domain list updated');
-            })
-            .catch((reason) => {
-              console.log(reason);
-            });
-        });
-      })
-      .catch((reason) => {
-        console.log(reason);
-      });
-    return () => {
-      // Finalizer
-    };
-  }, [page, perPage, offset]);
-
-  const handleOpenWizard = () => {
-    if (appContext !== undefined) {
-      appContext.wizard.setDomain({ domain_id: '', title: '', description: '' } as Domain);
-      appContext.wizard.setRegisteredStatus('initial');
-      appContext.wizard.setToken('');
-      navigate('/domains/wizard', { replace: true });
-    }
-  };
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number, newPage: number) => {
-    const newOffset = Math.floor((offset + newPerPage - 1) / newPerPage) * newPerPage;
-    setPerPage(newPerPage);
-    setPage(newPage);
-    setOffset(newOffset);
-  };
+const ListContent = (props: ListContentProps) => {
+  const { page, setPage, perPage, setPerPage, itemCount } = props;
+  const offset = (page - 1) * perPage;
 
   return (
     <>
@@ -193,23 +144,20 @@ const ListContent = () => {
               <Toolbar>
                 <Flex>
                   <FlexItem>
-                    <Button ouiaId="ButtonDefaultRegisterIdentityDomain" onClick={handleOpenWizard}>
-                      Register identity domain
-                    </Button>
+                    <RegisterDomainButton />
                   </FlexItem>
                 </Flex>
               </Toolbar>
               <DomainList />
               <Pagination
                 dropDirection="up"
-                offset={offset + 1}
-                firstPage={1}
+                offset={offset}
                 itemCount={itemCount}
                 perPage={perPage}
                 page={page}
-                onSetPage={onSetPage}
+                onSetPage={(_event, page) => setPage(page)}
                 widgetId="top-example"
-                onPerPageSelect={onPerPageSelect}
+                onPerPageSelect={(_event, perPage) => setPerPage(perPage)}
                 ouiaId="PaginationTop"
               />
             </CardBody>
@@ -236,52 +184,39 @@ const DefaultPage = () => {
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
   // States
-  const [page, setPage] = useState<number>(0);
-  const [itemCount, setItemCount] = useState<number>(appContext?.domains.length || -1);
-  const [perPage] = useState<number>(10);
-  const [offset, setOffset] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(10);
+  const offset = (page - 1) * perPage;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   console.log('INFO:DefaultPage render');
 
-  // TODO Extract in a hook
   useEffect(() => {
-    const local_domains: Domain[] = [];
+    setIsLoading(true);
     resources_api
       .listDomains(undefined, offset, perPage, undefined)
       .then((res) => {
-        let count = 0;
-        res.data.data.map((item) => {
-          resources_api
-            .readDomain(item.domain_id)
-            .then((res_domain) => {
-              local_domains[count++] = res_domain.data;
-              if (res.data.data.length == local_domains.length) {
-                appContext?.setDomains(local_domains);
-                const newOffset = Math.floor((offset + perPage - 1) / perPage) * perPage;
-                const newPage = newOffset / perPage;
-                setItemCount(res.data.meta.count);
-                setOffset(newOffset);
-                setPage(newPage);
-              }
-              console.log('INFO:domain list updated');
-            })
-            .catch((reason) => {
-              console.log(reason);
-            });
-        });
+        const domains: Domain[] = res.data.data;
+        const count = res.data.meta.count;
+        appContext.setListDomains(domains);
+        appContext.setTotalDomains(count);
+        setIsLoading(false);
       })
       .catch((reason) => {
         console.log(reason);
+        setIsLoading(false);
       });
-    return () => {
-      // Finalizer
-    };
-  }, []);
+  }, [page, perPage]);
+
+  const changePageSize = (size: number) => {
+    setPerPage(size);
+    setPage(1);
+  };
 
   const listContent = (
     <>
       <Header />
-      <ListContent />
+      <ListContent page={page} setPage={setPage} perPage={perPage} setPerPage={changePageSize} itemCount={appContext.totalDomains} />
     </>
   );
 
@@ -292,8 +227,19 @@ const DefaultPage = () => {
     </>
   );
 
-  // TODO Use similar logic to display a Spinner icon
-  const content = itemCount <= 0 ? emptyContent : listContent;
+  const loadingContent = (
+    <>
+      <Header />
+      <Bullseye>
+        <Spinner />
+      </Bullseye>
+    </>
+  );
+
+  if (isLoading) {
+    return loadingContent;
+  }
+  const content = appContext.totalDomains <= 0 ? emptyContent : listContent;
   return content;
 };
 

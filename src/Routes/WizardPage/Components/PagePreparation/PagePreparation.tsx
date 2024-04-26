@@ -4,7 +4,7 @@ import { Alert, Button, ClipboardCopy, Form, FormGroup, TextContent, Title } fro
 
 import './PagePreparation.scss';
 import { ResourcesApiFactory } from '../../../../Api';
-import { AppContext, AppContextType } from '../../../../AppContext';
+import { AppContext } from '../../../../AppContext';
 
 /** Represent the properties for PagePreparation component. */
 interface PagePreparationProps {
@@ -30,7 +30,7 @@ const PagePreparation = (props: PagePreparationProps) => {
   const prerequisitesLink = 'https://www.google.com?q=rhel-idm+pre-requisites';
 
   // States
-  const appContext = useContext<AppContextType | undefined>(AppContext);
+  const appContext = useContext(AppContext);
 
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);

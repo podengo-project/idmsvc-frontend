@@ -21,10 +21,6 @@ export interface DomainListProps {
   domains: Domain[];
 }
 
-export interface DomainProps {
-  domain: Domain;
-}
-
 /**
  * Since OnSort specifies sorted columns by index, we need sortable values
  * for our object by column index.
@@ -97,7 +93,7 @@ export const DomainList = () => {
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
-  const context = useContext<AppContextType | undefined>(AppContext);
+  const context = useContext<AppContextType>(AppContext);
   const navigate = useNavigate();
 
   // Index of the currently sorted column
@@ -108,7 +104,7 @@ export const DomainList = () => {
   // Sort direction of the currently sorted column
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
-  const domains = context?.domains || ([] as Domain[]);
+  const domains = context.listDomains;
 
   const [isOpenAutoJoinChangeConfirm, setIsOpenAutoJoinChangeConfirm] = useState(false);
   const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState<boolean>(false);
@@ -132,7 +128,7 @@ export const DomainList = () => {
 
   // remove domain(s) matching the given uuid from the `domains` state
   const removeDomain = (uuid: string): void => {
-    context?.deleteDomain(uuid);
+    context.deleteDomain(uuid);
   };
 
   const showAutoJoinChangeConfirmDialog = (domain: Domain) => {
@@ -157,7 +153,7 @@ export const DomainList = () => {
         })
         .then((response) => {
           if (response.status == 200) {
-            context?.updateDomain(response.data);
+            context.updateDomain(response.data);
           } else {
             // TODO show-up notification with error message
           }
@@ -222,8 +218,8 @@ export const DomainList = () => {
 
   const onShowDetails = (domain: Domain | undefined) => {
     if (domain !== undefined) {
-      context?.setEditing(domain);
-      navigate('/details/' + domain?.domain_id);
+      context.setEditing(domain);
+      navigate('/details/' + domain.domain_id);
     }
   };
 
