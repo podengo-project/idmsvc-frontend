@@ -18,7 +18,6 @@ import { useState } from 'react';
 import { Domain, ResourcesApiFactory } from '../../../../Api';
 import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 import PencilAltIcon from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
-import DownloadIcon from '@patternfly/react-icons/dist/esm/icons/download-icon';
 
 interface DetailGeneralProps {
   domain?: Domain;
@@ -238,34 +237,6 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
               onChange={handleAutoJoin}
               ouiaId="ButtonDetailGeneralAutoenroll"
             />
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
-          <DescriptionListTerm>
-            Certificate Authority
-            <Icon className="pf-u-ml-xs">
-              <Tooltip content={'Certificate Authority'}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </Icon>
-          </DescriptionListTerm>
-          <DescriptionListDescription>
-            <Button
-              isInline
-              variant="link"
-              onClick={() => {
-                // TODO Add changes when the API endpoint is implemented
-                console.warn('not implemented');
-                new Error('not implemented');
-                return;
-              }}
-              ouiaId="LinkDetailGeneralCertificate"
-            >
-              <Icon>
-                <DownloadIcon />
-              </Icon>{' '}
-              Download certificate
-            </Button>
           </DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
