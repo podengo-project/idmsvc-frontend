@@ -113,7 +113,17 @@ export const DetailServers = (props: DetailServersProps) => {
               <Tr>
                 <Th sort={getSortParams(0)}>Name</Th>
                 <Th sort={getSortParams(1)}>Location</Th>
-                <Th sort={getSortParams(2)}>HCC Enrollment</Th>
+                <Th
+                  info={{
+                    tooltip: 'Server is enrolled in HCC.',
+                    tooltipProps: {
+                      isContentLeftAligned: true,
+                    },
+                  }}
+                  sort={getSortParams(2)}
+                >
+                  HCC Enrollment
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
