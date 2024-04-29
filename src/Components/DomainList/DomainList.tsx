@@ -9,6 +9,8 @@ import { AppContext, AppContextType } from '../../AppContext';
 import { Button } from '@patternfly/react-core';
 import AutoJoinChangeConfirmDialog from '../AutoJoinChangeConfirmDialog/AutoJoinChangeConfirmDialog';
 import ConfirmDeleteDomain from '../ConfirmDeleteDomain/ConfirmDeleteDomain';
+import useNotification from '../../Hooks/useNotification';
+import { buildDeleteFailedNotification, buildDeleteSuccessNotification } from '../../Routes/DetailPage/detailNotifications';
 
 export interface IColumnType<T> {
   key: string;
@@ -95,6 +97,7 @@ export const DomainList = () => {
 
   const context = useContext<AppContextType>(AppContext);
   const navigate = useNavigate();
+  const { notifyError, notifySuccess } = useNotification();
 
   // Index of the currently sorted column
   // Note: if you intend to make columns reorderable, you may instead want to use a non-numeric key
@@ -183,13 +186,14 @@ export const DomainList = () => {
         .then((response) => {
           if (response.status == 204) {
             removeDomain(domainId);
+            notifySuccess(buildDeleteSuccessNotification(domain));
           } else {
-            // TODO show-up notification with error message
+            notifyError(buildDeleteFailedNotification(domain));
           }
         })
         .catch((error) => {
-          // TODO show-up notification with error message
-          console.log('error onClose: ' + error);
+          notifyError(buildDeleteFailedNotification(domain));
+          console.log('error onDelete: ' + error);
         });
     }
   };
