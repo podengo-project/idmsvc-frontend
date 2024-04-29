@@ -20,6 +20,7 @@ import useNotification from '../../../../Hooks/useNotification';
 import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 import PencilAltIcon from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
 import {
+  buildAutoJoinToggleFailedNotification,
   buildDescriptionEditFailedNotification,
   buildDescriptionEditSuccessNotification,
   buildTitleEditFailedNotification,
@@ -112,7 +113,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
     setIsDescriptionModalOpen(false);
   };
 
-  const handleAutoJoin = (checked: boolean, event: React.FormEvent<HTMLInputElement>) => {
+  const handleAutoJoin = () => {
     console.log('toggled auto-join enable/disable');
     if (domain.domain_id) {
       resources_api
@@ -124,12 +125,12 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
             setAutoJoin(response.data.auto_enrollment_enabled);
             if (props.onChange !== undefined) props.onChange({ ...domain, auto_enrollment_enabled: response.data.auto_enrollment_enabled });
           } else {
-            // TODO show-up notification with error message
+            notifyError(buildAutoJoinToggleFailedNotification(domain));
           }
         })
         .catch((error) => {
-          // TODO show-up notification with error message
-          console.log('error onClose: ' + error);
+          notifyError(buildAutoJoinToggleFailedNotification(domain));
+          console.log('error handleAutoJoin: ' + error);
         });
     }
   };
