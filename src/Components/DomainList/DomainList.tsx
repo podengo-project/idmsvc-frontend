@@ -10,7 +10,12 @@ import { Button } from '@patternfly/react-core';
 import AutoJoinChangeConfirmDialog from '../AutoJoinChangeConfirmDialog/AutoJoinChangeConfirmDialog';
 import ConfirmDeleteDomain from '../ConfirmDeleteDomain/ConfirmDeleteDomain';
 import useNotification from '../../Hooks/useNotification';
-import { buildDeleteFailedNotification, buildDeleteSuccessNotification } from '../../Routes/DetailPage/detailNotifications';
+import {
+  buildAutoJoinToggleFailedNotification,
+  buildAutoJoinToggleSuccessNotification,
+  buildDeleteFailedNotification,
+  buildDeleteSuccessNotification,
+} from '../../Routes/DetailPage/detailNotifications';
 
 export interface IColumnType<T> {
   key: string;
@@ -157,13 +162,14 @@ export const DomainList = () => {
         .then((response) => {
           if (response.status == 200) {
             context.updateDomain(response.data);
+            notifySuccess(buildAutoJoinToggleSuccessNotification(domain));
           } else {
-            // TODO show-up notification with error message
+            notifyError(buildAutoJoinToggleFailedNotification(domain));
           }
         })
         .catch((error) => {
-          // TODO show-up notification with error message
-          console.log('error onClose: ' + error);
+          notifyError(buildAutoJoinToggleFailedNotification(domain));
+          console.log('error toggleAutoJoin: ' + error);
         });
     }
   };

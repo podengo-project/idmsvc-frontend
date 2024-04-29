@@ -38,3 +38,23 @@ export const buildDeleteFailedNotification = (domain?: Domain): NotificationPayl
     ),
   };
 };
+
+export const buildAutoJoinToggleSuccessNotification = (domain?: Domain): NotificationPayload => {
+  return {
+    title: (
+      <>
+        Domain auto-join for <i>{domain?.title}</i> updated successfully.
+      </>
+    ),
+  };
+};
+
+export const buildAutoJoinToggleFailedNotification = (domain?: Domain): NotificationPayload => {
+  return {
+    title: (
+      <>
+        Failed to update domain auto-join for <i>{domain?.title}.</i>
+      </>
+    ),
+  };
+};
