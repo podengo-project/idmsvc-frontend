@@ -23,6 +23,8 @@ import { AppContext } from '../../AppContext';
 import { DetailGeneral } from './Components/DetailGeneral/DetailGeneral';
 import { DetailServers } from './Components/DetailServers/DetailServers';
 import ConfirmDeleteDomain from '../../Components/ConfirmDeleteDomain/ConfirmDeleteDomain';
+import useNotification from '../../Hooks/useNotification';
+import { buildDeleteFailedNotification, buildDeleteSuccessNotification } from './detailNotifications';
 
 /**
  * It represents the detail page to show the information about a
@@ -35,6 +37,7 @@ const DetailPage = () => {
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
   const navigate = useNavigate();
+  const { notifyError, notifySuccess } = useNotification();
 
   // Params
   const { domain_id } = useParams();
@@ -101,15 +104,18 @@ const DetailPage = () => {
         .then((response) => {
           if (response.status == 204) {
             appContext?.deleteDomain(domainId);
+            notifySuccess(buildDeleteSuccessNotification(domain));
             navigate('/domains', { replace: true });
           } else {
-            // TODO show-up notification with error message
+            notifyError(buildDeleteFailedNotification(domain));
             console.error(`response.status=${response.status}; response.data=${response.data}`);
+            onDismissConfirmDelete();
           }
         })
         .catch((error) => {
-          // TODO show-up notification with error message
-          console.log('error onClose: ' + error);
+          notifyError(buildDeleteFailedNotification(domain));
+          console.log('error onDelete: ' + error);
+          onDismissConfirmDelete();
         });
     }
   };
