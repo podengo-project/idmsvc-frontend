@@ -16,8 +16,15 @@ import {
 import React from 'react';
 import { useState } from 'react';
 import { Domain, ResourcesApiFactory } from '../../../../Api';
+import useNotification from '../../../../Hooks/useNotification';
 import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 import PencilAltIcon from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
+import {
+  buildDescriptionEditFailedNotification,
+  buildDescriptionEditSuccessNotification,
+  buildTitleEditFailedNotification,
+  buildTitleEditSuccessNotification,
+} from '../../detailNotifications';
 
 interface DetailGeneralProps {
   domain?: Domain;
@@ -33,6 +40,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
 
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
+  const { notifyError, notifySuccess } = useNotification();
 
   // States
   const [autoJoin, setAutoJoin] = useState<boolean | undefined>(domain.auto_enrollment_enabled);
@@ -57,12 +65,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           if (response.status == 200) {
             setTitle(response.data.title || '');
             if (props.onChange !== undefined) props.onChange({ ...domain, title: response.data.title });
+            notifySuccess(buildTitleEditSuccessNotification());
           } else {
-            // TODO show-up notification with error message
+            notifyError(buildTitleEditFailedNotification());
           }
         })
         .catch((error) => {
-          // TODO show-up notification with error message
+          notifyError(buildTitleEditFailedNotification());
           console.log('error at handleSaveTitleButton: ' + error);
         });
     }
@@ -85,12 +94,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           if (response.status == 200) {
             setDescription(response.data.description || '');
             if (props.onChange !== undefined) props.onChange({ ...domain, description: response.data.description });
+            notifySuccess(buildDescriptionEditSuccessNotification());
           } else {
-            // TODO show-up notification with error message
+            notifyError(buildDescriptionEditFailedNotification());
           }
         })
         .catch((error) => {
-          // TODO show-up notification with error message
+          notifyError(buildDescriptionEditFailedNotification());
           console.log('error at handleSaveDescriptionButton: ' + error);
         });
     }
