@@ -271,7 +271,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </Button>,
         ]}
       >
-        <TextInput value={editTitle} type="text" onChange={(value) => setEditTitle(value)} ouiaId="TextModalDomainTitle" />
+        <TextInput value={editTitle} type="text" onChange={(value) => setEditTitle(value)} ouiaId="TextModalDomainTitle" aria-label="New Title" />
       </Modal>
       <Modal
         variant={ModalVariant.small}
@@ -294,7 +294,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </Button>,
         ]}
       >
-        <TextArea autoResize resizeOrientation="vertical" value={editDescription} onChange={(value) => setEditDescription(value)} />
+        <TextArea
+          autoResize
+          resizeOrientation="vertical"
+          value={editDescription}
+          onChange={(value) => setEditDescription(value)}
+          aria-label="New Description"
+        />
       </Modal>
     </>
   );
