@@ -23,10 +23,11 @@ import {
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './WizardPage.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Domain, ResourcesApiFactory } from '../../Api/api';
 import { AppContext } from '../../AppContext';
 import { VerifyState } from './Components/VerifyRegistry/VerifyRegistry';
+import useNotification from '../../Hooks/useNotification';
 
 // Lazy load for the wizard pages
 const PagePreparation = React.lazy(() => import('./Components/PagePreparation/PagePreparation'));
@@ -47,11 +48,60 @@ const WizardPage = () => {
   const appContext = useContext(AppContext);
   const domain = appContext?.wizard.domain;
   const navigate = useNavigate();
+  const { notifySuccess, notifyWarning, notifyError, removeNotification } = useNotification();
   const [isCancelConfirmationModalOpen, SetIsCancelConfirmationModalOpen] = useState<boolean>(false);
 
   // FIXME Update the URL with the location for docs
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
+
+  const notifyNotCompleted = () => {
+    const notificationID = 'domain-registration-cancelled-notification';
+    notifyError({
+      id: notificationID,
+      title: 'Identity domain registration could not be completed',
+      description: (
+        <>
+          <p>You will need to re-launch the &quot;Register identity domain&quot; wizard.</p>
+          <p>
+            <Link to="/domains/wizard" onClick={() => removeNotification(notificationID)}>
+              Relaunch the wizard
+            </Link>
+          </p>
+        </>
+      ),
+    });
+  };
+
+  const notifyDomainRegistrationSuccess = () => {
+    if (!domain) return;
+
+    if (domain.auto_enrollment_enabled) {
+      notifySuccess({
+        title: 'Identity domain registration created and enabled',
+      });
+    } else {
+      notifyWarning({
+        title: 'Identity domain registration created but not enabled',
+        description: (
+          <>
+            <p>You can enable &quot;Domain auto-join on launch&quot; in the registry list.</p>
+          </>
+        ),
+      });
+    }
+  };
+
+  const notifyDomainRegistrationError = () => {
+    notifyError({
+      title: 'Issue occurred when finishing the domain registration',
+      description: (
+        <>
+          <p>Check domain in the registry list.</p>
+        </>
+      ),
+    });
+  };
 
   /** Event triggered when we do click on continue button at cancel confirmation modal */
   const onConfirmCancelWizardContinueButtonClick = () => {
@@ -70,17 +120,19 @@ const WizardPage = () => {
         .then((result) => {
           if (result.status === 204 || result.status === 404) {
             dismissCancelConfirmationAndGoToDefaultView();
+            notifyNotCompleted();
           } else {
-            // TODO add error notification
             dismissCancelConfirmationAndGoToDefaultView();
+            notifyNotCompleted();
           }
         })
         .catch(() => {
-          // TODO add error notification
           dismissCancelConfirmationAndGoToDefaultView();
+          notifyNotCompleted();
         });
     } else {
       dismissCancelConfirmationAndGoToDefaultView();
+      notifyNotCompleted();
     }
   };
 
@@ -97,15 +149,18 @@ const WizardPage = () => {
         })
         .then((response) => {
           if (response.status >= 400) {
-            // TODO Notify error
+            notifyDomainRegistrationError();
+          } else {
+            notifyDomainRegistrationSuccess();
           }
           navigate('/domains');
         })
-        .catch((error) => {
-          // TODO Notify error
+        .catch(() => {
+          notifyDomainRegistrationError();
           navigate('/domains');
         });
     } else {
+      notifyDomainRegistrationError();
       navigate('/domains');
     }
   };
