@@ -14,10 +14,10 @@ const App = () => {
   const navigate = useNavigate();
   const { on } = useChrome();
 
-  useEffect(() => {
-    const registry = getRegistry();
-    registry.register({ notifications: notificationsReducer as Reducer });
+  const registry = getRegistry();
+  registry.register({ notifications: notificationsReducer as Reducer });
 
+  useEffect(() => {
     const unregister = on('APP_NAVIGATION', (event) => navigate(`/${event.navId}`));
     return () => {
       unregister?.();
