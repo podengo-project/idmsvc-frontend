@@ -1,5 +1,5 @@
 import { AlertVariant } from '@patternfly/react-core';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import { addNotification, removeNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -21,5 +21,7 @@ export default function useNotification() {
 
   const notifyWarning = (payload: NotificationPayload) => notify({ variant: AlertVariant.warning, ...payload });
 
-  return { notify, notifyError, notifySuccess, notifyWarning };
+  const remove = (id: string | number) => dispatch(removeNotification(id));
+
+  return { notify, notifyError, notifySuccess, notifyWarning, removeNotification: remove };
 }
