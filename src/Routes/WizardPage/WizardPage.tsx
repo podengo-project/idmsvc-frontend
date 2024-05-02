@@ -29,11 +29,10 @@ import { AppContext } from '../../AppContext';
 import { VerifyState } from './Components/VerifyRegistry/VerifyRegistry';
 import useNotification from '../../Hooks/useNotification';
 
-// Lazy load for the wizard pages
-const PagePreparation = React.lazy(() => import('./Components/PagePreparation/PagePreparation'));
-const PageServiceRegistration = React.lazy(() => import('./Components/PageServiceRegistration/PageServiceRegistration'));
-const PageServiceDetails = React.lazy(() => import('./Components/PageServiceDetails/PageServiceDetails'));
-const PageReview = React.lazy(() => import('./Components/PageReview/PageReview'));
+import PagePreparation from './Components/PagePreparation/PagePreparation';
+import PageServiceRegistration from './Components/PageServiceRegistration/PageServiceRegistration';
+import PageServiceDetails from './Components/PageServiceDetails/PageServiceDetails';
+import PageReview from './Components/PageReview/PageReview';
 
 /**
  * Wizard page to register a new domain into the service.
