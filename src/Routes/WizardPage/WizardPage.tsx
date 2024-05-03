@@ -237,6 +237,7 @@ const WizardPage = () => {
     }
     appContext?.wizard.setRegisteredStatus(value);
     if (value === 'completed' && data !== undefined) {
+      data.auto_enrollment_enabled = true;
       appContext?.wizard.setDomain(data);
       setCanJumpPage3(true);
       // Check whether initial values for user-configurable fields
