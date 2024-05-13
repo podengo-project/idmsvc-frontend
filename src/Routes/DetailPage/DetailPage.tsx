@@ -2,19 +2,21 @@ import { useNavigate, useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 
 import {
-  Card,
-  CardBody,
-  Dropdown,
-  DropdownItem,
-  Flex,
-  FlexItem,
-  KebabToggle,
-  Page,
-  PageSection,
-  Tab,
-  TabTitleText,
-  Tabs,
+	Card,
+	CardBody,
+	Flex,
+	FlexItem,
+	Page,
+	PageSection,
+	Tab,
+	TabTitleText,
+	Tabs
 } from '@patternfly/react-core';
+import {
+	Dropdown,
+	DropdownItem,
+	KebabToggle
+} from '@patternfly/react-core/deprecated';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './DetailPage.scss';
@@ -151,7 +153,7 @@ const DetailPage = () => {
             <FlexItem>
               <Dropdown
                 onSelect={onKebabSelect}
-                toggle={<KebabToggle onToggle={onKebabToggle} />}
+                toggle={<KebabToggle onToggle={(_event, isOpen: boolean, event: MouseEvent | TouchEvent | KeyboardEvent | React.KeyboardEvent<any> | React.MouseEvent<HTMLButtonElement>) => onKebabToggle(isOpen, event)} />}
                 isOpen={isKebabOpen}
                 isPlain
                 dropdownItems={dropdownItems}
@@ -161,7 +163,7 @@ const DetailPage = () => {
             </FlexItem>
           </Flex>
           <Tabs
-            hasBorderBottom={false}
+            hasNoBorderBottom
             activeKey={activeTabKey}
             onSelect={handleTabClick}
             isBox={false}

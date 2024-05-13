@@ -20,8 +20,7 @@ import {
   Spinner,
   Stack,
   StackItem,
-  Title,
-  Toolbar,
+  Toolbar, EmptyStateHeader,
 } from '@patternfly/react-core';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
@@ -84,10 +83,7 @@ const EmptyContent = () => {
       <Section>
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
-            <EmptyStateIcon icon={RegistryIcon} />
-            <Title headingLevel="h2" size="lg" className="pf-u-pt-sm" ouiaId="TitleEmptyContent">
-              No identity domains registered
-            </Title>
+            <EmptyStateHeader titleText="No identity domains registered" icon={<EmptyStateIcon icon={RegistryIcon} />} headingLevel="h2" />
             <EmptyStateBody>
               <Stack>
                 <StackItem className="pf-u-pt-sm">

@@ -1,4 +1,4 @@
-import { ActionsColumn, IAction, TableComposable, Tbody, Td, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
+import { ActionsColumn, IAction, Table /* data-codemods */, Tbody, Td, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
 import './DomainList.scss';
 import { Fragment, useContext, useState } from 'react';
 import React from 'react';
@@ -235,7 +235,7 @@ export const DomainList = () => {
 
   return (
     <>
-      <TableComposable>
+      <Table>
         <Thead>
           <Tr ouiaId="TrDomainListHeader">
             <Th sort={getSortParams(0)}>Name</Th>
@@ -281,7 +281,7 @@ export const DomainList = () => {
             );
           })}
         </Tbody>
-      </TableComposable>
+      </Table>
       <AutoJoinChangeConfirmDialog
         domain={currentDomain}
         isOpen={isOpenAutoJoinChangeConfirm}

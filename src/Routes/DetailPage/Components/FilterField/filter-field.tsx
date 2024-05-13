@@ -1,4 +1,13 @@
-import { Button, Dropdown, DropdownItem, DropdownToggle, InputGroup, TextInput } from '@patternfly/react-core';
+import {
+	Button,
+	InputGroup,
+	TextInput, InputGroupItem
+} from '@patternfly/react-core';
+import {
+	Dropdown,
+	DropdownItem,
+	DropdownToggle
+} from '@patternfly/react-core/deprecated';
 import React, { useState } from 'react';
 import { FilterIcon } from '@patternfly/react-icons/dist/esm/icons/filter-icon';
 import { SearchIcon } from '@patternfly/react-icons/dist/esm/icons/search-icon';
@@ -63,25 +72,25 @@ export const InputFilterServer = (props: InputFilterServerProps) => {
   return (
     <>
       <InputGroup>
-        <Dropdown
+        <InputGroupItem><Dropdown
           onSelect={onSelect}
           toggle={
-            <DropdownToggle onToggle={onToggle} icon={<FilterIcon />}>
+            <DropdownToggle onToggle={(_event, isOpen: boolean) => onToggle(isOpen)} icon={<FilterIcon />}>
               {filter}
             </DropdownToggle>
           }
           isOpen={isOpen}
           dropdownItems={dropdownItems}
           ouiaId="DropdownFilterField"
-        />
-        <TextInput
+        /></InputGroupItem>
+        <InputGroupItem isFill ><TextInput
           id="input-filter-dropdown"
           aria-label="input with dropdown and button"
           value={value}
-          onChange={onChange}
+          onChange={(_event, value: string) => onChange(value)}
           ouiaId="TextinputFilterField"
-        />
-        <Button id="input-filter-button" variant="control" icon={<SearchIcon />} ouiaId="ButtonFilterField" />
+        /></InputGroupItem>
+        <InputGroupItem><Button id="input-filter-button" variant="control" icon={<SearchIcon />} ouiaId="ButtonFilterField" /></InputGroupItem>
       </InputGroup>
     </>
   );

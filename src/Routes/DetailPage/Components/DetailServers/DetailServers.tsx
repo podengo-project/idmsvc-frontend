@@ -1,7 +1,7 @@
 import { Flex, FlexItem, Stack, StackItem, TextInputGroupUtilities } from '@patternfly/react-core';
 import React from 'react';
 import { Domain, DomainIpaServer } from '../../../../Api';
-import { TableComposable, Tbody, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
+import { Table /* data-codemods */, Tbody, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
 
 interface DetailServersProps {
   domain?: Domain;
@@ -108,7 +108,7 @@ export const DetailServers = (props: DetailServersProps) => {
           </Flex>
         </StackItem>
         <StackItem>
-          <TableComposable aria-label="Simple table" variant="compact" borders={true} className="pt-u-width-100">
+          <Table aria-label="Simple table" variant="compact" borders={true} className="pt-u-width-100">
             <Thead>
               <Tr>
                 <Th sort={getSortParams(0)}>Name</Th>
@@ -135,7 +135,7 @@ export const DetailServers = (props: DetailServersProps) => {
                 </Tr>
               ))}
             </Tbody>
-          </TableComposable>
+          </Table>
         </StackItem>
       </Stack>
     </>
