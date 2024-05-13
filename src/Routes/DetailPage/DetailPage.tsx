@@ -131,9 +131,9 @@ const DetailPage = () => {
   return (
     <>
       <Page>
-        <PageHeader className="pf-u-mb-0">
+        <PageHeader className="pf-v5-u-mb-0">
           <Flex>
-            <FlexItem className="pf-u-mr-auto">
+            <FlexItem className="pf-v5-u-mr-auto">
               <PageHeaderTitle title={domain?.title} ouiaId="TextDetailTitle" />
             </FlexItem>
             <FlexItem>

@@ -83,7 +83,7 @@ const PagePreparation = (props: PagePreparationProps) => {
           console.debug('TODO onSubmit WizardPage' + String(value));
         }}
       >
-        <FormGroup label="Identity domain type" fieldId="register-domain-type" className="pf-u-mt-lg">
+        <FormGroup label="Identity domain type" fieldId="register-domain-type" className="pf-v5-u-mt-lg">
           <Alert
             title={'Only Red Hat Identity Management (IdM) is currently supported.'}
             variant="info"
@@ -93,7 +93,7 @@ const PagePreparation = (props: PagePreparationProps) => {
         </FormGroup>
         <FormGroup label="Identity domain prerequisites">
           <ol>
-            <li className="pf-u-pt-sd pf-u-ml-md">
+            <li className="pf-v5-u-pt-sd pf-v5-u-ml-md">
               Complete the{' '}
               <Button
                 component="a"
@@ -108,7 +108,7 @@ const PagePreparation = (props: PagePreparationProps) => {
                 prerequisites
               </Button>
             </li>
-            <li className="pf-u-pt-md pf-u-ml-md">
+            <li className="pf-v5-u-pt-md pf-v5-u-ml-md">
               <TextContent>
                 Verify whether or not the package is present on your Red Hat IdM server(s) by running the following command in a terminal on your Red
                 Hat IdM server(s):
@@ -116,7 +116,7 @@ const PagePreparation = (props: PagePreparationProps) => {
               <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextWizardPagePrepareCheckInstall">
                 dnf list installed ipa-hcc-server
               </ClipboardCopy>
-              <TextContent className="pf-u-pt-md">
+              <TextContent className="pf-v5-u-pt-md">
                 If the package is not present on your Red Hat IdM server(s), follow these{' '}
                 <Button
                   component="a"
@@ -134,7 +134,7 @@ const PagePreparation = (props: PagePreparationProps) => {
                   dnf copr enable @podengo/ipa-hcc && dnf install ipa-hcc-server
                 </ClipboardCopy>
               </TextContent>
-              <TextContent className="pf-u-pt-md">
+              <TextContent className="pf-v5-u-pt-md">
                 The package must be installed on at least one Red Hat IdM server. For redundancy, the package should be installed on two or more Red
                 Hat IdM servers.
               </TextContent>

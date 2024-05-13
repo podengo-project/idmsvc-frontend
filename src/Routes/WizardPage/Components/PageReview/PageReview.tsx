@@ -184,7 +184,7 @@ const PageReview = (props: PageReviewProps) => {
       <Title className="pt-u-mb-xl" headingLevel={'h2'} ouiaId="TextWizardReviewTitle">
         Review
       </Title>
-      {props.domain.domain_type === 'rhel-idm' && <PageReviewIpa domain={props.domain} className="pf-u-mt-lg" />}
+      {props.domain.domain_type === 'rhel-idm' && <PageReviewIpa domain={props.domain} className="pf-v5-u-mt-lg" />}
     </>
   );
 };
