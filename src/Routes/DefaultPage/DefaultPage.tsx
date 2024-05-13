@@ -15,7 +15,7 @@ import {
   EmptyStateVariant,
   Flex,
   FlexItem,
-  Page,
+  PageGroup,
   PageSection,
   Pagination,
   Spinner,
@@ -134,7 +134,7 @@ const ListContent = (props: ListContentProps) => {
 
   return (
     <>
-      <Page>
+      <PageGroup>
         <PageSection>
           <Card>
             <CardBody>
@@ -160,7 +160,7 @@ const ListContent = (props: ListContentProps) => {
             </CardBody>
           </Card>
         </PageSection>
-      </Page>
+      </PageGroup>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Card, CardBody, Flex, FlexItem, Page, PageSection, Tab, TabTitleText, Tabs } from '@patternfly/react-core';
+import { Card, CardBody, Flex, FlexItem, PageGroup, PageSection, Tab, TabTitleText, Tabs } from '@patternfly/react-core';
 import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core/deprecated';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
@@ -130,7 +130,7 @@ const DetailPage = () => {
   // Return render
   return (
     <>
-      <Page>
+      <PageGroup>
         <PageHeader className="pf-v5-u-mb-0">
           <Flex>
             <FlexItem className="pf-v5-u-mr-auto">
@@ -172,7 +172,7 @@ const DetailPage = () => {
             </CardBody>
           </Card>
         </PageSection>
-      </Page>
+      </PageGroup>
       <ConfirmDeleteDomain domain={domain} isOpen={isOpenConfirmDelete} onCancel={onDismissConfirmDelete} onDelete={onDelete} />
     </>
   );
