@@ -7,7 +7,7 @@
 import React, { useContext, useState } from 'react';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
-import { Button, Modal, ModalVariant, Page, PageSection, PageSectionTypes, PageSectionVariants, Text } from '@patternfly/react-core';
+import { Button, Modal, ModalVariant, Page, PageSection, PageSectionVariants, Text } from '@patternfly/react-core';
 import { Wizard, WizardStep } from '@patternfly/react-core/deprecated';
 
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
@@ -328,7 +328,7 @@ const WizardPage = () => {
             </Button>
           </p>
         </PageHeader>
-        <PageSection type={PageSectionTypes.wizard} variant={PageSectionVariants.light}>
+        <PageSection type={'wizard'} variant={PageSectionVariants.light}>
           <Wizard
             navAriaLabel={`${title} steps`}
             mainAriaLabel={`${title} content`}
