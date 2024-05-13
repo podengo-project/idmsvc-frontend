@@ -13,7 +13,7 @@ module.exports = {
    * Add additional webpack plugins
    */
   plugins: [],
-  _unstableHotReload: process.env.HOT === 'true',
+  hotReload: process.env.HOT === 'true',
   routes: {
     /* Add routes to the backend  */
     '/api/idmsvc/': { host: 'http://localhost:8000' },

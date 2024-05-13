@@ -7,7 +7,7 @@ import React from 'react';
  *
  * @param props the props given by the smart component.
  */
-const SampleComponent: React.FC = (props) => {
+const SampleComponent = (props: { children: React.ReactNode }) => {
   return <span className="sample-component"> {props.children} </span>;
 };
 
