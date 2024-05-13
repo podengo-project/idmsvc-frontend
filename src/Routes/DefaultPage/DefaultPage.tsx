@@ -10,6 +10,7 @@ import {
   CardBody,
   EmptyState,
   EmptyStateBody,
+  EmptyStateHeader,
   EmptyStateIcon,
   EmptyStateVariant,
   Flex,
@@ -20,7 +21,7 @@ import {
   Spinner,
   Stack,
   StackItem,
-  Toolbar, EmptyStateHeader,
+  Toolbar,
 } from '@patternfly/react-core';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 

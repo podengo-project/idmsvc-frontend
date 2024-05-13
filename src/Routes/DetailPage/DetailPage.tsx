@@ -1,22 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 
-import {
-	Card,
-	CardBody,
-	Flex,
-	FlexItem,
-	Page,
-	PageSection,
-	Tab,
-	TabTitleText,
-	Tabs
-} from '@patternfly/react-core';
-import {
-	Dropdown,
-	DropdownItem,
-	KebabToggle
-} from '@patternfly/react-core/deprecated';
+import { Card, CardBody, Flex, FlexItem, Page, PageSection, Tab, TabTitleText, Tabs } from '@patternfly/react-core';
+import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core/deprecated';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './DetailPage.scss';
@@ -153,7 +139,7 @@ const DetailPage = () => {
             <FlexItem>
               <Dropdown
                 onSelect={onKebabSelect}
-                toggle={<KebabToggle onToggle={(_event, isOpen: boolean, event: MouseEvent | TouchEvent | KeyboardEvent | React.KeyboardEvent<any> | React.MouseEvent<HTMLButtonElement>) => onKebabToggle(isOpen, event)} />}
+                toggle={<KebabToggle onToggle={(event, isOpen) => onKebabToggle(isOpen, event)} />}
                 isOpen={isKebabOpen}
                 isPlain
                 dropdownItems={dropdownItems}
@@ -162,14 +148,7 @@ const DetailPage = () => {
               />
             </FlexItem>
           </Flex>
-          <Tabs
-            hasNoBorderBottom
-            activeKey={activeTabKey}
-            onSelect={handleTabClick}
-            isBox={false}
-            aria-label="Tabs in the detail page"
-            role="region"
-          >
+          <Tabs hasNoBorderBottom activeKey={activeTabKey} onSelect={handleTabClick} isBox={false} aria-label="Tabs in the detail page" role="region">
             <Tab title={<TabTitleText>General</TabTitleText>} eventKey={0} ouiaId="ButtonDetailGeneral" />
             <Tab title={<TabTitleText>Servers</TabTitleText>} eventKey={1} ouiaId="ButtonDetailServers" />
           </Tabs>

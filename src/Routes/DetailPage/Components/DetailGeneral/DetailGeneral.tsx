@@ -272,7 +272,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </Button>,
         ]}
       >
-        <TextInput value={editTitle} type="text" onChange={(_event, value) => setEditTitle(value)} ouiaId="TextModalDomainTitle" aria-label="New Title" />
+        <TextInput
+          value={editTitle}
+          type="text"
+          onChange={(_event, value) => setEditTitle(value)}
+          ouiaId="TextModalDomainTitle"
+          aria-label="New Title"
+        />
       </Modal>
       <Modal
         variant={ModalVariant.small}

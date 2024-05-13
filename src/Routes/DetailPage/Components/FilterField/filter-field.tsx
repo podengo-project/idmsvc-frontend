@@ -1,13 +1,5 @@
-import {
-	Button,
-	InputGroup,
-	TextInput, InputGroupItem
-} from '@patternfly/react-core';
-import {
-	Dropdown,
-	DropdownItem,
-	DropdownToggle
-} from '@patternfly/react-core/deprecated';
+import { Button, InputGroup, InputGroupItem, TextInput } from '@patternfly/react-core';
+import { Dropdown, DropdownItem, DropdownToggle } from '@patternfly/react-core/deprecated';
 import React, { useState } from 'react';
 import { FilterIcon } from '@patternfly/react-icons/dist/esm/icons/filter-icon';
 import { SearchIcon } from '@patternfly/react-icons/dist/esm/icons/search-icon';
@@ -72,25 +64,31 @@ export const InputFilterServer = (props: InputFilterServerProps) => {
   return (
     <>
       <InputGroup>
-        <InputGroupItem><Dropdown
-          onSelect={onSelect}
-          toggle={
-            <DropdownToggle onToggle={(_event, isOpen: boolean) => onToggle(isOpen)} icon={<FilterIcon />}>
-              {filter}
-            </DropdownToggle>
-          }
-          isOpen={isOpen}
-          dropdownItems={dropdownItems}
-          ouiaId="DropdownFilterField"
-        /></InputGroupItem>
-        <InputGroupItem isFill ><TextInput
-          id="input-filter-dropdown"
-          aria-label="input with dropdown and button"
-          value={value}
-          onChange={(_event, value: string) => onChange(value)}
-          ouiaId="TextinputFilterField"
-        /></InputGroupItem>
-        <InputGroupItem><Button id="input-filter-button" variant="control" icon={<SearchIcon />} ouiaId="ButtonFilterField" /></InputGroupItem>
+        <InputGroupItem>
+          <Dropdown
+            onSelect={onSelect}
+            toggle={
+              <DropdownToggle onToggle={(_event, isOpen: boolean) => onToggle(isOpen)} icon={<FilterIcon />}>
+                {filter}
+              </DropdownToggle>
+            }
+            isOpen={isOpen}
+            dropdownItems={dropdownItems}
+            ouiaId="DropdownFilterField"
+          />
+        </InputGroupItem>
+        <InputGroupItem isFill>
+          <TextInput
+            id="input-filter-dropdown"
+            aria-label="input with dropdown and button"
+            value={value}
+            onChange={(_event, value: string) => onChange(value)}
+            ouiaId="TextinputFilterField"
+          />
+        </InputGroupItem>
+        <InputGroupItem>
+          <Button id="input-filter-button" variant="control" icon={<SearchIcon />} ouiaId="ButtonFilterField" />
+        </InputGroupItem>
       </InputGroup>
     </>
   );
