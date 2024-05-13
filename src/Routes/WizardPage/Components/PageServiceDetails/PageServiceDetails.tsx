@@ -78,7 +78,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
             id="register-title"
             value={title}
             onChange={(_event, value: string) => onChangeTitle(value)}
-            className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
+            className="pf-v5-u-w-100 pf-v5-u-w-50-on-md pf-v5-u-w-50-on-xl"
             ouiaId="TextinputWizardDetailsDomainTitle"
           />
         </FormGroup>
@@ -88,7 +88,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
             id="register-description"
             type="text"
             readOnly={false}
-            className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
+            className="pf-v5-u-w-100 pf-v5-u-w-50-on-md pf-v5-u-w-50-on-xl"
             value={description}
             onChange={(_event, value: string) => onChangeDescription(value)}
           />
@@ -97,7 +97,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
           label={
             <>
               Domain auto-join on launch{' '}
-              <Icon className="pf-u-ml-xs">
+              <Icon className="pf-v5-u-ml-xs">
                 <Tooltip content={autoEnrollmentTooltipContent}>
                   <OutlinedQuestionCircleIcon />
                 </Tooltip>

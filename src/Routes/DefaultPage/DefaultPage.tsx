@@ -87,14 +87,14 @@ const EmptyContent = () => {
             <EmptyStateHeader titleText="No identity domains registered" icon={<EmptyStateIcon icon={RegistryIcon} />} headingLevel="h2" />
             <EmptyStateBody>
               <Stack>
-                <StackItem className="pf-u-pt-sm">
+                <StackItem className="pf-v5-u-pt-sm">
                   Use host access controls from your existing identity domains in your
                   <br /> cloud environment*. To get started, register an identity domain.
                 </StackItem>
-                <StackItem className="pf-u-pt-md">
+                <StackItem className="pf-v5-u-pt-md">
                   <RegisterDomainButton />
                 </StackItem>
-                <StackItem className="pf-u-pt-md">
+                <StackItem className="pf-v5-u-pt-md">
                   <Button
                     component="a"
                     target="_blank"
@@ -108,7 +108,7 @@ const EmptyContent = () => {
                     Learn more about registering identity domains{' '}
                   </Button>
                 </StackItem>
-                <StackItem className="pf-u-pt-lg pf-u-color-100">
+                <StackItem className="pf-v5-u-pt-lg pf-v5-u-color-100">
                   *Only currently available for Red Hat Identity Management (IdM) deployments.
                 </StackItem>
               </Stack>

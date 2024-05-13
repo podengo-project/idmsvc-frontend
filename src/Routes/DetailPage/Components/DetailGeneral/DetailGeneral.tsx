@@ -151,7 +151,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         <DescriptionListGroup>
           <DescriptionListTerm>
             Identity domain type
-            <Icon className="pf-u-ml-xs">
+            <Icon className="pf-v5-u-ml-xs">
               <Tooltip content={'Only Red Hat Identity Management (IdM) is currently supported.'}>
                 <OutlinedQuestionCircleIcon />
               </Tooltip>
@@ -183,13 +183,13 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           </DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
-          <DescriptionListTerm className="pf-u-align-text-top">
+          <DescriptionListTerm className="pf-v5-u-align-text-top">
             <Text>Description</Text>
           </DescriptionListTerm>
-          <DescriptionListDescription className="pf-u-text-wrap">
+          <DescriptionListDescription className="pf-v5-u-text-wrap">
             <span style={{ whiteSpace: 'pre-line' }}>{description} </span>
             <Button
-              className="pf-global--primary-color--100"
+              className="pf-v5-global--primary-color--100"
               variant="link"
               onClick={() => {
                 setEditDescription(description);
@@ -208,7 +208,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListDescription>
             <Button
               isInline
-              className="pf-global--primary-color--100"
+              className="pf-v5-global--primary-color--100"
               variant="link"
               onClick={() => {
                 props.onShowServerTab && props.onShowServerTab();
@@ -222,7 +222,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         <DescriptionListGroup>
           <DescriptionListTerm>
             UUID
-            <Icon className="pf-u-ml-xs">
+            <Icon className="pf-v5-u-ml-xs">
               <Tooltip content={'Unique ID of this domain registration'}>
                 <OutlinedQuestionCircleIcon />
               </Tooltip>
@@ -233,7 +233,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         <DescriptionListGroup>
           <DescriptionListTerm>
             Domain auto-join on launch
-            <Icon className="pf-u-ml-xs">
+            <Icon className="pf-v5-u-ml-xs">
               <Tooltip content={'This option allows hosts to join this identity domain using domain auto-join on launch'}>
                 <OutlinedQuestionCircleIcon />
               </Tooltip>

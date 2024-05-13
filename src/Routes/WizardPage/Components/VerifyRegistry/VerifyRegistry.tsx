@@ -24,27 +24,27 @@ const VerifyRegistryIcon = (props: VerifyRegistryIconProps) => {
   return (
     <>
       {props.state == 'initial' && (
-        <Icon className="pf-c-progress-stepper pf-c-progress-stepper__step-icon" isInline>
+        <Icon className="pf-v5-c-progress-stepper pf-v5-c-progress-stepper__step-icon" isInline>
           <PendingIcon />
         </Icon>
       )}
       {props.state == 'waiting' && (
-        <Icon className="pf-c-progress-stepper pf-c-progress-stepper__step-icon" isInline>
+        <Icon className="pf-v5-c-progress-stepper pf-v5-c-progress-stepper__step-icon" isInline>
           <PendingIcon />
         </Icon>
       )}
       {props.state == 'timed-out' && (
-        <Icon className="pf-c-progress-stepper pf-c-progress-stepper__step-icon pf-u-icon-color-dark" isInline>
+        <Icon className="pf-v5-c-progress-stepper pf-v5-c-progress-stepper__step-icon pf-v5-u-icon-color-dark" isInline>
           <PendingIcon />
         </Icon>
       )}
       {props.state == 'not-found' && (
-        <Icon className="pf-c-progress-stepper pf-c-progress-stepper__step-icon pf-u-icon-color-dark" status="danger" isInline>
+        <Icon className="pf-v5-c-progress-stepper pf-v5-c-progress-stepper__step-icon pf-v5-u-icon-color-dark" status="danger" isInline>
           <ExclamationCircleIcon />
         </Icon>
       )}
       {props.state == 'completed' && (
-        <Icon className="pf-c-progress-stepper pf-c-progress-stepper__step-icon pf-u-icon-color-dark" status="success" isInline>
+        <Icon className="pf-v5-c-progress-stepper pf-v5-c-progress-stepper__step-icon pf-v5-u-icon-color-dark" status="success" isInline>
           <CheckCircleIcon />
         </Icon>
       )}
@@ -61,10 +61,10 @@ interface VerifyRegistryLabelProps {
 const VerifyRegistryLabel = (props: VerifyRegistryLabelProps) => {
   return (
     <>
-      {props.state == 'initial' && <TextContent className="pf-u-font-weight-bold">Verify registration</TextContent>}
-      {props.state == 'waiting' && <TextContent className="pf-u-font-weight-bold">Verify registration</TextContent>}
-      {props.state == 'timed-out' && <TextContent className="pf-u-font-weight-bold pf-u-danger-color-100">Verify registration</TextContent>}
-      {props.state == 'not-found' && <TextContent className="pf-u-font-weight-bold pf-u-danger-color-100">Verify registration</TextContent>}
+      {props.state == 'initial' && <TextContent className="pf-v5-u-font-weight-bold">Verify registration</TextContent>}
+      {props.state == 'waiting' && <TextContent className="pf-v5-u-font-weight-bold">Verify registration</TextContent>}
+      {props.state == 'timed-out' && <TextContent className="pf-v5-u-font-weight-bold pf-v5-u-danger-color-100">Verify registration</TextContent>}
+      {props.state == 'not-found' && <TextContent className="pf-v5-u-font-weight-bold pf-v5-u-danger-color-100">Verify registration</TextContent>}
       {props.state == 'completed' && <TextContent>Verify registration</TextContent>}
     </>
   );
@@ -79,11 +79,11 @@ interface VerifyRegistryDescriptionProps {
 const VerifyRegistryDescription = (props: VerifyRegistryDescriptionProps) => {
   return (
     <>
-      {props.state == 'initial' && <TextContent className="pf-u-color-200">Running verification test</TextContent>}
-      {props.state == 'waiting' && <TextContent className="pf-u-color-200">Waiting for registration data</TextContent>}
-      {props.state == 'timed-out' && <TextContent className="pf-u-color-200">Test timed out</TextContent>}
-      {props.state == 'not-found' && <TextContent className="pf-u-color-200">Registration data not found</TextContent>}
-      {props.state == 'completed' && <TextContent className="pf-u-color-200">Test completed</TextContent>}
+      {props.state == 'initial' && <TextContent className="pf-v5-u-color-200">Running verification test</TextContent>}
+      {props.state == 'waiting' && <TextContent className="pf-v5-u-color-200">Waiting for registration data</TextContent>}
+      {props.state == 'timed-out' && <TextContent className="pf-v5-u-color-200">Test timed out</TextContent>}
+      {props.state == 'not-found' && <TextContent className="pf-v5-u-color-200">Registration data not found</TextContent>}
+      {props.state == 'completed' && <TextContent className="pf-v5-u-color-200">Test completed</TextContent>}
     </>
   );
 };
@@ -101,7 +101,7 @@ const VerifyRegistryFooter = (props: VerifyRegistryFooterProps) => {
     <>
       {props.state == 'initial' && (
         <>
-          <Button className="pf-u-my-xs" variant="secondary" onClick={props.onTest} ouiaId="ButtonVerifyTest">
+          <Button className="pf-v5-u-my-xs" variant="secondary" onClick={props.onTest} ouiaId="ButtonVerifyTest">
             Test
           </Button>
         </>
@@ -247,18 +247,18 @@ const VerifyRegistry = (props: VerifyRegistryProps) => {
   };
 
   return (
-    <span className="pf-u-text-align-center">
-      <Stack className="pf-u-py-md">
-        <StackItem className="pf-u-py-xs pf-u-m-auto">
+    <span className="pf-v5-u-text-align-center">
+      <Stack className="pf-v5-u-py-md">
+        <StackItem className="pf-v5-u-py-xs pf-v5-u-m-auto">
           <VerifyRegistryIcon state={props.state} />
         </StackItem>
-        <StackItem className="pf-u-py-xs">
+        <StackItem className="pf-v5-u-py-xs">
           <VerifyRegistryLabel state={props.state} />
         </StackItem>
-        <StackItem className="pf-u-py-xs">
+        <StackItem className="pf-v5-u-py-xs">
           <VerifyRegistryDescription state={props.state} />
         </StackItem>
-        <StackItem className="pf-u-text-align-center pf-u-py-xs">
+        <StackItem className="pf-v5-u-text-align-center pf-v5-u-py-xs">
           <VerifyRegistryFooter state={props.state} onTest={onRetry} />
         </StackItem>
       </Stack>

@@ -64,16 +64,16 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
         Register your identity domain
       </Title>
       <Form onSubmit={(e) => e.preventDefault()}>
-        <Alert title={alertTitle} variant="warning" isInline className="pf-u-mt-lg" ouiaId="AlertWizardRegistrationNote">
+        <Alert title={alertTitle} variant="warning" isInline className="pf-v5-u-mt-lg" ouiaId="AlertWizardRegistrationNote">
           Completing this step registers your identity domain, and cannot be undone from the wizard.{' '}
-          <div className="pf-u-mt-md">
+          <div className="pf-v5-u-mt-md">
             <Button component="a" target="_blank" variant="link" isInline href={linkLearnMoreAbout} ouiaId="LinkWizardRegistrationLearnMore">
               Learn more about registering identity domains
             </Button>
           </div>
         </Alert>
         <ol>
-          <li className="pf-u-ml-md">
+          <li className="pf-v5-u-ml-md">
             <TextContent>
               Register your Red Hat IdM domain with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your Red Hat
               IdM server.
@@ -82,7 +82,7 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
               {ipa_hcc_register_cmd}
             </ClipboardCopy>
           </li>
-          <li className="pf-u-ml-md pf-u-pt-md">
+          <li className="pf-v5-u-ml-md pf-v5-u-pt-md">
             <TextContent>Once the processes have been completed, run a verification test.</TextContent>
           </li>
         </ol>
