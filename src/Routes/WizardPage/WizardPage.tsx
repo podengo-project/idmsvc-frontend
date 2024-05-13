@@ -7,7 +7,7 @@
 import React, { useContext, useState } from 'react';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
-import { Button, Modal, ModalVariant, Page, PageSection, PageSectionVariants, Text } from '@patternfly/react-core';
+import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text } from '@patternfly/react-core';
 import { Wizard, WizardStep } from '@patternfly/react-core/deprecated';
 
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
@@ -309,7 +309,7 @@ const WizardPage = () => {
 
   return (
     <>
-      <Page>
+      <PageGroup>
         <PageHeader>
           <PageHeaderTitle title={title} ouiaId="TextWizardTitle" />
           <p>
@@ -374,7 +374,7 @@ const WizardPage = () => {
             </Button>
           </Modal>
         </PageSection>
-      </Page>
+      </PageGroup>
     </>
   );
 };
