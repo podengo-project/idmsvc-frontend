@@ -25,7 +25,7 @@ import {
 
 import './PageReview.scss';
 import { Domain, DomainIpaServer } from '../../../../Api/api';
-import { TableComposable, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
+import { Table /* data-codemods */, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 
 /**
  * Encapsulate the table header for the list of
@@ -87,10 +87,10 @@ const PageReviewIpaServersBody = (props: PageReviewIpaServersProps) => {
 const PageReviewIpaServers = (props: PageReviewIpaServersProps) => {
   return (
     <>
-      <TableComposable variant="compact" ouiaId="TextWizardReviewTable">
+      <Table variant="compact" ouiaId="TextWizardReviewTable">
         <PageReviewIpaServersHead />
         <PageReviewIpaServersBody servers={props.servers} />
-      </TableComposable>
+      </Table>
     </>
   );
 };

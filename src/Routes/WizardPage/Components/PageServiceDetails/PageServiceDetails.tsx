@@ -77,7 +77,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
           <TextInput
             id="register-title"
             value={title}
-            onChange={onChangeTitle}
+            onChange={(_event, value: string) => onChangeTitle(value)}
             className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
             ouiaId="TextinputWizardDetailsDomainTitle"
           />
@@ -90,7 +90,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
             readOnly={false}
             className="pf-u-w-100 pf-u-w-50-on-md pf-u-w-50-on-xl"
             value={description}
-            onChange={onChangeDescription}
+            onChange={(_event, value: string) => onChangeDescription(value)}
           />
         </FormGroup>
         <FormGroup
@@ -112,7 +112,7 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
             aria-label="Message when on"
             isChecked={isAutoEnrollmentEnabled}
             hasCheckIcon
-            onChange={onChangeAutoEnrollment}
+            onChange={(_event, checked: boolean) => onChangeAutoEnrollment(checked)}
             ouiaId="SwitchWizardDetailsDomainAutoenrollment"
           />
         </FormGroup>
