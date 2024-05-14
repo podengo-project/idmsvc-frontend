@@ -84,7 +84,6 @@ const PageServiceDetails = (props: PageServiceDetailsProps) => {
         </FormGroup>
         <FormGroup label="Description" fieldId="register-description">
           <TextArea
-            contentEditable="true"
             id="register-description"
             type="text"
             readOnly={false}

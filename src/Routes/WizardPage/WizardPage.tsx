@@ -7,8 +7,7 @@
 import React, { useContext, useState } from 'react';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
-import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text } from '@patternfly/react-core';
-import { Wizard, WizardStep } from '@patternfly/react-core/deprecated';
+import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text, Wizard, WizardStep } from '@patternfly/react-core';
 
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
@@ -155,42 +154,9 @@ const WizardPage = () => {
   };
 
   /** Event triggered when Cancel button is clicked on the wizard. */
-  const onWizardCancel = () => {
-    console.log('onWizardCancel fired');
-    SetIsCancelConfirmationModalOpen(true);
-  };
-
-  /** Event triggered when Cancel button is clicked on the wizard. */
   const onWizardClose = () => {
     console.log('onWizardClose fired');
     SetIsCancelConfirmationModalOpen(true);
-  };
-
-  /** Event triggered when Back button is clicked. */
-  const onPreviousPage = (_newStep: { id?: string | number; name: React.ReactNode }) => {
-    // TODO If not needed at the end clean-up onPreviousPage
-    console.log('onPreviousPage fired for id=' + _newStep.id);
-    return;
-  };
-
-  /** Event triggered when a specific page is clicked. */
-  const onGoToStep = (_newStep: { id?: string | number; name: React.ReactNode }) => {
-    // TODO If not needed at the end clean-up onPreviousPage
-    console.log('onGoToStep fired' + _newStep.id);
-    return;
-  };
-
-  /** Event triggered when the Next button is clicked. */
-  const onNextPage = async ({ id }: WizardStep) => {
-    // FIXME Delete log
-    console.log('onNextPage fired for id=' + id);
-    if (id === undefined) {
-      return;
-    }
-    if (typeof id === 'string') {
-      const [, orderIndex] = id.split('-');
-      id = parseInt(orderIndex);
-    }
   };
 
   const initCanJumpPage1 = true;
@@ -260,51 +226,6 @@ const WizardPage = () => {
     }
   };
 
-  /** Configure the wizard pages. */
-  const steps: WizardStep[] = [
-    {
-      // This page only display the pre-requisites
-      id: 1,
-      name: 'Preparation',
-      component: <PagePreparation onToken={onToken} />,
-      canJumpTo: canJumpPage1,
-      enableNext: canJumpPage2,
-    },
-    {
-      id: 2,
-      name: 'Domain registration',
-      component: (
-        <PageServiceRegistration uuid={domain?.domain_id ? domain?.domain_id : ''} token={appContext?.wizard.token || ''} onVerify={onVerify} />
-      ),
-      canJumpTo: canJumpPage2,
-      enableNext: canJumpPage3,
-    },
-    {
-      id: 3,
-      name: 'Domain information',
-      component: (
-        <PageServiceDetails
-          title={domain?.title}
-          description={domain?.description}
-          autoEnrollmentEnabled={domain?.auto_enrollment_enabled}
-          onChangeTitle={onChangeTitle}
-          onChangeDescription={onChangeDescription}
-          onChangeAutoEnrollment={onChangeAutoEnrollment}
-        />
-      ),
-      canJumpTo: canJumpPage3,
-      enableNext: canJumpPage4,
-    },
-    {
-      id: 4,
-      name: 'Review',
-      component: <PageReview domain={domain || ({} as Domain)} />,
-      nextButtonText: 'Finish',
-      canJumpTo: canJumpPage4,
-      enableNext: true,
-    },
-  ];
-
   const title = 'Register identity domain';
 
   return (
@@ -329,17 +250,56 @@ const WizardPage = () => {
           </p>
         </PageHeader>
         <PageSection type={'wizard'} variant={PageSectionVariants.light}>
-          <Wizard
-            navAriaLabel={`${title} steps`}
-            mainAriaLabel={`${title} content`}
-            steps={steps}
-            onNext={onNextPage}
-            onBack={onPreviousPage}
-            onGoToStep={onGoToStep}
-            onAbort={onWizardCancel}
-            onSave={onWizardSave}
-            onClose={onWizardClose}
-          />
+          <Wizard navAriaLabel={`${title} steps`} isVisitRequired={true} onClose={onWizardClose} onSave={onWizardSave}>
+            <WizardStep
+              id="wizard-nav-preparation"
+              name="preparation"
+              isDisabled={!canJumpPage1}
+              navItem={{
+                content: 'Preparation',
+              }}
+            >
+              <PagePreparation onToken={onToken} />
+            </WizardStep>
+            <WizardStep
+              id="wizard-nav-registration"
+              name="registration"
+              isDisabled={!canJumpPage2}
+              navItem={{
+                content: 'Registration',
+              }}
+            >
+              <PageServiceRegistration uuid={domain?.domain_id ? domain?.domain_id : ''} token={appContext?.wizard.token || ''} onVerify={onVerify} />
+            </WizardStep>
+            <WizardStep
+              id="wizard-nav-details"
+              name="details"
+              isDisabled={!canJumpPage3}
+              navItem={{
+                content: 'Details',
+              }}
+            >
+              <PageServiceDetails
+                title={domain?.title}
+                description={domain?.description}
+                autoEnrollmentEnabled={domain?.auto_enrollment_enabled}
+                onChangeTitle={onChangeTitle}
+                onChangeDescription={onChangeDescription}
+                onChangeAutoEnrollment={onChangeAutoEnrollment}
+              />
+            </WizardStep>
+            <WizardStep
+              id="wizard-nav-review"
+              name="review"
+              isDisabled={!canJumpPage4}
+              navItem={{
+                content: 'Review',
+              }}
+              footer={{ nextButtonText: 'Finish' }}
+            >
+              <PageReview domain={domain || ({} as Domain)} />
+            </WizardStep>
+          </Wizard>
           <Modal
             variant={ModalVariant.small}
             title="Cancel identity domain registration"
