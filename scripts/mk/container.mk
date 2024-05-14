@@ -42,6 +42,7 @@ registry-login:
 .PHONY: container-build
 container-build:  ## Build image CONTAINER_IMAGE from CONTAINERFILE using the CONTAINER_CONTEXT_DIR
 	$(CONTAINER_ENGINE) build \
+	  --ulimit nofile=65535:65535 \
 	  --label "quay.expires-after=$(QUAY_EXPIRATION)" \
 	  $(CONTAINER_BUILD_OPTS) \
 	  -t "$(CONTAINER_IMAGE)" \
@@ -54,7 +55,7 @@ container-shell:  ## Open a terminal to check build steps
 		-v $(PROJECT_DIR):/opt/app-root/src:rw,z \
 		--tmpfs /opt/app-root/src/node_modules:rw \
 		--tmpfs /opt/app-root/src/.npm:rw \
-		registry.redhat.io/rhel9/nodejs-16:1-138.1699550438 \
+		registry.redhat.io/rhel9/nodejs-18:1-108.1714669798 \
 		/bin/bash
 
 .PHONY: container-push
