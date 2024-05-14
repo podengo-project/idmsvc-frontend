@@ -1,8 +1,22 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Card, CardBody, Flex, FlexItem, PageGroup, PageSection, Tab, TabTitleText, Tabs } from '@patternfly/react-core';
-import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core/deprecated';
+import {
+  Card,
+  CardBody,
+  Dropdown,
+  DropdownItem,
+  DropdownList,
+  Flex,
+  FlexItem,
+  MenuToggle,
+  PageGroup,
+  PageSection,
+  Tab,
+  TabTitleText,
+  Tabs,
+} from '@patternfly/react-core';
+import { EllipsisVIcon } from '@patternfly/react-icons';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './DetailPage.scss';
@@ -63,20 +77,6 @@ const DetailPage = () => {
   // Kebab menu
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
 
-  const onKebabToggle = (
-    isOpen: boolean,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    event: MouseEvent | TouchEvent | KeyboardEvent | React.KeyboardEvent<any> | React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.stopPropagation();
-    setIsKebabOpen(isOpen);
-  };
-
-  const onKebabSelect = (event?: React.SyntheticEvent<HTMLDivElement>): void => {
-    event?.stopPropagation();
-    setIsKebabOpen(!isKebabOpen);
-  };
-
   const OnShowConfirmDelete = () => {
     setIsOpenConfirmDelete(true);
   };
@@ -109,18 +109,6 @@ const DetailPage = () => {
     }
   };
 
-  const dropdownItems: JSX.Element[] = [
-    <DropdownItem
-      key="delete"
-      onClick={() => {
-        domain !== undefined && OnShowConfirmDelete();
-      }}
-      ouiaId="ButtonDetailsDelete"
-    >
-      Delete
-    </DropdownItem>,
-  ];
-
   // Tabs
   const [activeTabKey, setActiveTabKey] = React.useState<string | number>(0);
   const handleTabClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
@@ -138,14 +126,37 @@ const DetailPage = () => {
             </FlexItem>
             <FlexItem>
               <Dropdown
-                onSelect={onKebabSelect}
-                toggle={<KebabToggle onToggle={(event, isOpen) => onKebabToggle(isOpen, event)} />}
+                onSelect={() => setIsKebabOpen(false)}
+                onOpenChange={(isOpen: boolean) => setIsKebabOpen(isOpen)}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    aria-label="kebab dropdown toggle"
+                    variant="plain"
+                    onClick={() => setIsKebabOpen(!isKebabOpen)}
+                    isExpanded={isKebabOpen}
+                  >
+                    <EllipsisVIcon />
+                  </MenuToggle>
+                )}
                 isOpen={isKebabOpen}
-                isPlain
-                dropdownItems={dropdownItems}
-                position="right"
                 ouiaId=""
-              />
+                popperProps={{
+                  position: 'right',
+                }}
+              >
+                <DropdownList>
+                  <DropdownItem
+                    key="delete"
+                    onClick={() => {
+                      domain !== undefined && OnShowConfirmDelete();
+                    }}
+                    ouiaId="ButtonDetailsDelete"
+                  >
+                    Delete
+                  </DropdownItem>
+                </DropdownList>
+              </Dropdown>
             </FlexItem>
           </Flex>
           <Tabs hasNoBorderBottom activeKey={activeTabKey} onSelect={handleTabClick} isBox={false} aria-label="Tabs in the detail page" role="region">
