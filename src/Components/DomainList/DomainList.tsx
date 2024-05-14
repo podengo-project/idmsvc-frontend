@@ -242,7 +242,7 @@ export const DomainList = () => {
             <Th>UUID</Th>
             <Th>Type</Th>
             <Th sort={getSortParams(3)}>Domain auto-join on launch</Th>
-            <Th></Th>
+            <Th aria-label="Actions"></Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -255,29 +255,27 @@ export const DomainList = () => {
             }
             let row = 1;
             return (
-              <>
-                <Tr key={domain.domain_id} ouiaId={'RowListDomain' + row++}>
-                  <Td>
-                    <Button
-                      variant="link"
-                      onClick={() => {
-                        onShowDetails(domain);
-                      }}
-                      ouiaId="LinkDomainListDetails"
-                    >
-                      {domain.title}
-                    </Button>
-                  </Td>
-                  <Td>{domain.domain_id}</Td>
-                  <Td>
-                    <DomainListFieldType domain_type={domain.domain_type} />
-                  </Td>
-                  <Td>{domain.auto_enrollment_enabled ? enabledText : disabledText}</Td>
-                  <Td isActionCell>
-                    <ActionsColumn items={rowActions} />
-                  </Td>
-                </Tr>
-              </>
+              <Tr key={domain.domain_id} ouiaId={'RowListDomain' + row++}>
+                <Td>
+                  <Button
+                    variant="link"
+                    onClick={() => {
+                      onShowDetails(domain);
+                    }}
+                    ouiaId="LinkDomainListDetails"
+                  >
+                    {domain.title}
+                  </Button>
+                </Td>
+                <Td>{domain.domain_id}</Td>
+                <Td>
+                  <DomainListFieldType domain_type={domain.domain_type} />
+                </Td>
+                <Td>{domain.auto_enrollment_enabled ? enabledText : disabledText}</Td>
+                <Td isActionCell>
+                  <ActionsColumn items={rowActions} />
+                </Td>
+              </Tr>
             );
           })}
         </Tbody>
