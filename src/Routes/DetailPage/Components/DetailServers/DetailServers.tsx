@@ -1,7 +1,7 @@
 import { Flex, FlexItem, Stack, StackItem, TextInputGroupUtilities } from '@patternfly/react-core';
 import React from 'react';
 import { Domain, DomainIpaServer } from '../../../../Api';
-import { Table /* data-codemods */, Tbody, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
+import { Table, Tbody, Td, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
 
 interface DetailServersProps {
   domain?: Domain;
@@ -129,9 +129,9 @@ export const DetailServers = (props: DetailServersProps) => {
             <Tbody>
               {servers.map((server) => (
                 <Tr key={server.subscription_manager_id} ouiaId={'RowDetailServer' + row++}>
-                  <Th>{server.fqdn}</Th>
-                  <Th>{server.location}</Th>
-                  <Th>{server.hcc_enrollment_server ? 'Yes' : 'No'}</Th>
+                  <Td>{server.fqdn}</Td>
+                  <Td>{server.location}</Td>
+                  <Td>{server.hcc_enrollment_server ? 'Yes' : 'No'}</Td>
                 </Tr>
               ))}
             </Tbody>
