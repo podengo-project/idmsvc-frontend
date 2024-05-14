@@ -1,4 +1,5 @@
-FROM registry.redhat.io/rhel9/nodejs-16:1-110 AS builder
+# https://catalog.redhat.com/software/containers/ubi9/nodejs-18/62e8e7ed22d1d3c2dfe2ca01
+FROM registry.redhat.io/rhel9/nodejs-18:1-108.1714669798 AS builder
 # https://github.com/cypress-io/cypress/issues/25236
 # TODO Set env variable indicated into the URL
 USER root
@@ -23,6 +24,7 @@ ENV APP_NAME=${APP_NAME}
 RUN ./gen.app.info.sh
 
 
+# https://quay.io/repository/cloudservices/caddy-ubi?tab=tags
 FROM quay.io/cloudservices/caddy-ubi:11145b1
 WORKDIR /opt/app-root/src
 
