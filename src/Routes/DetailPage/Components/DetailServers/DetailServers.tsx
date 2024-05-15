@@ -1,6 +1,6 @@
 import { Flex, FlexItem, Stack, StackItem, TextInputGroupUtilities } from '@patternfly/react-core';
 import React from 'react';
-import { Domain, DomainIpaServer } from '../../../../Api';
+import { Domain, DomainIpaServer } from '../../../../Api/idmsvc';
 import { Table, Tbody, Td, Th, ThProps, Thead, Tr } from '@patternfly/react-table';
 
 interface DetailServersProps {

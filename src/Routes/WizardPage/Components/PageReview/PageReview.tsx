@@ -24,7 +24,7 @@ import {
 } from '@patternfly/react-core';
 
 import './PageReview.scss';
-import { Domain, DomainIpaServer } from '../../../../Api/api';
+import { Domain, DomainIpaServer } from '../../../../Api/idmsvc';
 import { Table /* data-codemods */, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 
 /**

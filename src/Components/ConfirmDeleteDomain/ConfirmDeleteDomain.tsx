@@ -1,7 +1,7 @@
 import { Button, Modal } from '@patternfly/react-core';
 import './ConfirmDeleteDomain.scss';
 import React from 'react';
-import { Domain } from '../../Api/api';
+import { Domain } from '../../Api/idmsvc';
 
 interface ConfirmDeleteDomainProps {
   domain?: Domain;

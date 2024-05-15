@@ -27,7 +27,7 @@ import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-com
 
 import './DefaultPage.scss';
 import Section from '@redhat-cloud-services/frontend-components/Section';
-import { Domain, ResourcesApiFactory } from '../../Api/api';
+import { Domain, ResourcesApiFactory } from '../../Api/idmsvc';
 import { DomainList } from '../../Components/DomainList/DomainList';
 import { AppContext } from '../../AppContext';
 

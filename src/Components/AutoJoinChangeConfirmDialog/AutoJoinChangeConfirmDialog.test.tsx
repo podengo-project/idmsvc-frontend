@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import AutoJoinChangeConfirmDialog from './AutoJoinChangeConfirmDialog';
 import '@testing-library/jest-dom';
-import { Domain, DomainType } from '../../Api';
+import { Domain, DomainType } from '../../Api/idmsvc';
 
 const domain: Domain = {
   title: 'domain',

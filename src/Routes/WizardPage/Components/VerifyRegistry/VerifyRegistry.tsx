@@ -8,7 +8,7 @@ import { PendingIcon } from '@patternfly/react-icons/dist/esm/icons/pending-icon
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
 import './VerifyRegistry.scss';
-import { Domain, ResourcesApiFactory } from '../../../../Api';
+import { Domain, ResourcesApiFactory } from '../../../../Api/idmsvc';
 
 /* Common definitions */
 

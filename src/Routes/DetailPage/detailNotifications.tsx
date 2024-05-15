@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Domain } from '../../Api/api';
+import { Domain } from '../../Api/idmsvc';
 import { NotificationPayload } from '../../Hooks/useNotification';
 
 export const buildDescriptionEditSuccessNotification = (): NotificationPayload => {

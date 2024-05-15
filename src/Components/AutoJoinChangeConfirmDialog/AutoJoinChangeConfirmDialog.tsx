@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal } from '@patternfly/react-core';
 import './AutoJoinChangeConfirmDialog.scss';
 
-import { Domain } from '../../Api/api';
+import { Domain } from '../../Api/idmsvc';
 
 interface AutoJoinChangeConfirmDialogProps {
   /** The domain to be changed */

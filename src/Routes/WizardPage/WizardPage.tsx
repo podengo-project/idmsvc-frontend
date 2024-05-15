@@ -13,7 +13,7 @@ import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-com
 
 import './WizardPage.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { Domain, ResourcesApiFactory } from '../../Api/api';
+import { Domain, ResourcesApiFactory } from '../../Api/idmsvc';
 import { AppContext } from '../../AppContext';
 import { VerifyState } from './Components/VerifyRegistry/VerifyRegistry';
 import useNotification from '../../Hooks/useNotification';

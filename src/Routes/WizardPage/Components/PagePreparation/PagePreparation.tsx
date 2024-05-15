@@ -3,7 +3,7 @@ import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external
 import { Alert, Button, ClipboardCopy, Form, FormGroup, TextContent, Title } from '@patternfly/react-core';
 
 import './PagePreparation.scss';
-import { ResourcesApiFactory } from '../../../../Api';
+import { ResourcesApiFactory } from '../../../../Api/idmsvc';
 import { AppContext } from '../../../../AppContext';
 
 /** Represent the properties for PagePreparation component. */

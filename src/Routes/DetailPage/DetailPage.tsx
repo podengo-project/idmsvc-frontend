@@ -20,7 +20,7 @@ import { EllipsisVIcon } from '@patternfly/react-icons';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './DetailPage.scss';
-import { Domain, ResourcesApiFactory } from '../../Api/api';
+import { Domain, ResourcesApiFactory } from '../../Api/idmsvc';
 import { AppContext } from '../../AppContext';
 import { DetailGeneral } from './Components/DetailGeneral/DetailGeneral';
 import { DetailServers } from './Components/DetailServers/DetailServers';

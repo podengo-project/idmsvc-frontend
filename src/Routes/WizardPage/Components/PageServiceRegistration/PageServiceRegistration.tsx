@@ -3,7 +3,7 @@ import { Alert, Button, ClipboardCopy, Flex, FlexItem, Form, TextContent, Title 
 
 import './PageServiceRegistration.scss';
 import VerifyRegistry, { VerifyState } from '../VerifyRegistry/VerifyRegistry';
-import { Domain } from '../../../../Api';
+import { Domain } from '../../../../Api/idmsvc';
 
 /**
  * Represents the properties accepted by the @{link PageServiceRegistration} component.
