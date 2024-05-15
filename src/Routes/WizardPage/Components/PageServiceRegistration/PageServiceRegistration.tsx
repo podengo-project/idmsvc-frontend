@@ -75,15 +75,15 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
         <ol>
           <li className="pf-v5-u-ml-md">
             <TextContent>
-              Register your Red Hat IdM domain with the Red Hat Hybrid Cloud Console by running the following command in a terminal on your Red Hat
-              IdM server.
+              Register your Red Hat IdM domain with the Red Hat Hybrid Cloud Console by running the following command as <code>root</code> in a
+              terminal on your Red Hat IdM server, and following the prompts.
             </TextContent>
             <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextWizardRegistrationRegister">
               {ipa_hcc_register_cmd}
             </ClipboardCopy>
           </li>
           <li className="pf-v5-u-ml-md pf-v5-u-pt-md">
-            <TextContent>Once the processes have been completed, run a verification test.</TextContent>
+            <TextContent>After the command completes, verify the registration was successful.</TextContent>
           </li>
         </ol>
       </Form>

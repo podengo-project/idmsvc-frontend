@@ -39,7 +39,7 @@ const Header = () => {
     <PageHeader>
       <PageHeaderTitle title={title} />
       <p>
-        Manage registered identity domains to leverage host access controls from your existing identity and access management.{' '}
+        Register identity and access management systems to enable machines to automatically join a domain.{' '}
         <Button
           component="a"
           target="_blank"
@@ -50,7 +50,7 @@ const Header = () => {
           href={linkLearnMoreAbout}
           ouiaId="LinkDefaultLearnMoreAbout1"
         >
-          Learn more about the domain registry.
+          Learn more about the Directory and Domain Services registry.
         </Button>
       </p>
     </PageHeader>
@@ -88,8 +88,8 @@ const EmptyContent = () => {
             <EmptyStateBody>
               <Stack>
                 <StackItem className="pf-v5-u-pt-sm">
-                  Use host access controls from your existing identity domains in your
-                  <br /> cloud environment*. To get started, register an identity domain.
+                  Register an identity domain to enable systems to
+                  <br /> automatically join the domain on launch.
                 </StackItem>
                 <StackItem className="pf-v5-u-pt-md">
                   <RegisterDomainButton />
