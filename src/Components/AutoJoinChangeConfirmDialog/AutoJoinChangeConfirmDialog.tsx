@@ -38,7 +38,9 @@ const AutoJoinChangeConfirmDialog: React.FC<AutoJoinChangeConfirmDialogProps> = 
     text = (
       <div>
         <p>Are you sure you want to disable domain auto-join?</p>
-        <p>Disabling will avoid new hosts to join the domain &quot;{domain.title}&quot; using domain auto-join on launch.</p>
+        <p>
+          Disabling will prevent systems from automatically joining the domain <strong>{domain.title}</strong>.
+        </p>
       </div>
     );
   } else {
@@ -46,7 +48,9 @@ const AutoJoinChangeConfirmDialog: React.FC<AutoJoinChangeConfirmDialogProps> = 
     text = (
       <div>
         <p>Are you sure you want to enable domain auto-join?</p>
-        <p>Enabling will allow new hosts to join the domain &quot;{domain.title}&quot; using domain auto-join on launch.</p>
+        <p>
+          Enabling will allow systems to automatically join the domain <strong>{domain.title}</strong>.
+        </p>
       </div>
     );
   }

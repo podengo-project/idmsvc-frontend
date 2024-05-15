@@ -36,7 +36,8 @@ const ConfirmDeleteDomain: React.FC<ConfirmDeleteDomainProps> = (props) => {
         </Button>,
       ]}
     >
-      No new host enrollment from HCC will be allowed on <b>{props.domain?.title || ''}</b> domain after registration deletion.
+      Hosts will be unable to automatically join the domain
+      <b> {props.domain?.title || ''}</b> after deletion.
     </Modal>
   );
 };
