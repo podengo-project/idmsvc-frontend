@@ -3,7 +3,7 @@ import './DomainList.scss';
 import { Fragment, useContext, useState } from 'react';
 import React from 'react';
 
-import { Domain, DomainType, ResourcesApiFactory } from '../../Api/api';
+import { Domain, DomainType, ResourcesApiFactory } from '../../Api/idmsvc';
 import { useNavigate } from 'react-router-dom';
 import { AppContext, AppContextType } from '../../AppContext';
 import { Button } from '@patternfly/react-core';

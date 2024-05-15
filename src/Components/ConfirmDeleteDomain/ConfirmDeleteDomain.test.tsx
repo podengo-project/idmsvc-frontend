@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ConfirmDeleteDomain from './ConfirmDeleteDomain';
 import '@testing-library/jest-dom';
-import { Domain } from '../../Api';
+import { Domain } from '../../Api/idmsvc';
 
 const domain: Domain = {
   domain_name: 'mydomain.test',

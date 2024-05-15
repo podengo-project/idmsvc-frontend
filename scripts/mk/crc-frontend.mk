@@ -39,11 +39,16 @@ run:$(NODE_BIN)/fec  ## Execute frontend
 
 .PHONY: generate-api
 generate-api: $(NODE_BIN)/openapi-generator-cli $(NODE_BIN)/prettier $(PUBLIC_OPENAPI) ## Generate the API client from openapi specification
-	@rm -rf $(APIDIR)
+	@rm -rf "$(APIDIR)/idmsvc"
+
+	# Generate idmsvc API client
 	TS_POST_PROCESS_FILE="node_modules/.bin/prettier --write" \
 	    npm run openapi-generator-cli -- generate --enable-post-process-file \
-	        -i "$(PUBLIC_OPENAPI)" -g typescript-axios -o $(APIDIR)
-	@rm -f $(APIDIR)/.gitignore $(APIDIR)/.npmignore $(APIDIR)/git_push.sh
+	        -i "$(PUBLIC_OPENAPI)" -g typescript-axios -o $(APIDIR)/idmsvc
+	@rm -rf \
+	  "$(APIDIR)/idmsvc/.gitignore" \
+	  "$(APIDIR)/idmsvc/.npmignore" \
+	  "$(APIDIR)/idmsvc/git_push.sh"
 
 .PHONY: update-api
 update-api:

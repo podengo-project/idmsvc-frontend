@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useState } from 'react';
-import { Domain } from './Api';
+import { Domain } from './Api/idmsvc';
 import { VerifyState } from './Routes/WizardPage/Components/VerifyRegistry/VerifyRegistry';
 import React from 'react';
 
