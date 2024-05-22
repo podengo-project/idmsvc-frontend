@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import ConfirmDeleteDomain from './ConfirmDeleteDomain';
 import '@testing-library/jest-dom';
@@ -21,7 +21,7 @@ test('expect modal displayed', () => {
   expect(screen.getByRole('button', { name: 'Cancel' })).toHaveTextContent(/^Cancel$/);
 });
 
-test('expect handler onDelete to be called', () => {
+test('expect handler onDelete to not be called without confirmation', () => {
   // given
   const confirmHandler = jest.fn();
   const cancelHandler = jest.fn();
@@ -31,8 +31,30 @@ test('expect handler onDelete to be called', () => {
   screen.getByRole('button', { name: 'Delete' }).click();
 
   // then the confirmHandler should be called with the domain as argument and cancelHandler should not
-  expect(confirmHandler).toBeCalledWith(domain);
-  expect(cancelHandler).toBeCalledTimes(0);
+  expect(confirmHandler).toHaveBeenCalledTimes(0);
+  expect(cancelHandler).toHaveBeenCalledTimes(0);
+});
+
+test('expect handler onDelete is called with confirmation', () => {
+  // given
+  const confirmHandler = jest.fn();
+  const cancelHandler = jest.fn();
+  render(<ConfirmDeleteDomain domain={domain} isOpen={true} onDelete={confirmHandler} onCancel={cancelHandler} />);
+
+  // when confirmation checkbox is checked
+  const checkbox = screen.getByRole('checkbox', { name: 'I understand that this action cannot be undone' });
+  expect(checkbox).not.toBeChecked();
+  act(() => {
+    checkbox.click();
+  });
+  expect(checkbox).toBeChecked();
+
+  // when the OK button is clicked
+  screen.getByRole('button', { name: 'Delete' }).click();
+
+  // then the confirmHandler should be called with the domain as argument and cancelHandler should not
+  expect(confirmHandler).toHaveBeenCalledWith(domain);
+  expect(cancelHandler).toHaveBeenCalledTimes(0);
 });
 
 test('expect handler onCancel to be called', () => {
@@ -45,6 +67,6 @@ test('expect handler onCancel to be called', () => {
   screen.getByRole('button', { name: 'Cancel' }).click();
 
   // then the confirmHandler should be called with the domain as argument and cancelHandler should not
-  expect(cancelHandler).toBeCalledTimes(1);
-  expect(confirmHandler).toBeCalledTimes(0);
+  expect(cancelHandler).toHaveBeenCalledTimes(1);
+  expect(confirmHandler).toHaveBeenCalledTimes(0);
 });
