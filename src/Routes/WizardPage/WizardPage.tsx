@@ -306,7 +306,7 @@ const WizardPage = () => {
             titleIconVariant={'warning'}
             isOpen={isCancelConfirmationModalOpen}
             onClose={onConfirmCancelWizardContinueButtonClick}
-            ouiaId="ModalDesription"
+            ouiaId="ModalCancelRegistration"
             actions={[
               <Button key="cancel" variant="primary" onClick={onConfirmCancelWizardCancelButtonClick} ouiaId="ButtonModalCancelRegistrationCancel">
                 Cancel registration

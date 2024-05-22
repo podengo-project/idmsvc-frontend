@@ -296,7 +296,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           >
             Save
           </Button>,
-          <Button key="cancel" variant="link" onClick={handleCancelDescriptionButton} ouiaId="ButtonModalDescriptionSave">
+          <Button key="cancel" variant="link" onClick={handleCancelDescriptionButton} ouiaId="ButtonModalDescriptionCancel">
             Cancel
           </Button>,
         ]}
