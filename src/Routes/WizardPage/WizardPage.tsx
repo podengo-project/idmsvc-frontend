@@ -258,6 +258,9 @@ const WizardPage = () => {
               navItem={{
                 content: 'Preparation',
               }}
+              footer={{
+                isNextDisabled: !canJumpPage2,
+              }}
             >
               <PagePreparation onToken={onToken} />
             </WizardStep>
@@ -268,6 +271,9 @@ const WizardPage = () => {
               navItem={{
                 content: 'Registration',
               }}
+              footer={{
+                isNextDisabled: !canJumpPage3,
+              }}
             >
               <PageServiceRegistration uuid={domain?.domain_id ? domain?.domain_id : ''} token={appContext?.wizard.token || ''} onVerify={onVerify} />
             </WizardStep>
@@ -277,6 +283,9 @@ const WizardPage = () => {
               isDisabled={!canJumpPage3}
               navItem={{
                 content: 'Details',
+              }}
+              footer={{
+                isNextDisabled: !canJumpPage4,
               }}
             >
               <PageServiceDetails
