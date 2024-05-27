@@ -43,6 +43,8 @@ make dev-static port=9999
 
 The below will be necessary to deploy on the dev cluster.
 
+- Install nvm by: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash`.
+- Config node 18 by: `nvm install 18; nvm use 18`.
 - Run `cp -vf config/bonfire.example.yaml config/bonfire.yaml`.
 - Update the `config/bonfire.yaml` file by following the TODO
   placeholders.
