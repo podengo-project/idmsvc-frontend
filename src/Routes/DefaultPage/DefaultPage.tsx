@@ -18,7 +18,6 @@ import {
   PageGroup,
   PageSection,
   Pagination,
-  Spinner,
   Stack,
   StackItem,
   Toolbar,
@@ -30,6 +29,7 @@ import Section from '@redhat-cloud-services/frontend-components/Section';
 import { Domain, ResourcesApiFactory } from '../../Api/idmsvc';
 import { DomainList } from '../../Components/DomainList/DomainList';
 import { AppContext } from '../../AppContext';
+import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 
 const Header = () => {
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
@@ -185,10 +185,20 @@ const DefaultPage = () => {
   const [perPage, setPerPage] = useState<number>(10);
   const offset = (page - 1) * perPage;
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   console.log('INFO:DefaultPage render');
 
   useEffect(() => {
+    if (appContext.rbac.isLoading) {
+      setIsLoading(true);
+      return;
+    }
+    if (!appContext.rbac.permissions.hasDomainsList) {
+      console.error('rbac no list permission');
+      navigate('/no-permissions', { replace: true });
+      return;
+    }
     setIsLoading(true);
     resources_api
       .listDomains(undefined, offset, perPage, undefined)
@@ -203,7 +213,7 @@ const DefaultPage = () => {
         console.log(reason);
         setIsLoading(false);
       });
-  }, [page, perPage]);
+  }, [page, perPage, appContext.rbac.isLoading]);
 
   const changePageSize = (size: number) => {
     setPerPage(size);
@@ -227,13 +237,11 @@ const DefaultPage = () => {
   const loadingContent = (
     <>
       <Header />
-      <Bullseye>
-        <Spinner />
-      </Bullseye>
+      <CenteredSpinner />
     </>
   );
 
-  if (isLoading) {
+  if (appContext.rbac.isLoading || isLoading) {
     return loadingContent;
   }
   const content = appContext.totalDomains <= 0 ? emptyContent : listContent;

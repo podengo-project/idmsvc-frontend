@@ -27,6 +27,7 @@ import { DetailServers } from './Components/DetailServers/DetailServers';
 import ConfirmDeleteDomain from '../../Components/ConfirmDeleteDomain/ConfirmDeleteDomain';
 import useNotification from '../../Hooks/useNotification';
 import { buildDeleteFailedNotification, buildDeleteSuccessNotification } from './detailNotifications';
+import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 
 /**
  * It represents the detail page to show the information about a
@@ -57,6 +58,9 @@ const DetailPage = () => {
 
   // Load Domain to display
   useEffect(() => {
+    if (!appContext.rbac.permissions.hasDomainsRead) {
+      navigate('/no-permissions', { replace: true });
+    }
     if (domain_id) {
       resources_api
         .readDomain(domain_id)
@@ -72,7 +76,7 @@ const DetailPage = () => {
           navigate('/domains', { replace: true });
         });
     }
-  }, [domain_id]);
+  }, [domain_id, appContext.rbac.isLoading]);
 
   // Kebab menu
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
@@ -114,6 +118,10 @@ const DetailPage = () => {
   const handleTabClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
   };
+
+  if (appContext.rbac.isLoading) {
+    return <CenteredSpinner />;
+  }
 
   // Return render
   return (

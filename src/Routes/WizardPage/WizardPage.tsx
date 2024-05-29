@@ -4,7 +4,7 @@
  * The goal is provide the steps to register and add
  * a new domain service.
  */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
 import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text, Wizard, WizardStep } from '@patternfly/react-core';
@@ -22,6 +22,7 @@ import PagePreparation from './Components/PagePreparation/PagePreparation';
 import PageServiceRegistration from './Components/PageServiceRegistration/PageServiceRegistration';
 import PageServiceDetails from './Components/PageServiceDetails/PageServiceDetails';
 import PageReview from './Components/PageReview/PageReview';
+import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 
 /**
  * Wizard page to register a new domain into the service.
@@ -42,6 +43,13 @@ const WizardPage = () => {
   // FIXME Update the URL with the location for docs
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
+
+  useEffect(() => {
+    if (!appContext.rbac.permissions.hasTokenCreate || !appContext.rbac.permissions.hasDomainsUpdate) {
+      navigate('/no-permissions', { replace: true });
+      return;
+    }
+  }, [appContext.rbac.isLoading]);
 
   const notifyNotCompleted = () => {
     const notificationID = 'domain-registration-cancelled-notification';
@@ -227,6 +235,10 @@ const WizardPage = () => {
   };
 
   const title = 'Register identity domain';
+
+  if (appContext.rbac.isLoading) {
+    return <CenteredSpinner />;
+  }
 
   return (
     <>
