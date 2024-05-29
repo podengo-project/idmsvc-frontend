@@ -18,11 +18,17 @@ export interface IdmPermissions {
  * domain integration service.
  */
 const useIdmPermissions = (): IdmPermissions => {
-  const { hasAccess: hasTokensCreate, isLoading: isLoadingTokensCreate } = usePermissions(APP, [APP + ':token:create'], false, true);
-  const { hasAccess: hasDomainsRead, isLoading: isLoadingDomainsRead } = usePermissions(APP, [APP + ':domains:read'], false, true);
-  const { hasAccess: hasDomainsUpdate, isLoading: isLoadingDomainsUpdate } = usePermissions(APP, [APP + ':domains:update'], false, true);
-  const { hasAccess: hasDomainsDelete, isLoading: isLoadingDomainsDelete } = usePermissions(APP, [APP + ':domains:delete'], false, true);
-  const { hasAccess: hasDomainsList, isLoading: isLoadingDomainsList } = usePermissions(APP, [APP + ':domains:list'], false, true);
+  const tokenCreate = APP + ':token:create';
+  const domainsRead = APP + ':domains:read';
+  const domainsUpdate = APP + ':domains:update';
+  const domainsDelete = APP + ':domains:delete';
+  const domainsList = APP + ':domains:list';
+
+  const { hasAccess: hasTokensCreate, isLoading: isLoadingTokensCreate } = usePermissions(APP, [tokenCreate], true, true);
+  const { hasAccess: hasDomainsRead, isLoading: isLoadingDomainsRead } = usePermissions(APP, [domainsRead], true, true);
+  const { hasAccess: hasDomainsUpdate, isLoading: isLoadingDomainsUpdate } = usePermissions(APP, [domainsUpdate], true, true);
+  const { hasAccess: hasDomainsDelete, isLoading: isLoadingDomainsDelete } = usePermissions(APP, [domainsDelete], true, true);
+  const { hasAccess: hasDomainsList, isLoading: isLoadingDomainsList } = usePermissions(APP, [domainsList], true, true);
 
   const isLoading: boolean =
     isLoadingTokensCreate || isLoadingDomainsRead || isLoadingDomainsUpdate || isLoadingDomainsDelete || isLoadingDomainsList;
