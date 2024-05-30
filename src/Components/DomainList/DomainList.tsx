@@ -16,6 +16,7 @@ import {
   buildDeleteFailedNotification,
   buildDeleteSuccessNotification,
 } from '../../Routes/DetailPage/detailNotifications';
+import useIdmPermissions from '../../Hooks/useIdmPermissions';
 
 export interface IColumnType<T> {
   key: string;
@@ -100,7 +101,8 @@ export const DomainList = () => {
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
 
-  const context = useContext<AppContextType>(AppContext);
+  const appContext = useContext<AppContextType>(AppContext);
+  const rbac = useIdmPermissions();
   const navigate = useNavigate();
   const { notifyError, notifySuccess } = useNotification();
 
@@ -112,7 +114,7 @@ export const DomainList = () => {
   // Sort direction of the currently sorted column
   const [activeSortDirection, setActiveSortDirection] = React.useState<'asc' | 'desc'>('asc');
 
-  const domains = context.listDomains;
+  const domains = appContext.listDomains;
 
   const [isOpenAutoJoinChangeConfirm, setIsOpenAutoJoinChangeConfirm] = useState(false);
   const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState<boolean>(false);
@@ -136,7 +138,7 @@ export const DomainList = () => {
 
   // remove domain(s) matching the given uuid from the `domains` state
   const removeDomain = (uuid: string): void => {
-    context.deleteDomain(uuid);
+    appContext.deleteDomain(uuid);
   };
 
   const showAutoJoinChangeConfirmDialog = (domain: Domain) => {
@@ -161,7 +163,7 @@ export const DomainList = () => {
         })
         .then((response) => {
           if (response.status == 200) {
-            context.updateDomain(response.data);
+            appContext.updateDomain(response.data);
             notifySuccess(buildAutoJoinToggleSuccessNotification(domain));
           } else {
             notifyError(buildAutoJoinToggleFailedNotification(domain));
@@ -209,6 +211,7 @@ export const DomainList = () => {
       title: 'Enable/Disable',
       onClick: () => showAutoJoinChangeConfirmDialog(domain),
       ouiaId: 'ButtonActionEnableDisable',
+      isDisabled: !rbac.permissions.hasDomainsUpdate,
     },
     {
       title: 'Edit',
@@ -219,6 +222,7 @@ export const DomainList = () => {
       title: 'Delete',
       onClick: () => OnShowConfirmDelete(domain),
       ouiaId: 'ButtonActionDelete',
+      isDisabled: !rbac.permissions.hasDomainsDelete,
     },
   ];
 
@@ -228,7 +232,7 @@ export const DomainList = () => {
 
   const onShowDetails = (domain: Domain | undefined) => {
     if (domain !== undefined) {
-      context.setEditing(domain);
+      appContext.setEditing(domain);
       navigate('/details/' + domain.domain_id);
     }
   };

@@ -26,6 +26,7 @@ import {
   buildTitleEditFailedNotification,
   buildTitleEditSuccessNotification,
 } from '../../detailNotifications';
+import useIdmPermissions from '../../../../Hooks/useIdmPermissions';
 
 interface DetailGeneralProps {
   domain?: Domain;
@@ -41,6 +42,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
 
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
+  const rbac = useIdmPermissions();
   const { notifyError, notifySuccess } = useNotification();
 
   // States
@@ -175,6 +177,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
                 return;
               }}
               ouiaId="ButtonDetailGeneralEditTitle"
+              isDisabled={!rbac.permissions.hasDomainsUpdate}
             >
               <Icon>
                 <PencilAltIcon />
@@ -196,6 +199,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
                 setIsDescriptionModalOpen(true);
               }}
               ouiaId="ButtonDetailGeneralEditDescription"
+              isDisabled={!rbac.permissions.hasDomainsUpdate}
             >
               <Icon>
                 <PencilAltIcon />
@@ -247,6 +251,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
               isChecked={autoJoin}
               onChange={handleAutoJoin}
               ouiaId="ButtonDetailGeneralAutoenroll"
+              isDisabled={!rbac.permissions.hasDomainsUpdate}
             />
           </DescriptionListDescription>
         </DescriptionListGroup>

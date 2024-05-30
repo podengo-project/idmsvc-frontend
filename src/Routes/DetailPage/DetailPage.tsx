@@ -168,6 +168,7 @@ const DetailPage = () => {
                       domain !== undefined && OnShowConfirmDelete();
                     }}
                     ouiaId="ButtonDetailsDelete"
+                    isDisabled={!rbac.permissions.hasDomainsDelete}
                   >
                     Delete
                   </DropdownItem>

@@ -60,6 +60,7 @@ const Header = () => {
 
 const RegisterDomainButton = () => {
   const appContext = useContext(AppContext);
+  const rbac = useIdmPermissions();
   const navigate = useNavigate();
 
   const handleOpenWizard = () => {
@@ -69,8 +70,10 @@ const RegisterDomainButton = () => {
     navigate('/domains/wizard', { replace: true });
   };
 
+  const isDisabled = rbac.isLoading || !rbac.permissions.hasTokenCreate || !rbac.permissions.hasDomainsUpdate;
+
   return (
-    <Button ouiaId="ButtonDefaultRegisterIdentityDomain" onClick={handleOpenWizard}>
+    <Button ouiaId="ButtonDefaultRegisterIdentityDomain" onClick={handleOpenWizard} isLoading={rbac.isLoading} isDisabled={isDisabled}>
       Register identity domain
     </Button>
   );
