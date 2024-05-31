@@ -23,6 +23,7 @@ import PageServiceRegistration from './Components/PageServiceRegistration/PageSe
 import PageServiceDetails from './Components/PageServiceDetails/PageServiceDetails';
 import PageReview from './Components/PageReview/PageReview';
 import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
+import useIdmPermissions from '../../Hooks/useIdmPermissions';
 
 /**
  * Wizard page to register a new domain into the service.
@@ -39,17 +40,18 @@ const WizardPage = () => {
   const navigate = useNavigate();
   const { notifySuccess, notifyWarning, notifyError, removeNotification } = useNotification();
   const [isCancelConfirmationModalOpen, SetIsCancelConfirmationModalOpen] = useState<boolean>(false);
+  const rbac = useIdmPermissions();
 
   // FIXME Update the URL with the location for docs
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
 
   useEffect(() => {
-    if (!appContext.rbac.permissions.hasTokenCreate || !appContext.rbac.permissions.hasDomainsUpdate) {
+    if (!rbac.isLoading && (!rbac.permissions.hasTokenCreate || !rbac.permissions.hasDomainsUpdate)) {
       navigate('/no-permissions', { replace: true });
       return;
     }
-  }, [appContext.rbac.isLoading]);
+  }, [rbac]);
 
   const notifyNotCompleted = () => {
     const notificationID = 'domain-registration-cancelled-notification';
@@ -236,7 +238,7 @@ const WizardPage = () => {
 
   const title = 'Register identity domain';
 
-  if (appContext.rbac.isLoading) {
+  if (rbac.isLoading) {
     return <CenteredSpinner />;
   }
 

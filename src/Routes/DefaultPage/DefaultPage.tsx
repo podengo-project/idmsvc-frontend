@@ -30,6 +30,7 @@ import { Domain, ResourcesApiFactory } from '../../Api/idmsvc';
 import { DomainList } from '../../Components/DomainList/DomainList';
 import { AppContext } from '../../AppContext';
 import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
+import useIdmPermissions from '../../Hooks/useIdmPermissions';
 
 const Header = () => {
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
@@ -186,15 +187,16 @@ const DefaultPage = () => {
   const offset = (page - 1) * perPage;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+  const rbac = useIdmPermissions();
 
   console.log('INFO:DefaultPage render');
 
   useEffect(() => {
-    if (appContext.rbac.isLoading) {
+    if (rbac.isLoading) {
       setIsLoading(true);
       return;
     }
-    if (!appContext.rbac.permissions.hasDomainsList) {
+    if (!rbac.permissions.hasDomainsList) {
       console.error('rbac no list permission');
       navigate('/no-permissions', { replace: true });
       return;
@@ -213,7 +215,7 @@ const DefaultPage = () => {
         console.log(reason);
         setIsLoading(false);
       });
-  }, [page, perPage, appContext.rbac.isLoading]);
+  }, [page, perPage, rbac]);
 
   const changePageSize = (size: number) => {
     setPerPage(size);
@@ -241,7 +243,7 @@ const DefaultPage = () => {
     </>
   );
 
-  if (appContext.rbac.isLoading || isLoading) {
+  if (rbac.isLoading || isLoading) {
     return loadingContent;
   }
   const content = appContext.totalDomains <= 0 ? emptyContent : listContent;
