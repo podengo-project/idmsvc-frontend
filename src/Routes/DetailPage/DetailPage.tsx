@@ -27,6 +27,7 @@ import { DetailServers } from './Components/DetailServers/DetailServers';
 import ConfirmDeleteDomain from '../../Components/ConfirmDeleteDomain/ConfirmDeleteDomain';
 import useNotification from '../../Hooks/useNotification';
 import { buildDeleteFailedNotification, buildDeleteSuccessNotification } from './detailNotifications';
+import useIdmPermissions from '../../Hooks/useIdmPermissions';
 import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 
 /**
@@ -41,25 +42,32 @@ const DetailPage = () => {
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
   const navigate = useNavigate();
   const { notifyError, notifySuccess } = useNotification();
+  const rbac = useIdmPermissions();
 
   // Params
   const { domain_id } = useParams();
 
-  if (domain_id === undefined) {
-    navigate('/domains', { replace: true });
-    return <></>;
-  }
+  useEffect(() => {
+    if (domain_id === undefined) {
+      navigate('/domains', { replace: true });
+    }
+  }, [domain_id]);
 
   // States
-  const [domain, setDomain] = useState<Domain | undefined>(appContext?.getDomain(domain_id) || undefined);
+  const [domain, setDomain] = useState<Domain | undefined>(appContext?.getDomain(domain_id as string) || undefined);
   const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState<boolean>(false);
 
   console.log('INFO:DetailPage render:domain_id=' + domain_id);
 
   // Load Domain to display
   useEffect(() => {
-    if (!appContext.rbac.permissions.hasDomainsRead) {
+    if (rbac.isLoading) {
+      return;
+    }
+
+    if (!rbac.permissions.hasDomainsRead) {
       navigate('/no-permissions', { replace: true });
+      return;
     }
     if (domain_id) {
       resources_api
@@ -76,7 +84,7 @@ const DetailPage = () => {
           navigate('/domains', { replace: true });
         });
     }
-  }, [domain_id, appContext.rbac.isLoading]);
+  }, [domain_id, rbac]);
 
   // Kebab menu
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
@@ -119,7 +127,7 @@ const DetailPage = () => {
     setActiveTabKey(tabIndex);
   };
 
-  if (appContext.rbac.isLoading) {
+  if (rbac.isLoading) {
     return <CenteredSpinner />;
   }
 

@@ -1,4 +1,5 @@
-import { usePermissions } from '@redhat-cloud-services/frontend-components-utilities/RBACHook';
+import { useEffect, useMemo, useState } from 'react';
+import { UsePermissionsState, doesHavePermissions, getRBAC } from '@redhat-cloud-services/frontend-components-utilities/RBAC';
 
 const APP = 'idmsvc';
 
@@ -24,25 +25,42 @@ const useIdmPermissions = (): IdmPermissions => {
   const domainsDelete = APP + ':domains:delete';
   const domainsList = APP + ':domains:list';
 
-  const { hasAccess: hasTokensCreate, isLoading: isLoadingTokensCreate } = usePermissions(APP, [tokenCreate], true, true);
-  const { hasAccess: hasDomainsRead, isLoading: isLoadingDomainsRead } = usePermissions(APP, [domainsRead], true, true);
-  const { hasAccess: hasDomainsUpdate, isLoading: isLoadingDomainsUpdate } = usePermissions(APP, [domainsUpdate], true, true);
-  const { hasAccess: hasDomainsDelete, isLoading: isLoadingDomainsDelete } = usePermissions(APP, [domainsDelete], true, true);
-  const { hasAccess: hasDomainsList, isLoading: isLoadingDomainsList } = usePermissions(APP, [domainsList], true, true);
+  const [permissions, setPermissions] = useState<UsePermissionsState>({
+    isLoading: true,
+    hasAccess: false,
+    isOrgAdmin: false,
+    permissions: [],
+  });
 
-  const isLoading: boolean =
-    isLoadingTokensCreate || isLoadingDomainsRead || isLoadingDomainsUpdate || isLoadingDomainsDelete || isLoadingDomainsList;
+  useEffect(() => {
+    (async () => {
+      // setPermissions((prev) => ({ ...prev, isLoading: true }));
 
-  return {
-    isLoading: isLoading,
-    permissions: {
-      hasTokenCreate: hasTokensCreate,
-      hasDomainsRead: hasDomainsRead,
-      hasDomainsList: hasDomainsList,
-      hasDomainsUpdate: hasDomainsUpdate,
-      hasDomainsDelete: hasDomainsDelete,
-    },
-  };
+      const { isOrgAdmin, permissions: userPermissions } = await getRBAC(APP);
+
+      setPermissions({
+        isLoading: false,
+        isOrgAdmin,
+        permissions: userPermissions,
+        hasAccess: false,
+      });
+    })();
+  }, []);
+
+  const idmPermissions = useMemo(() => {
+    return {
+      isLoading: permissions.isLoading,
+      permissions: {
+        hasTokenCreate: doesHavePermissions(permissions.permissions, [tokenCreate], false),
+        hasDomainsRead: doesHavePermissions(permissions.permissions, [domainsRead], false),
+        hasDomainsList: doesHavePermissions(permissions.permissions, [domainsList], false),
+        hasDomainsUpdate: doesHavePermissions(permissions.permissions, [domainsUpdate], false),
+        hasDomainsDelete: doesHavePermissions(permissions.permissions, [domainsDelete], false),
+      },
+    };
+  }, [permissions]);
+
+  return idmPermissions;
 };
 
 export default useIdmPermissions;

@@ -2,7 +2,6 @@ import { ReactNode, createContext, useState } from 'react';
 import { Domain } from './Api/idmsvc';
 import { VerifyState } from './Routes/WizardPage/Components/VerifyRegistry/VerifyRegistry';
 import React from 'react';
-import useIdmPermissions, { IdmPermissions } from './Hooks/useIdmPermissions';
 
 /**
  * It represents the application context so common events and properties
@@ -51,7 +50,6 @@ export interface AppContextType {
     /** Set the ephemeral domain information. */
     setDomain: (value: Domain) => void;
   };
-  rbac: IdmPermissions;
 }
 
 /**
@@ -78,7 +76,6 @@ export const AppContext = createContext<AppContextType>({
     domain: {} as Domain,
     setDomain: () => undefined,
   },
-  rbac: {} as IdmPermissions,
 });
 
 /**
@@ -182,7 +179,6 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
           domain: wizardDomain || ({} as Domain),
           setDomain: _setWizardDomain,
         },
-        rbac: useIdmPermissions(),
       }}
     >
       {children}
