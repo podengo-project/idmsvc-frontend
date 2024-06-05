@@ -31,6 +31,7 @@ import { DomainList } from '../../Components/DomainList/DomainList';
 import { AppContext } from '../../AppContext';
 import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 import useIdmPermissions from '../../Hooks/useIdmPermissions';
+import NoPermissions from '../../Components/NoPermissions/NoPermissions';
 
 const Header = () => {
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
@@ -189,19 +190,14 @@ const DefaultPage = () => {
   const [perPage, setPerPage] = useState<number>(10);
   const offset = (page - 1) * perPage;
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
   const rbac = useIdmPermissions();
+
+  const hasPermissions = !rbac.isLoading && rbac.permissions.hasDomainsList;
 
   console.log('INFO:DefaultPage render');
 
   useEffect(() => {
-    if (rbac.isLoading) {
-      setIsLoading(true);
-      return;
-    }
-    if (!rbac.permissions.hasDomainsList) {
-      console.error('rbac no list permission');
-      navigate('/no-permissions', { replace: true });
+    if (!hasPermissions) {
       return;
     }
     setIsLoading(true);
@@ -218,7 +214,7 @@ const DefaultPage = () => {
         console.log(reason);
         setIsLoading(false);
       });
-  }, [page, perPage, rbac]);
+  }, [page, perPage, hasPermissions]);
 
   const changePageSize = (size: number) => {
     setPerPage(size);
@@ -246,9 +242,14 @@ const DefaultPage = () => {
     </>
   );
 
+  if (!rbac.isLoading && !hasPermissions) {
+    return <NoPermissions />;
+  }
+
   if (rbac.isLoading || isLoading) {
     return loadingContent;
   }
+
   const content = appContext.totalDomains <= 0 ? emptyContent : listContent;
   return content;
 };

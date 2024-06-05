@@ -4,7 +4,7 @@
  * The goal is provide the steps to register and add
  * a new domain service.
  */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 
 import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text, Wizard, WizardStep } from '@patternfly/react-core';
@@ -24,6 +24,7 @@ import PageServiceDetails from './Components/PageServiceDetails/PageServiceDetai
 import PageReview from './Components/PageReview/PageReview';
 import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 import useIdmPermissions from '../../Hooks/useIdmPermissions';
+import NoPermissions from '../../Components/NoPermissions/NoPermissions';
 
 /**
  * Wizard page to register a new domain into the service.
@@ -41,17 +42,11 @@ const WizardPage = () => {
   const { notifySuccess, notifyWarning, notifyError, removeNotification } = useNotification();
   const [isCancelConfirmationModalOpen, SetIsCancelConfirmationModalOpen] = useState<boolean>(false);
   const rbac = useIdmPermissions();
+  const hasPermissions = !rbac.isLoading && rbac.permissions.hasTokenCreate && rbac.permissions.hasDomainsUpdate;
 
   // FIXME Update the URL with the location for docs
   const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
-
-  useEffect(() => {
-    if (!rbac.isLoading && (!rbac.permissions.hasTokenCreate || !rbac.permissions.hasDomainsUpdate)) {
-      navigate('/no-permissions', { replace: true });
-      return;
-    }
-  }, [rbac]);
 
   const notifyNotCompleted = () => {
     const notificationID = 'domain-registration-cancelled-notification';
@@ -240,6 +235,10 @@ const WizardPage = () => {
 
   if (rbac.isLoading) {
     return <CenteredSpinner />;
+  }
+
+  if (!hasPermissions) {
+    return <NoPermissions />;
   }
 
   return (

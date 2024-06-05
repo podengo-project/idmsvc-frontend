@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
-import { Button } from '@patternfly/react-core';
+import { Button, PageSection } from '@patternfly/react-core';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
-const NoPermissionsPage = () => {
-  useEffect(() => {
-    insights?.chrome?.appAction?.('no-permissions');
-  }, []);
-
+/**
+ * A Component to show when user doesn't have RBAC permissions for the page.
+ */
+const NoPermissions = () => {
   const { isBeta } = useChrome();
   const prefix = isBeta() ? '/beta' : '/preview';
   const linkMyUserAccess = prefix + '/iam/my-user-access';
 
   return (
-    <Main>
+    <PageSection>
       <NotAuthorized
         serviceName="Directory and Domain"
         showReturnButton
@@ -32,8 +30,8 @@ const NoPermissionsPage = () => {
           </>
         }
       />
-    </Main>
+    </PageSection>
   );
 };
 
-export default NoPermissionsPage;
+export default NoPermissions;
