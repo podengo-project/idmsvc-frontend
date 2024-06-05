@@ -29,6 +29,7 @@ import useNotification from '../../Hooks/useNotification';
 import { buildDeleteFailedNotification, buildDeleteSuccessNotification } from './detailNotifications';
 import useIdmPermissions from '../../Hooks/useIdmPermissions';
 import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
+import NoPermissions from '../../Components/NoPermissions/NoPermissions';
 
 /**
  * It represents the detail page to show the information about a
@@ -43,6 +44,7 @@ const DetailPage = () => {
   const navigate = useNavigate();
   const { notifyError, notifySuccess } = useNotification();
   const rbac = useIdmPermissions();
+  const hasPermissions = !rbac.isLoading && rbac.permissions.hasDomainsRead;
 
   // Params
   const { domain_id } = useParams();
@@ -61,12 +63,7 @@ const DetailPage = () => {
 
   // Load Domain to display
   useEffect(() => {
-    if (rbac.isLoading) {
-      return;
-    }
-
-    if (!rbac.permissions.hasDomainsRead) {
-      navigate('/no-permissions', { replace: true });
+    if (!hasPermissions) {
       return;
     }
     if (domain_id) {
@@ -84,7 +81,7 @@ const DetailPage = () => {
           navigate('/domains', { replace: true });
         });
     }
-  }, [domain_id, rbac]);
+  }, [domain_id, hasPermissions]);
 
   // Kebab menu
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
@@ -129,6 +126,10 @@ const DetailPage = () => {
 
   if (rbac.isLoading) {
     return <CenteredSpinner />;
+  }
+
+  if (!hasPermissions) {
+    return <NoPermissions />;
   }
 
   // Return render

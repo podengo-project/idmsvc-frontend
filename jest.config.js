@@ -4,6 +4,7 @@ module.exports = {
   coverageDirectory: './coverage/',
   moduleNameMapper: {
     '\\.(css|scss)$': 'identity-obj-proxy',
+    uuid: require.resolve('uuid'), // https://stackoverflow.com/a/73203803
   },
   roots: ['<rootDir>/src/'],
   transformIgnorePatterns: ['/node_modules/(?!@redhat-cloud-services)', '/node_modules/(?!@patternfly)'],
