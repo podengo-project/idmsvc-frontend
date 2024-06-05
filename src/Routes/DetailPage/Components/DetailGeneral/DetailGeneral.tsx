@@ -170,7 +170,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListDescription>
             {title}{' '}
             <Button
-              variant="plain"
+              variant="link"
               onClick={() => {
                 setEditTitle(title);
                 setIsTitleModalOpen(true);
@@ -192,7 +192,6 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListDescription className="pf-v5-u-text-wrap">
             <span style={{ whiteSpace: 'pre-line' }}>{description} </span>
             <Button
-              className="pf-v5-global--primary-color--100"
               variant="link"
               onClick={() => {
                 setEditDescription(description);
@@ -212,7 +211,6 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
           <DescriptionListDescription>
             <Button
               isInline
-              className="pf-v5-global--primary-color--100"
               variant="link"
               onClick={() => {
                 props.onShowServerTab && props.onShowServerTab();
