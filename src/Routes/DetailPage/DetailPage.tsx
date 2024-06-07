@@ -12,6 +12,7 @@ import {
   MenuToggle,
   PageGroup,
   PageSection,
+  Skeleton,
   Tab,
   TabTitleText,
   Tabs,
@@ -63,7 +64,7 @@ const DetailPage = () => {
 
   // Load Domain to display
   useEffect(() => {
-    if (!hasPermissions) {
+    if (!hasPermissions || domain_id === undefined || domain) {
       return;
     }
     if (domain_id) {
@@ -132,6 +133,37 @@ const DetailPage = () => {
     return <NoPermissions />;
   }
 
+  let domainTitle: React.ReactNode = domain?.title;
+  if (!domainTitle) {
+    domainTitle = <Skeleton width="15em" />;
+  }
+
+  let body: React.ReactNode = null;
+  if (!domain) {
+    body = (
+      <div style={{ height: '340px' }}>
+        <Skeleton width="40%" height="100%" screenreaderText="Loading domain" />
+      </div>
+    );
+  } else {
+    if (activeTabKey === 0) {
+      body = (
+        <DetailGeneral
+          domain={domain}
+          onShowServerTab={() => {
+            setActiveTabKey(1);
+          }}
+          onChange={(value: Domain) => {
+            setDomain(value);
+            appContext?.updateDomain(value);
+          }}
+        />
+      );
+    } else {
+      body = <DetailServers domain={domain} />;
+    }
+  }
+
   // Return render
   return (
     <>
@@ -139,7 +171,7 @@ const DetailPage = () => {
         <PageHeader className="pf-v5-u-mb-0">
           <Flex>
             <FlexItem className="pf-v5-u-mr-auto">
-              <PageHeaderTitle title={domain?.title} ouiaId="TextDetailTitle" />
+              <PageHeaderTitle title={domainTitle} ouiaId="TextDetailTitle" />
             </FlexItem>
             <FlexItem>
               <Dropdown
@@ -169,7 +201,7 @@ const DetailPage = () => {
                       domain !== undefined && OnShowConfirmDelete();
                     }}
                     ouiaId="ButtonDetailsDelete"
-                    isDisabled={!rbac.permissions.hasDomainsDelete}
+                    isDisabled={!rbac.permissions.hasDomainsDelete || !domain}
                   >
                     Delete
                   </DropdownItem>
@@ -184,21 +216,7 @@ const DetailPage = () => {
         </PageHeader>
         <PageSection>
           <Card ouiaId="CardDetailPage">
-            <CardBody>
-              {activeTabKey === 0 && (
-                <DetailGeneral
-                  domain={domain}
-                  onShowServerTab={() => {
-                    setActiveTabKey(1);
-                  }}
-                  onChange={(value: Domain) => {
-                    setDomain(value);
-                    appContext?.updateDomain(value);
-                  }}
-                />
-              )}
-              {activeTabKey === 1 && <DetailServers domain={domain} />}
-            </CardBody>
+            <CardBody>{body}</CardBody>
           </Card>
         </PageSection>
       </PageGroup>

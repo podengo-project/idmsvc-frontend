@@ -22,6 +22,9 @@ import {
   StackItem,
   Toolbar,
 } from '@patternfly/react-core';
+
+import { SkeletonTable } from '@patternfly/react-component-groups';
+
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 
 import './DefaultPage.scss';
@@ -131,11 +134,18 @@ interface ListContentProps {
   perPage: number;
   setPerPage: (value: number) => void;
   itemCount: number;
+  isLoading: boolean;
 }
 
 const ListContent = (props: ListContentProps) => {
   const { page, setPage, perPage, setPerPage, itemCount } = props;
-  const offset = (page - 1) * perPage;
+
+  let table: React.ReactNode = null;
+  if (props.isLoading) {
+    table = <SkeletonTable rows={itemCount || 4} columns={['Name', 'UUID', 'Type', 'Domain auto-join on launch', 'Actions']} />;
+  } else {
+    table = <DomainList />;
+  }
 
   return (
     <>
@@ -150,10 +160,10 @@ const ListContent = (props: ListContentProps) => {
                   </FlexItem>
                 </Flex>
               </Toolbar>
-              <DomainList />
+              {table}
               <Pagination
+                className="pf-u-mt-md"
                 dropDirection="up"
-                offset={offset}
                 itemCount={itemCount}
                 perPage={perPage}
                 page={page}
@@ -221,37 +231,42 @@ const DefaultPage = () => {
     setPage(1);
   };
 
-  const listContent = (
-    <>
-      <Header />
-      <ListContent page={page} setPage={setPage} perPage={perPage} setPerPage={changePageSize} itemCount={appContext.totalDomains} />
-    </>
-  );
-
-  const emptyContent = (
-    <>
-      <Header />
-      <EmptyContent />
-    </>
-  );
-
-  const loadingContent = (
-    <>
-      <Header />
-      <CenteredSpinner />
-    </>
-  );
-
   if (!rbac.isLoading && !hasPermissions) {
     return <NoPermissions />;
   }
 
-  if (rbac.isLoading || isLoading) {
-    return loadingContent;
+  const firstTimeLoading = isLoading && !appContext.totalDomains;
+  if (rbac.isLoading || firstTimeLoading) {
+    return (
+      <>
+        <Header />
+        <CenteredSpinner />
+      </>
+    );
   }
 
-  const content = appContext.totalDomains <= 0 ? emptyContent : listContent;
-  return content;
+  if (!isLoading && appContext.totalDomains <= 0) {
+    return (
+      <>
+        <Header />
+        <EmptyContent />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      <ListContent
+        page={page}
+        setPage={setPage}
+        perPage={perPage}
+        setPerPage={changePageSize}
+        itemCount={appContext.totalDomains}
+        isLoading={isLoading}
+      />
+    </>
+  );
 };
 
 export default DefaultPage;
