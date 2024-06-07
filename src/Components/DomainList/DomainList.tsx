@@ -36,12 +36,12 @@ export interface DomainListProps {
  * @returns an array with the indexable fields for comparing.
  */
 const getSortableRowValues = (domain: Domain): string[] => {
-  const { domain_type } = domain;
+  const { domain_type, domain_id } = domain;
   let { title, auto_enrollment_enabled } = domain;
   title = title || '';
   auto_enrollment_enabled = auto_enrollment_enabled || false;
   const text_auto_enrollment_enabled = auto_enrollment_enabled === true ? 'Enabled' : 'Disabled';
-  return [title, domain_type, text_auto_enrollment_enabled];
+  return [title, domain_id || '', domain_type, text_auto_enrollment_enabled];
 };
 
 type fnCompareRows = (a: Domain, b: Domain) => number;
