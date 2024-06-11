@@ -150,15 +150,17 @@ interface VerifyRegistryProps {
 
 const VerifyRegistry = (props: VerifyRegistryProps) => {
   const [isPolling, setIsPolling] = useState<boolean>(true);
+  const [startTime, setStartTime] = useState<number>(Date.now());
 
   const base_url = '/api/idmsvc/v1';
   const resources_api = ResourcesApiFactory(undefined, base_url, undefined);
-  const timeout = 3 * 1000; // Seconds
 
-  /** TODO Extract this effect in a hook to simplify this code */
+  const second = 1000;
+  const checkInterval = 2 * second;
+  const timeout = 15 * 60 * second; // 15 minutes
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
-    let elapsedTime = 0;
     let newState: VerifyState = props.state;
     let domain: Domain | undefined = undefined;
     const stopPolling = (state: VerifyState, domain?: Domain) => {
@@ -205,12 +207,13 @@ const VerifyRegistry = (props: VerifyRegistryProps) => {
         }
       }
 
+      const elapsedTime = Date.now() - startTime;
+
       if (newState !== undefined && newState !== props.state) {
         switch (newState) {
           case 'timed-out':
           case 'waiting':
             props.onChange(newState);
-            // setState(newState);
             break;
           default:
             if (elapsedTime >= timeout) {
@@ -223,7 +226,6 @@ const VerifyRegistry = (props: VerifyRegistryProps) => {
             break;
         }
       }
-      elapsedTime += 1000; // Increase elapsed time by 1 second
       if (elapsedTime > timeout) {
         newState = 'timed-out';
         stopPolling(newState);
@@ -231,7 +233,7 @@ const VerifyRegistry = (props: VerifyRegistryProps) => {
     };
 
     fetchData();
-    intervalId = setInterval(fetchData, 1000);
+    intervalId = setInterval(fetchData, checkInterval);
 
     return () => {
       if (intervalId) {
@@ -241,8 +243,8 @@ const VerifyRegistry = (props: VerifyRegistryProps) => {
   }, [isPolling]);
 
   const onRetry = () => {
+    setStartTime(Date.now());
     props.onChange('initial');
-    // setState('initial');
     setIsPolling(true);
   };
 
