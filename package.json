@@ -16,7 +16,6 @@
     "lint:prettier": "prettier --check src",
     "patch:hosts": "fec patch-etc-hosts",
     "start": "HOT=true fec dev",
-    "start-beta": "HOT=true fec dev --clouddotEnv=stage --uiEnv=beta",
     "test": "TZ=UTC jest --verbose --no-cache",
     "test-watch": "TZ=UTC jest --watch",
     "postinstall": "ts-patch install && rimraf .cache",

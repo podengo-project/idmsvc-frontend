@@ -4,4 +4,7 @@
 
 APP_NAME := idmsvc
 
+# Determine the default run environment
+CLOUDDOT_ENV ?= stage
+UI_ENV ?= beta
 
