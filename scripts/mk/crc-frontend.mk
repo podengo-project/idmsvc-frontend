@@ -33,9 +33,15 @@ prettier: $(NODE_BIN)/prettier  ## Make code prettier
 test:  $(NODE_BIN)/jest ## Execute unit tests
 	npm run test
 
+$(eval NPM_RUN_START:=npm run start)
+ifneq (,$(findstring $(CLOUDDOT_ENV),stage prod))
+ifneq (,$(findstring $(UI_ENV),beta stable))
+$(eval NPM_RUN_START:=npm run start -- --clouddotEnv="$(CLOUDDOT_ENV)" --uiEnv="$(UI_ENV)")
+endif
+endif
 .PHONY: run
-run:$(NODE_BIN)/fec  ## Execute frontend
-	npm run start
+run: $(NODE_BIN)/fec  ## Execute frontend
+	$(NPM_RUN_START)
 
 .PHONY: generate-api
 generate-api: $(NODE_BIN)/openapi-generator-cli $(NODE_BIN)/prettier $(PUBLIC_OPENAPI) ## Generate the API client from openapi specification
