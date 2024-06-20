@@ -81,6 +81,12 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
     setIsTitleModalOpen(false);
   };
 
+  const confirmTitleByEnter = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleSaveTitleButton();
+    }
+  };
+
   const handleCancelTitleButton = () => {
     console.log('Cancel Title button pressed');
     setIsTitleModalOpen(false);
@@ -260,6 +266,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         isOpen={isTitleModalOpen}
         onClose={handleCancelTitleButton}
         ouiaId="ModalTitle"
+        onKeyUp={confirmTitleByEnter}
         actions={[
           <Button
             key="save"
