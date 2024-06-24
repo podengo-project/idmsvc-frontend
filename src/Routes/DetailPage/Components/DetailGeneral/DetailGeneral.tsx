@@ -56,9 +56,15 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
   const [isTitleModalOpen, setIsTitleModalOpen] = useState<boolean>(false);
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState<boolean>(false);
 
+  const canSaveTitle = !!editTitle && editTitle !== title;
+
   // Control handlers
-  const handleSaveTitleButton = () => {
-    console.log('Save Title button pressed');
+  const saveTitle = () => {
+    console.log('Save Title requested');
+    if (!canSaveTitle) {
+      console.log('Title change is not valid');
+      return;
+    }
     if (domain.domain_id) {
       resources_api
         .updateDomainUser(domain.domain_id, {
@@ -75,7 +81,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         })
         .catch((error) => {
           notifyError(buildTitleEditFailedNotification());
-          console.log('error at handleSaveTitleButton: ' + error);
+          console.log('error at saveTitle: ' + error);
         });
     }
     setIsTitleModalOpen(false);
@@ -83,7 +89,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
 
   const confirmTitleByEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      handleSaveTitleButton();
+      saveTitle();
     }
   };
 
@@ -268,13 +274,7 @@ export const DetailGeneral = (props: DetailGeneralProps) => {
         ouiaId="ModalTitle"
         onKeyUp={confirmTitleByEnter}
         actions={[
-          <Button
-            key="save"
-            variant="primary"
-            isDisabled={title == editTitle}
-            onClick={handleSaveTitleButton}
-            ouiaId="ButtonModalDomainDomainTitleSave"
-          >
+          <Button key="save" variant="primary" isDisabled={!canSaveTitle} onClick={saveTitle} ouiaId="ButtonModalDomainDomainTitleSave">
             Save
           </Button>,
           <Button key="cancel" variant="link" onClick={handleCancelTitleButton} ouiaId="ButtonModalDomainDomainTitleCancel">
