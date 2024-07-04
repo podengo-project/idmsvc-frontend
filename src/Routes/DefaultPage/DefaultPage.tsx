@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
 import { RegistryIcon } from '@patternfly/react-icons/dist/esm/icons/registry-icon';
 
 import {
@@ -37,27 +36,12 @@ import useIdmPermissions from '../../Hooks/useIdmPermissions';
 import NoPermissions from '../../Components/NoPermissions/NoPermissions';
 
 const Header = () => {
-  const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const title = 'Directory and Domain Services';
 
   return (
     <PageHeader>
       <PageHeaderTitle title={title} />
-      <p>
-        Register identity and access management systems to enable machines to automatically join a domain.{' '}
-        <Button
-          component="a"
-          target="_blank"
-          variant="link"
-          isInline
-          icon={<ExternalLinkAltIcon />}
-          iconPosition="right"
-          href={linkLearnMoreAbout}
-          ouiaId="LinkDefaultLearnMoreAbout1"
-        >
-          Learn more about the Directory and Domain Services registry.
-        </Button>
-      </p>
+      <p>Register identity and access management systems to enable machines to automatically join a domain.</p>
     </PageHeader>
   );
 };
@@ -84,9 +68,6 @@ const RegisterDomainButton = () => {
 };
 
 const EmptyContent = () => {
-  // FIXME Update this link in the future
-  const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
-
   return (
     <>
       <Section>
@@ -102,20 +83,7 @@ const EmptyContent = () => {
                 <StackItem className="pf-v5-u-pt-md">
                   <RegisterDomainButton />
                 </StackItem>
-                <StackItem className="pf-v5-u-pt-md">
-                  <Button
-                    component="a"
-                    target="_blank"
-                    variant="link"
-                    isInline
-                    icon={<ExternalLinkAltIcon />}
-                    iconPosition="right"
-                    href={linkLearnMoreAbout}
-                    ouiaId="LinkDefaultLearnMoreAbout2"
-                  >
-                    Learn more about registering identity domains{' '}
-                  </Button>
-                </StackItem>
+                <StackItem className="pf-v5-u-pt-md"></StackItem>
                 <StackItem className="pf-v5-u-pt-lg pf-v5-u-color-100">
                   *Only currently available for Red Hat Identity Management (IdM) deployments.
                 </StackItem>
