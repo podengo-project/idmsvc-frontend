@@ -26,8 +26,6 @@ interface PagePreparationProps {
 const PagePreparation = (props: PagePreparationProps) => {
   // FIXME Update the target link when it is known
   const installServerPackagesLink = 'https://duckduckgo.com/?q=freeipa+prerequisites';
-  // FIXME Update the target link when it is known
-  const prerequisitesLink = 'https://www.google.com?q=rhel-idm+pre-requisites';
 
   // States
   const appContext = useContext(AppContext);
@@ -93,21 +91,6 @@ const PagePreparation = (props: PagePreparationProps) => {
         </FormGroup>
         <FormGroup label="Identity domain prerequisites">
           <ol>
-            <li className="pf-v5-u-pt-sd pf-v5-u-ml-md">
-              Complete the{' '}
-              <Button
-                component="a"
-                target="_blank"
-                variant="link"
-                icon={<ExternalLinkAltIcon />}
-                iconPosition="right"
-                isInline
-                href={prerequisitesLink}
-                ouiaId="ButtonPagePreparationPrerequisites"
-              >
-                prerequisites
-              </Button>
-            </li>
             <li className="pf-v5-u-pt-md pf-v5-u-ml-md">
               <TextContent>
                 Verify whether or not the package is present on your Red Hat IdM server(s) by running the following command in a terminal on your Red

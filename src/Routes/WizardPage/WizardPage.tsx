@@ -45,7 +45,6 @@ const WizardPage = () => {
   const hasPermissions = !rbac.isLoading && rbac.permissions.hasTokenCreate && rbac.permissions.hasDomainsUpdate;
 
   // FIXME Update the URL with the location for docs
-  const linkLearnMoreAbout = 'https://access.redhat.com/articles/1586893';
   const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
 
   const notifyNotCompleted = () => {
@@ -246,21 +245,7 @@ const WizardPage = () => {
       <PageGroup>
         <PageHeader>
           <PageHeaderTitle title={title} ouiaId="TextWizardTitle" />
-          <p>
-            Add an identity domain to the registry.{' '}
-            <Button
-              component="a"
-              target="_blank"
-              variant="link"
-              isInline
-              icon={<ExternalLinkAltIcon />}
-              iconPosition="right"
-              href={linkLearnMoreAbout}
-              ouiaId="LinkWizardHeaderLearnAbout"
-            >
-              Learn more about registering identity domains{' '}
-            </Button>
-          </p>
+          <p>Add an identity domain to the registry.</p>
         </PageHeader>
         <PageSection type={'wizard'} variant={PageSectionVariants.light}>
           <Wizard navAriaLabel={`${title} steps`} isVisitRequired={true} onClose={onWizardClose} onSave={onWizardSave}>
