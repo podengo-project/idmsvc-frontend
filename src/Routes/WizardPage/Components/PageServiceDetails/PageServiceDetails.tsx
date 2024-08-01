@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Icon, TextArea, Title, Tooltip } from '@patternfly/react-core';
 import { TextInput } from '@patternfly/react-core';
-import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
+import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon';
 
 import './PageServiceDetails.scss';
 import { Switch } from '@patternfly/react-core';

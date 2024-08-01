@@ -5,7 +5,7 @@
  * a new domain service.
  */
 import React, { useContext, useState } from 'react';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
+import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/js/icons/external-link-alt-icon';
 
 import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text, Wizard, WizardStep } from '@patternfly/react-core';
 
