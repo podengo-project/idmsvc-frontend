@@ -12,7 +12,7 @@ apps:
       # pushed to the repository.
       - name: backend
         host: github
-        repo: pondengo-project/idmsvc-backend
+        repo: podengo-project/idmsvc-backend
         path: deployments/clowder.yaml
         parameters:
           ENV_NAME: "ephemeral"
