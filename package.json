@@ -17,7 +17,7 @@
     "patch:hosts": "fec patch-etc-hosts",
     "start": "HOT=true fec dev",
     "test": "TZ=UTC jest --verbose --no-cache",
-    "test-watch": "TZ=UTC jest --watch",
+    "test-watch": "TZ=UTC jest --watch --verbose",
     "postinstall": "ts-patch install && rimraf .cache",
     "prettier": "prettier --write src",
     "verify": "npm-run-all build lint test",
@@ -71,6 +71,7 @@
     "stylelint": "15.11.0",
     "stylelint-config-recommended-scss": "13.0.0",
     "stylelint-scss": "5.2.1",
+    "ts-jest": "^29.2.4",
     "ts-patch": "^3.1.2",
     "typescript": "~5.4.5",
     "webpack-bundle-analyzer": "4.4.2"
