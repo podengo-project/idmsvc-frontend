@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RegistryIcon } from '@patternfly/react-icons/dist/esm/icons/registry-icon';
 
 import {
+  Alert,
   Bullseye,
   Button,
   Card,
@@ -35,13 +36,18 @@ import CenteredSpinner from '../../Components/CenteredSpinner/CenteredSpinner';
 import useIdmPermissions from '../../Hooks/useIdmPermissions';
 import NoPermissions from '../../Components/NoPermissions/NoPermissions';
 
-const Header = () => {
+interface HeaderProps {
+  children?: React.ReactNode;
+}
+
+const Header = (props: HeaderProps) => {
   const title = 'Directory and Domain Services';
 
   return (
     <PageHeader>
       <PageHeaderTitle title={title} />
       <p>Register identity and access management systems to enable machines to automatically join a domain.</p>
+      {props.children}
     </PageHeader>
   );
 };
@@ -64,6 +70,28 @@ const RegisterDomainButton = () => {
     <Button ouiaId="ButtonDefaultRegisterIdentityDomain" onClick={handleOpenWizard} isLoading={rbac.isLoading} isDisabled={isDisabled}>
       Register identity domain
     </Button>
+  );
+};
+
+interface MultipleEnabledDomainsWarningProps {
+  domains: Domain[];
+}
+
+/**
+ * A warning message that is displayed when multiple domains are enabled for auto-enrollment.
+ * @param domains
+ */
+const MultipleEnabledDomainsWarning = (props: MultipleEnabledDomainsWarningProps) => {
+  const count = props.domains.length;
+  if (count <= 1) {
+    return null;
+  }
+  return (
+    <div className="pf-v5-u-pt-md">
+      <Alert variant="danger" title="Multiple domains enabled for domain auto-join on launch" data-testid="MultipleEnabledDomainsWarning">
+        {count} domains are enabled for domain auto-join on launch. Only one domain can be enabled at a time.
+      </Alert>
+    </div>
   );
 };
 
@@ -118,7 +146,7 @@ const ListContent = (props: ListContentProps) => {
   return (
     <>
       <PageGroup>
-        <PageSection>
+        <PageSection data-testid="ListContent">
           <Card>
             <CardBody>
               <Toolbar>
@@ -222,9 +250,14 @@ const DefaultPage = () => {
     );
   }
 
+  const enabledDomains = appContext.listDomains.filter((domain) => domain.auto_enrollment_enabled);
+
   return (
     <>
-      <Header />
+      <Header>
+        <MultipleEnabledDomainsWarning domains={enabledDomains} />
+      </Header>
+
       <ListContent
         page={page}
         setPage={setPage}
