@@ -17,8 +17,8 @@ import React from 'react';
 import { useState } from 'react';
 import { Domain, ResourcesApiFactory } from '../../../../Api/idmsvc';
 import useNotification from '../../../../Hooks/useNotification';
-import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
-import PencilAltIcon from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
+import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon';
+import PencilAltIcon from '@patternfly/react-icons/dist/js/icons/pencil-alt-icon';
 import {
   buildAutoJoinToggleFailedNotification,
   buildDescriptionEditFailedNotification,

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import ExternalLinkAltIcon from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
+import ExternalLinkAltIcon from '@patternfly/react-icons/dist/js/icons/external-link-alt-icon';
 import { Alert, Button, ClipboardCopy, Form, FormGroup, TextContent, Title } from '@patternfly/react-core';
 
 import './PagePreparation.scss';

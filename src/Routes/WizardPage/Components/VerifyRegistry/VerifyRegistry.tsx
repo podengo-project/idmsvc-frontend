@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import { AxiosError } from 'axios';
 import { Button, Icon, Stack, StackItem, TextContent } from '@patternfly/react-core';
-import { CheckCircleIcon } from '@patternfly/react-icons/dist/esm/icons/check-circle-icon';
-import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
-import { PendingIcon } from '@patternfly/react-icons/dist/esm/icons/pending-icon';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/esm/icons/external-link-alt-icon';
+import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
+import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon';
+import { PendingIcon } from '@patternfly/react-icons/dist/js/icons/pending-icon';
+import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/js/icons/external-link-alt-icon';
 
 import './VerifyRegistry.scss';
 import { Domain, ResourcesApiFactory } from '../../../../Api/idmsvc';

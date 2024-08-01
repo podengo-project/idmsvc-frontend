@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
-import { RegistryIcon } from '@patternfly/react-icons/dist/esm/icons/registry-icon';
+import { RegistryIcon } from '@patternfly/react-icons/dist/js/icons/registry-icon';
 
 import {
   Alert,
