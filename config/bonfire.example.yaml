@@ -16,7 +16,8 @@ apps:
         path: deployments/clowder.yaml
         parameters:
           ENV_NAME: "ephemeral"
-          # LOGGING_LEVEL: "info"
+          LOGGING_LEVEL: "debug"
+          LOGGING_LOCATION: "true"
           CLIENTS_RBAC_BASE_URL: "http://rbac-service:8000/api/rbac/v1"
           CLIENTS_RBAC_ENABLED: "True"
           # SERVICE_REPLICAS: 3
@@ -26,7 +27,7 @@ apps:
       # environment by using the repository automation.
       - name: frontend
         # host: github
-        # repo: idmsvc/idmsvc-frontend
+        # repo: podengo-project/idmsvc-frontend
         host: local
         repo: ./
         path: deploy/frontend.yaml
