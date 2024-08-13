@@ -234,26 +234,26 @@ const DefaultPage = () => {
   const firstTimeLoading = isLoading && !appContext.totalDomains;
   if (rbac.isLoading || firstTimeLoading) {
     return (
-      <>
+      <PageGroup className="defaultPage">
         <Header />
         <CenteredSpinner />
-      </>
+      </PageGroup>
     );
   }
 
   if (!isLoading && appContext.totalDomains <= 0) {
     return (
-      <>
+      <PageGroup className="defaultPage">
         <Header />
         <EmptyContent />
-      </>
+      </PageGroup>
     );
   }
 
   const enabledDomains = appContext.listDomains.filter((domain) => domain.auto_enrollment_enabled);
 
   return (
-    <>
+    <PageGroup className="defaultPage">
       <Header>
         <MultipleEnabledDomainsWarning domains={enabledDomains} />
       </Header>
@@ -266,7 +266,7 @@ const DefaultPage = () => {
         itemCount={appContext.totalDomains}
         isLoading={isLoading}
       />
-    </>
+    </PageGroup>
   );
 };
 

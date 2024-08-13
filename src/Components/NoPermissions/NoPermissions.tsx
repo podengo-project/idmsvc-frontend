@@ -13,7 +13,7 @@ const NoPermissions = () => {
   const linkMyUserAccess = prefix + '/iam/my-user-access';
 
   return (
-    <PageSection>
+    <PageSection className="noPermissions">
       <NotAuthorized
         serviceName="Directory and Domain"
         showReturnButton

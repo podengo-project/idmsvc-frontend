@@ -8,7 +8,7 @@ const OopsPage = () => {
     insights?.chrome?.appAction?.('oops-page');
   }, []);
   return (
-    <Main>
+    <Main className="oopsPage">
       <Unavailable />
     </Main>
   );
