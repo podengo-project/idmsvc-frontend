@@ -167,7 +167,7 @@ const DetailPage = () => {
   // Return render
   return (
     <>
-      <PageGroup>
+      <PageGroup className="detailPage">
         <PageHeader className="pf-v5-u-mb-0">
           <Flex>
             <FlexItem className="pf-v5-u-mr-auto">

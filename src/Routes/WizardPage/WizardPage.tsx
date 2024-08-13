@@ -246,7 +246,7 @@ const WizardPage = () => {
 
   return (
     <>
-      <PageGroup>
+      <PageGroup className="wizardPage">
         <PageHeader>
           <PageHeaderTitle title={title} ouiaId="TextWizardTitle" />
           <p>Add an identity domain to the registry.</p>
