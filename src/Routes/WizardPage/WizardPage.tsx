@@ -240,6 +240,10 @@ const WizardPage = () => {
     return <NoPermissions />;
   }
 
+  const cancelButtonProps = {
+    ouiaId: 'ButtonWizardCancel',
+  };
+
   return (
     <>
       <PageGroup>
@@ -258,6 +262,10 @@ const WizardPage = () => {
               }}
               footer={{
                 isNextDisabled: !canJumpPage2,
+                nextButtonProps: {
+                  ouiaId: 'ButtonWizardPreparationNext',
+                },
+                cancelButtonProps,
               }}
             >
               <PagePreparation onToken={onToken} />
@@ -271,6 +279,13 @@ const WizardPage = () => {
               }}
               footer={{
                 isNextDisabled: !canJumpPage3,
+                nextButtonProps: {
+                  ouiaId: 'ButtonWizardRegistrationNext',
+                },
+                backButtonProps: {
+                  ouiaId: 'ButtonWizardRegistrationBack',
+                },
+                cancelButtonProps,
               }}
             >
               <PageServiceRegistration uuid={domain?.domain_id ? domain?.domain_id : ''} token={appContext?.wizard.token || ''} onVerify={onVerify} />
@@ -284,6 +299,13 @@ const WizardPage = () => {
               }}
               footer={{
                 isNextDisabled: !canJumpPage4,
+                nextButtonProps: {
+                  ouiaId: 'ButtonWizardDetailsNext',
+                },
+                backButtonProps: {
+                  ouiaId: 'ButtonWizardDetailsBack',
+                },
+                cancelButtonProps,
               }}
             >
               <PageServiceDetails
@@ -302,7 +324,16 @@ const WizardPage = () => {
               navItem={{
                 content: 'Review',
               }}
-              footer={{ nextButtonText: 'Finish' }}
+              footer={{
+                nextButtonText: 'Finish',
+                nextButtonProps: {
+                  ouiaId: 'ButtonWizardReviewFinish',
+                },
+                backButtonProps: {
+                  ouiaId: 'ButtonWizardReviewBack',
+                },
+                cancelButtonProps,
+              }}
             >
               <PageReview domain={domain || ({} as Domain)} />
             </WizardStep>
