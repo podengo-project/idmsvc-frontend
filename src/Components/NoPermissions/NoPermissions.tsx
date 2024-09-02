@@ -2,15 +2,12 @@ import React from 'react';
 
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { Button, PageSection } from '@patternfly/react-core';
-import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
 /**
  * A Component to show when user doesn't have RBAC permissions for the page.
  */
 const NoPermissions = () => {
-  const { isBeta } = useChrome();
-  const prefix = isBeta() ? '/beta' : '/preview';
-  const linkMyUserAccess = prefix + '/iam/my-user-access';
+  const linkMyUserAccess = '/iam/my-user-access';
 
   return (
     <PageSection className="noPermissions">

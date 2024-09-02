@@ -40,9 +40,6 @@ COPY ./package.json /opt/app-root/src/
 RUN sed -i -e 's/\/beta\/apps/\/apps/g' /opt/app-root/src/dist/stable/fed-mods.json
 
 ENV APP_NAME="idmsvc"
-ENV ROUTE_PATH="/apps/${APP_NAME}"
-ENV BETA_ROUTE_PATH="/beta/apps/${APP_NAME}"
-ENV PREVIEW_ROUTE_PATH="/preview/apps/${APP_NAME}"
 
 CMD ["caddy", "run", "--config", "/opt/app-root/src/Caddyfile"]
 

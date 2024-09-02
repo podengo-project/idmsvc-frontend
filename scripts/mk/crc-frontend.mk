@@ -35,7 +35,7 @@ test:  $(NODE_BIN)/jest ## Execute unit tests
 
 $(eval NPM_RUN_START:=npm run start)
 ifneq (,$(findstring $(CLOUDDOT_ENV),stage prod))
-ifneq (,$(findstring $(UI_ENV),beta stable))
+ifneq (,$(findstring $(UI_ENV),stable))
 $(eval NPM_RUN_START:=npm run start -- --clouddotEnv="$(CLOUDDOT_ENV)" --uiEnv="$(UI_ENV)")
 endif
 endif
