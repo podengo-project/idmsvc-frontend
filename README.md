@@ -1,6 +1,6 @@
 # idm-domains-frontend
 
-## Initial etc/hosts setup
+## Initial /etc/hosts setup
 
 In order to access the https://[env].foo.redhat.com in your browser, you have to add entries to your `/etc/hosts` file. This is a **one-time** setup that has to be done only once (unless you modify hosts) on each machine.
 
@@ -11,8 +11,6 @@ Add the below to your `/etc/hosts` file:
 ```
 127.0.0.1 prod.foo.redhat.com
 127.0.0.1 stage.foo.redhat.com
-127.0.0.1 qa.foo.redhat.com
-127.0.0.1 ci.foo.redhat.com
 ```
 
 ## Install react developer tools
@@ -22,7 +20,7 @@ favourite browser.
 
 - [React Developer Tools](https://react.dev/learn/react-developer-tools).
 
-## Setup and run chrome-service-backend
+## Setup and run chrome-service-backend (optional)
 
 > Useful when trying your service config changes
 > before commit to chrome-service-backend repository.
@@ -59,11 +57,7 @@ Now you can deploy into dev cluster by `make ephemeral-build-deploy`.
 
 1. `make run` to start the server.
 
-2. Open the [idmsvc beta app][idmsvc_beta_app] in your browser.
-
-3. Currently, `App.tsx` will throw a type error until your app is registered and a `navId` has been set.
-
-Update `config/dev.webpack.config.js` according to your application URL. [Read more][frontend_use_proxy].
+2. Open the [idmsvc app][idmsvc_app] in your browser.
 
 See: [Contributing](./docs/CONTRIBUTING.md).
 
@@ -79,8 +73,8 @@ Update git submodule and regenerate API with `make update-api`.
 Generate `src/Api` from the openapi specification by running `make generate-api`.
 
 * [Development Docs](docs/INDEX.md).
-* [Pattern Fly 4 - Components][patternfly_4].
+* [PatternFly - Components][patternfly].
 
-[idmsvc_beta_app]: https://stage.foo.redhat.com:1337/beta/settings/idmsvc
-[patternfly_4]: https://v4-archive.patternfly.org/v4/components/about-modal
+[idmsvc_app]: https://stage.foo.redhat.com:1337/settings/idmsvc
+[patternfly]: https://www.patternfly.org/components/all-components
 [frontend_use_proxy]: https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy
