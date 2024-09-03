@@ -24,8 +24,8 @@ interface PagePreparationProps {
  * @see {@link WizardPage} to know about the parent component.
  */
 const PagePreparation = (props: PagePreparationProps) => {
-  // FIXME Update the target link when it is known
-  const installServerPackagesLink = 'https://duckduckgo.com/?q=freeipa+prerequisites';
+  const deployAndManaingIPASystemsLink =
+    'https://docs.redhat.com/en/documentation/red_hat_insights/1-latest/html-single/deploying_and_managing_rhel_systems_in_hybrid_clouds/index#managing-external-authentication-and-authorization-domains_host-management-services';
 
   // States
   const appContext = useContext(AppContext);
@@ -87,42 +87,32 @@ const PagePreparation = (props: PagePreparationProps) => {
             variant="info"
             isInline
             ouiaId="AlertPagePreparationPrepare"
-          ></Alert>
+          >
+            <Button
+              component="a"
+              target="_blank"
+              variant="link"
+              isInline
+              href={deployAndManaingIPASystemsLink}
+              icon={<ExternalLinkAltIcon />}
+              iconPosition="right"
+              ouiaId="LinkWizardRegistrationLearnMore"
+            >
+              Deploying and managing RHEL systems in hybrid clouds
+            </Button>
+          </Alert>
         </FormGroup>
         <FormGroup label="Identity domain prerequisites">
-          <ol>
-            <li className="pf-v5-u-pt-md pf-v5-u-ml-md">
-              <TextContent>
-                Verify whether or not the package is present on your Red Hat IdM server(s) by running the following command in a terminal on your Red
-                Hat IdM server(s):
-              </TextContent>
-              <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextWizardPagePrepareCheckInstall">
-                dnf list installed ipa-hcc-server
-              </ClipboardCopy>
-              <TextContent className="pf-v5-u-pt-md">
-                If the package is not present on your Red Hat IdM server(s), follow these{' '}
-                <Button
-                  component="a"
-                  target="_blank"
-                  variant="link"
-                  icon={<ExternalLinkAltIcon />}
-                  iconPosition="right"
-                  isInline
-                  href={installServerPackagesLink}
-                  ouiaId="LinkPagePreparationInstall"
-                >
-                  steps to install the server packages
-                </Button>
-                <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextPagePreparationInstallPackage">
-                  dnf install ipa-hcc-server
-                </ClipboardCopy>
-              </TextContent>
-              <TextContent className="pf-v5-u-pt-md">
-                The package must be installed on at least one Red Hat IdM server. For redundancy, the package should be installed on two or more Red
-                Hat IdM servers.
-              </TextContent>
-            </li>
-          </ol>
+          <TextContent className="pf-v5-u-pt-md">
+            Install the ipa-hcc-server package in your Red Hat IdM server(s), by:
+            <ClipboardCopy hoverTip="copy" clickTip="Copied" isReadOnly ouiaId="TextPagePreparationInstallPackage">
+              dnf install ipa-hcc-server
+            </ClipboardCopy>
+          </TextContent>
+          <TextContent className="pf-v5-u-pt-md">
+            The package must be installed on at least one Red Hat IdM server. For redundancy, the package should be installed on two or more Red Hat
+            IdM servers.
+          </TextContent>
         </FormGroup>
       </Form>
     </>

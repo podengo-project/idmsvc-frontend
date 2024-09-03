@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, ClipboardCopy, Flex, FlexItem, Form, TextContent, Title } from '@patternfly/react-core';
+import { Alert, ClipboardCopy, Flex, FlexItem, Form, TextContent, Title } from '@patternfly/react-core';
 
 import './PageServiceRegistration.scss';
 import VerifyRegistry, { VerifyState } from '../VerifyRegistry/VerifyRegistry';
@@ -29,25 +29,10 @@ interface PageServiceRegistrationProp {
  * @public
  */
 const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
-  // FIXME Update the URL with the location for docs
-  // const installServerPackagesLink = 'https://freeipa.org/page/Quick_Start_Guide';
   const [state, setState] = useState<VerifyState>('initial');
-
-  // FIXME Clean-up when sure it is not needed
-  // const openInNewWindow = (url: string) => {
-  //   window.open(url, '_blank');
-  // };
-
-  // FIXME Clean-up when sure it is not needed
-  // const onInstallServerPackagesClick = () => {
-  //   openInNewWindow(installServerPackagesLink);
-  // };
 
   const ipa_hcc_register_cmd = 'ipa-hcc register ' + props.token;
   const alertTitle = 'Register your identity domain';
-
-  // FIXME Update the URL with the location for docs
-  const linkLearnMoreAbout = 'https://www.google.es/search?q=freeipa+registering+a+domain+service';
 
   const onChangeVerifyRegistry = (newState: VerifyState, domain?: Domain) => {
     setState(newState);
@@ -66,11 +51,6 @@ const PageServiceRegistration = (props: PageServiceRegistrationProp) => {
       <Form onSubmit={(e) => e.preventDefault()}>
         <Alert title={alertTitle} variant="warning" isInline className="pf-v5-u-mt-lg" ouiaId="AlertWizardRegistrationNote">
           Completing this step registers your identity domain, and cannot be undone from the wizard.{' '}
-          <div className="pf-v5-u-mt-md">
-            <Button component="a" target="_blank" variant="link" isInline href={linkLearnMoreAbout} ouiaId="LinkWizardRegistrationLearnMore">
-              Learn more about registering identity domains
-            </Button>
-          </div>
         </Alert>
         <ol>
           <li className="pf-v5-u-ml-md">

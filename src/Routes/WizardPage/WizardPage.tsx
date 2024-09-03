@@ -5,7 +5,6 @@
  * a new domain service.
  */
 import React, { useContext, useState } from 'react';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/js/icons/external-link-alt-icon';
 
 import { Button, Modal, ModalVariant, PageGroup, PageSection, PageSectionVariants, Text, Wizard, WizardStep } from '@patternfly/react-core';
 
@@ -43,9 +42,6 @@ const WizardPage = () => {
   const [isCancelConfirmationModalOpen, SetIsCancelConfirmationModalOpen] = useState<boolean>(false);
   const rbac = useIdmPermissions();
   const hasPermissions = !rbac.isLoading && rbac.permissions.hasTokenCreate && rbac.permissions.hasDomainsUpdate;
-
-  // FIXME Update the URL with the location for docs
-  const linkLearnMoreAboutRemovingDirectoryAndDomainServices = 'https://access.redhat.com/articles/1586893';
 
   const notifyNotCompleted = () => {
     const notificationID = 'domain-registration-cancelled-notification';
@@ -358,18 +354,6 @@ const WizardPage = () => {
               Proceeding with the cancellation, your data will not be saved in the Red Hat Hybrid Cloud Console. However, this action does not affect
               the identity server side if any action is done there.
             </Text>
-            <Button
-              component="a"
-              target="_blank"
-              variant="link"
-              icon={<ExternalLinkAltIcon />}
-              iconPosition="right"
-              isInline
-              href={linkLearnMoreAboutRemovingDirectoryAndDomainServices}
-              ouiaId="ButtonPagePreparationPrerequisites"
-            >
-              Learn more about removing Directory and Domain Services Packages from your Red hat IdM server
-            </Button>
           </Modal>
         </PageSection>
       </PageGroup>

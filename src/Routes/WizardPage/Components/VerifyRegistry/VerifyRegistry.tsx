@@ -5,7 +5,6 @@ import { Button, Icon, Stack, StackItem, TextContent } from '@patternfly/react-c
 import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon';
 import { PendingIcon } from '@patternfly/react-icons/dist/js/icons/pending-icon';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons/dist/js/icons/external-link-alt-icon';
 
 import './VerifyRegistry.scss';
 import { Domain, ResourcesApiFactory } from '../../../../Api/idmsvc';
@@ -96,7 +95,6 @@ interface VerifyRegistryFooterProps {
 }
 
 const VerifyRegistryFooter = (props: VerifyRegistryFooterProps) => {
-  const linkTroubleshootRegistration = 'https://www.google.com/search?q=freeipa+troubleshooting';
   return (
     <>
       {props.state == 'initial' && (
@@ -114,21 +112,7 @@ const VerifyRegistryFooter = (props: VerifyRegistryFooterProps) => {
           </Button>
         </>
       )}
-      {props.state == 'not-found' && (
-        <>
-          <Button
-            isInline
-            variant="link"
-            target="_blank"
-            href={linkTroubleshootRegistration}
-            icon={<ExternalLinkAltIcon />}
-            iconPosition="right"
-            ouiaId="ButtonVerifyTroubleshoot"
-          >
-            Troubleshoot registration
-          </Button>
-        </>
-      )}
+      {props.state == 'not-found' && <></>}
       {props.state == 'completed' && (
         <>
           <Button variant="secondary" onClick={props.onTest} ouiaId="ButtonVerifyCompleted">
