@@ -46,6 +46,6 @@ parameters:
   - name: IMAGE_TAG
     required: true
   - name: IMAGE
-    value: "quay.io/cloudservices/idmsvc-frontend"
+    value: quay.io/redhat-services-prod/insights-management-tenant/insights-idmsvc/idmsvc-frontend
   - name: APP_NAME
     value: idmsvc
