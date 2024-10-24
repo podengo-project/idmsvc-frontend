@@ -46,6 +46,10 @@ parameters:
   - name: IMAGE_TAG
     required: true
   - name: IMAGE
+<<<<<<< HEAD
     value: quay.io/redhat-services-prod/insights-management-tenant/insights-idmsvc/idmsvc-frontend
+=======
+    value: "redhat-services-prod/insights-management-tenant/insights-idmsvc/idmsvc-frontend"
+>>>>>>> 4faa71f (Move ClowdApp to Konflux image)
   - name: APP_NAME
     value: idmsvc
