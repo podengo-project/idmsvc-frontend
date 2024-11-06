@@ -1,6 +1,6 @@
-#
+# OpenShift template to deploy idmsvc-frontend
 ---
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: idmsvc-frontend
