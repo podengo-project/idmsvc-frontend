@@ -1,4 +1,7 @@
-# idm-domains-frontend
+# idmsvc-frontend (FreeIPA Domain Join service frontend)
+
+**This project is currently inactive.  Issues and pull requests will
+not be attended to.**
 
 ## Initial /etc/hosts setup
 
